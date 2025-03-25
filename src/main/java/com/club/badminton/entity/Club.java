@@ -27,9 +27,16 @@ public class Club extends BaseEntity {
     @Embedded
     private Address address;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "budget_id")
+    private Budget budget;
+
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private List<Schedule> schedules = new ArrayList<>();
 }

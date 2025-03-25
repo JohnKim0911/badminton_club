@@ -1,6 +1,5 @@
 package com.club.badminton.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -14,7 +13,6 @@ public class ClubMember extends BaseTimeEntity {
     @Column(name = "club_member_id")
     private Long id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
@@ -30,5 +28,11 @@ public class ClubMember extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private ClubMemberStatus status;
+
+    //연관관계 메서드
+    public void setMember(Member member) {
+        this.member = member;
+        member.getClubMembers().add(this);
+    }
 
 }

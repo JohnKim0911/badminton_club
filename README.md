@@ -27,7 +27,7 @@
 - Java 17
 - Spring Data JPA
 - Querydsl
-- H2
+- H2 database
 - Thymeleaf
 - IDE: IntelliJ (Community version)
 

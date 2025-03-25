@@ -9,7 +9,7 @@ public class Address {
 
     private String siDo; //시, 도
     private String guGun; //구, 군
-    private String street; //도로명
+    private String street; //로 (도로명)
 
     protected Address() {
     }
