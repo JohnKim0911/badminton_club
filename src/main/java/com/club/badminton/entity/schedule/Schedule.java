@@ -1,5 +1,7 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.schedule;
 
+import com.club.badminton.entity.base.BaseEntity;
+import com.club.badminton.entity.club.Club;
 import jakarta.persistence.*;
 import lombok.Getter;
 

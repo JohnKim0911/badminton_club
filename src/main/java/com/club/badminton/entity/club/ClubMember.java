@@ -1,5 +1,10 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.club;
 
+import com.club.badminton.entity.Member;
+import com.club.badminton.entity.budget.Transaction;
+import com.club.badminton.entity.base.BaseTimeEntity;
+import com.club.badminton.entity.post.Comment;
+import com.club.badminton.entity.post.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

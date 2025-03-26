@@ -1,4 +1,4 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.post;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.budget;
 
 /**
  * DEPOSIT(입금), WITHDRAW(출금)

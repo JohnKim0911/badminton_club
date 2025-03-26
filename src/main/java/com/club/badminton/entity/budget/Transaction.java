@@ -1,5 +1,6 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.budget;
 
+import com.club.badminton.entity.club.ClubMember;
 import jakarta.persistence.*;
 import lombok.Getter;
 

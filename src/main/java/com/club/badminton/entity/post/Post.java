@@ -1,5 +1,8 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.post;
 
+import com.club.badminton.entity.base.BaseTimeEntity;
+import com.club.badminton.entity.club.Club;
+import com.club.badminton.entity.club.ClubMember;
 import jakarta.persistence.*;
 import lombok.Getter;
 
