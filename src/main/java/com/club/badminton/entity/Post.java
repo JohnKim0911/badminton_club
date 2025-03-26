@@ -20,8 +20,8 @@ public class Post extends BaseTimeEntity {
     private Club club;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member writer;
+    @JoinColumn(name = "club_member_id")
+    private ClubMember writer;
 
     private String title;
 

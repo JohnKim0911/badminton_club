@@ -20,8 +20,8 @@ public class Transaction {
     private Budget budget;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "club_member_id")
+    private ClubMember clubMember;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;

@@ -2,6 +2,10 @@ package com.club.badminton.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "club_member")
@@ -21,6 +25,7 @@ public class ClubMember extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Setter
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -29,10 +34,20 @@ public class ClubMember extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ClubMemberStatus status;
 
+    @OneToMany(mappedBy = "writer")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "clubMember")
+    private List<Transaction> transactions = new ArrayList<>();
+
     //연관관계 메서드
     public void setMember(Member member) {
         this.member = member;
         member.getClubMembers().add(this);
     }
+
 
 }

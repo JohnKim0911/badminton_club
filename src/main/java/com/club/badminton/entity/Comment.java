@@ -17,8 +17,8 @@ public class Comment extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member writer;
+    @JoinColumn(name = "club_member_id")
+    private ClubMember writer;
 
     @Column
     private String contents;
