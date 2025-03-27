@@ -1,5 +1,6 @@
 package com.club.badminton.service;
 
+import com.club.badminton.dto.MemberDto;
 import com.club.badminton.entity.Member;
 import com.club.badminton.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,9 +18,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    /**
-     * 회원가입
-     */
     @Transactional
     public Long join(Member member) {
         validateMember(member);
@@ -26,9 +25,6 @@ public class MemberService {
         return member.getId();
     }
 
-    /**
-     * 회원가입 검증
-     */
     private void validateMember(Member member) {
         Optional<Member> foundMember = memberRepository.findByEmail(member.getEmail());
         if (foundMember.isPresent()) {
@@ -36,18 +32,33 @@ public class MemberService {
         }
     }
 
-    /**
-     * 전체회원 조회
-     */
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
+    public List<MemberDto> findMembers() {
+        List<Member> members = memberRepository.findAll();
+
+        //엔티티 -> DTO 변환
+        List<MemberDto> memberDtos = members.stream()
+                .map(m -> new MemberDto(m))
+                .collect(Collectors.toList());
+
+        return memberDtos;
     }
 
-    /**
-     * 회원 조회
-     */
-    public Member findMember(Long memberId) {
-        return memberRepository.findById(memberId).get();
+    public MemberDto login(MemberDto memberDto) {
+        Member member = validateLogin(memberDto);
+        return new MemberDto(member);
     }
 
+    private Member validateLogin(MemberDto memberDto) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(memberDto.getEmail());
+
+        if (optionalMember.isEmpty()) {
+            throw new IllegalStateException("등록되지 않은 이메일입니다.");
+        }
+
+        Member member = optionalMember.get();
+        if (!member.getPassword().equals(memberDto.getPassword())) {
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
+        return member;
+    }
 }

@@ -1,139 +1,97 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header:: header}"></head>
 <body>
     <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
 
     <main class="container" style="max-width: 500px;">
-        <div class="py-5 text-center">
+        <div class="py-4 text-center">
             <h2>회원가입</h2>
         </div>
 
         <div class="row g-5">
             <div class="col">
-                <form class="needs-validation" novalidate="">
+                <form class="needs-validation" action="/members/new" method="post" th:object="${memberForm}" novalidate>
                     <div class="row g-3">
+
                         <div class="col-12">
-                            <label for="username" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="username" placeholder="" value="" required="">
-                            <div class="invalid-feedback">
-                                Valid first name is required.
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                            <div class="invalid-feedback">
-                                Please enter a valid email address for shipping updates.
-                            </div>
+                            <label th:for="email" class="form-label">이메일</label>
+                            <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com" required
+                                   th:class="${#fields.hasErrors('email')}? 'form-control border-danger' : 'form-control'" >
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <div class="invalid-feedback mt-1">이메일을 입력해주세요.</div>
                         </div>
 
                         <div class="col-12">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
-                            <div class="invalid-feedback">
-                                Please enter your shipping address.
+                            <label th:for="password" class="form-label">비밀번호</label>
+                            <input type="password" th:field="*{password}" class="form-control" placeholder="*********" required
+                                   th:class="${#fields.hasErrors('password')}? 'form-control border-danger' : 'form-control'">
+                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+                            <div id="passwordHelpBlock" class="form-text">
+                                Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <label for="address2" class="form-label">Address 2 <span class="text-body-secondary">(Optional)</span></label>
-                            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                            <label th:for="name" class="form-label">이름</label>
+                            <input type="text" th:field="*{name}" class="form-control" placeholder="홍길동" value="Mark" required
+                                   th:class="${#fields.hasErrors('name')}? 'form-control border-danger' : 'form-control'">
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <div class="invalid-feedback">이름을 입력해주세요.</div>
                         </div>
 
-                        <div class="col-md-5">
-                            <label for="country" class="form-label">Country</label>
-                            <select class="form-select" id="country" required="">
-                                <option value="">Choose...</option>
-                                <option>United States</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select a valid country.
+                        <div class="col-12">
+                            <label th:for="phone" class="form-label">연락처</label>
+                            <input type="text" th:field="*{phone}" class="form-control" placeholder="010-XXXX-XXXX" required
+                                   th:class="${#fields.hasErrors('phone')}? 'form-control border-danger' : 'form-control'">
+                            <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <div class="invalid-feedback">연락처를 입력해주세요.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label th:for="birthday" class="form-label">생일</label><span class="text-body-secondary ms-1">(선택사항)</span>
+                            <input type="date" th:field="*{birthday}" class="form-control" placeholder=""
+                                   th:class="${#fields.hasErrors('birthday')}? 'form-control border-danger' : 'form-control'">
+                            <p th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <div class="invalid-feedback">생일을 입력해주세요.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="row gy-3">
+                                <div class="col-md-6">
+                                    <label th:for="siDo" class="form-label">주소1 (시/도)</label>
+                                    <input type="text" th:field="*{siDo}" class="form-control" placeholder="서울시" required
+                                           th:class="${#fields.hasErrors('siDo')}? 'form-control border-danger' : 'form-control'">
+                                    <p th:if="${#fields.hasErrors('siDo')}" th:errors="*{siDo}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                    <div class="invalid-feedback">주소1 (시/도)을 입력해주세요.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label th:for="guGun" class="form-label">주소2 (구/군)</label>
+                                    <input type="text" th:field="*{guGun}" class="form-control" placeholder="강남구" required
+                                           th:class="${#fields.hasErrors('guGun')}? 'form-control border-danger' : 'form-control'">
+                                    <p th:if="${#fields.hasErrors('guGun')}" th:errors="*{guGun}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                    <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label th:for="dongRi" class="form-label">주소3 (동/리)</label>
+                                    <input type="text" th:field="*{dongRi}" class="form-control" placeholder="서초동" required
+                                           th:class="${#fields.hasErrors('dongRi')}? 'form-control border-danger' : 'form-control'">
+                                    <p th:if="${#fields.hasErrors('dongRi')}" th:errors="*{dongRi}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                    <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="state" class="form-label">State</label>
-                            <select class="form-select" id="state" required="">
-                                <option value="">Choose...</option>
-                                <option>California</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid state.
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="zip" class="form-label">Zip</label>
-                            <input type="text" class="form-control" id="zip" placeholder="" required="">
-                            <div class="invalid-feedback">
-                                Zip code required.
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="same-address">
-                        <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="save-info">
-                        <label class="form-check-label" for="save-info">Save this information for next time</label>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <h4 class="mb-3">Payment</h4>
-
-                    <div class="my-3">
-                        <div class="form-check">
-                            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
-                            <label class="form-check-label" for="credit">Credit card</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
-                            <label class="form-check-label" for="debit">Debit card</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required="">
-                            <label class="form-check-label" for="paypal">PayPal</label>
-                        </div>
-                    </div>
-
-                    <div class="row gy-3">
-                        <div class="col-md-6">
-                            <label for="cc-name" class="form-label">Name on card</label>
-                            <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-                            <small class="text-body-secondary">Full name as displayed on card</small>
-                            <div class="invalid-feedback">
-                                Name on card is required
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="cc-number" class="form-label">Credit card number</label>
-                            <input type="text" class="form-control" id="cc-number" placeholder="" required="">
-                            <div class="invalid-feedback">
-                                Credit card number is required
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="cc-expiration" class="form-label">Expiration</label>
-                            <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
-                            <div class="invalid-feedback">
-                                Expiration date required
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="cc-cvv" class="form-label">CVV</label>
-                            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
-                            <div class="invalid-feedback">
-                                Security code required
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input type="checkbox" th:field="*{hasAcceptedTerms}" class="form-check-input" required
+                                       th:class="${#fields.hasErrors('hasAcceptedTerms')}? 'form-check-input border-danger' : 'form-check-input'">
+                                <label class="form-check-label" th:for="hasAcceptedTerms">회원가입 약관에 동의합니다.</label>
+                                <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                <div class="invalid-feedback">약관에 동의해야만 회원가입 할 수 있습니다.</div>
                             </div>
                         </div>
                     </div>
@@ -147,5 +105,33 @@
     </main>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Bootstrap validation -->
+    <script th:inline="javascript">
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+          'use strict'
+
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          const forms = document.querySelectorAll('.needs-validation')
+
+          // Loop over them and prevent submission
+          Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+
+              form.classList.add('was-validated')
+            }, false)
+          })
+        })()
+    </script>
+
+    <!-- 에러메시지 팝업 -->
+    <script th:if="${errorMessage}">
+        alert("[[${errorMessage}]]");
+    </script>
 </body>
 </html>
