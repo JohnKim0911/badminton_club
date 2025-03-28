@@ -1,4 +1,4 @@
-package com.club.badminton.web;
+package com.club.badminton.controller.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

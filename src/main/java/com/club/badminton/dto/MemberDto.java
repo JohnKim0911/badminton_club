@@ -3,20 +3,17 @@ package com.club.badminton.dto;
 
 import com.club.badminton.entity.Member;
 import com.club.badminton.entity.address.Address;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class MemberDto {
 
     private Long id;
     private String email;
-    private String password;
     private String name;
     private String phone;
     private LocalDate birthday;

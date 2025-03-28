@@ -11,49 +11,50 @@
 
         <div class="row g-5">
             <div class="col">
-                <form class="needs-validation" action="/members/new" method="post" th:object="${memberForm}" novalidate>
+                <form action="/members/new" method="post" th:object="${memberSignUpForm}" class="needs-validation" novalidate>
                     <div class="row g-3">
 
                         <div class="col-12">
                             <label th:for="email" class="form-label">이메일</label>
                             <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com" required
-                                   th:class="${#fields.hasErrors('email')}? 'form-control border-danger' : 'form-control'" >
-                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger my-1">에러 메시지 from 서버</p>
-                            <div class="invalid-feedback mt-1">이메일을 입력해주세요.</div>
+                                   th:classappend="${#fields.hasErrors('email')} ? 'border-danger' : ''" onblur="removeError(this)">
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger my-1"></p>
+                            <div class="invalid-feedback">이메일을 입력해주세요.</div>
                         </div>
 
                         <div class="col-12">
                             <label th:for="password" class="form-label">비밀번호</label>
-                            <input type="password" th:field="*{password}" class="form-control" placeholder="*********" required
-                                   th:class="${#fields.hasErrors('password')}? 'form-control border-danger' : 'form-control'">
-                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <input type="password" th:field="*{password}" class="form-control" required
+                                   th:classappend="${#fields.hasErrors('password')} ? 'border-danger' : ''" onblur="removeError(this)">
+                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger my-1"></p>
                             <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
                             <div id="passwordHelpBlock" class="form-text">
-                                Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+                                비밀번호는 8 ~ 20자 사이여야 하며, 글자와 숫자를 포함해야 합니다.<br>
+                                (공백, 특수문자, 이모티콘은 사용할 수 없습니다.)
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label th:for="name" class="form-label">이름</label>
-                            <input type="text" th:field="*{name}" class="form-control" placeholder="홍길동" value="Mark" required
-                                   th:class="${#fields.hasErrors('name')}? 'form-control border-danger' : 'form-control'">
-                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <input type="text" th:field="*{name}" class="form-control" value="Mark" required
+                                   th:classappend="${#fields.hasErrors('name')} ? 'border-danger' : ''" onblur="removeError(this)">
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger my-1"></p>
                             <div class="invalid-feedback">이름을 입력해주세요.</div>
                         </div>
 
                         <div class="col-12">
                             <label th:for="phone" class="form-label">연락처</label>
                             <input type="text" th:field="*{phone}" class="form-control" placeholder="010-XXXX-XXXX" required
-                                   th:class="${#fields.hasErrors('phone')}? 'form-control border-danger' : 'form-control'">
-                            <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                   th:classappend="${#fields.hasErrors('phone')} ? 'border-danger' : ''" onblur="removeError(this)">
+                            <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger my-1"></p>
                             <div class="invalid-feedback">연락처를 입력해주세요.</div>
                         </div>
 
                         <div class="col-12">
                             <label th:for="birthday" class="form-label">생일</label><span class="text-body-secondary ms-1">(선택사항)</span>
-                            <input type="date" th:field="*{birthday}" class="form-control" placeholder=""
-                                   th:class="${#fields.hasErrors('birthday')}? 'form-control border-danger' : 'form-control'">
-                            <p th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger my-1">에러 메시지 from 서버</p>
+                            <input type="date" th:field="*{birthday}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('birthday')} ? 'border-danger' : ''" onblur="removeError(this)">
+                            <p th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger my-1"></p>
                             <div class="invalid-feedback">생일을 입력해주세요.</div>
                         </div>
 
@@ -61,25 +62,25 @@
                             <div class="row gy-3">
                                 <div class="col-md-6">
                                     <label th:for="siDo" class="form-label">주소1 (시/도)</label>
-                                    <input type="text" th:field="*{siDo}" class="form-control" placeholder="서울시" required
-                                           th:class="${#fields.hasErrors('siDo')}? 'form-control border-danger' : 'form-control'">
-                                    <p th:if="${#fields.hasErrors('siDo')}" th:errors="*{siDo}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                    <input type="text" th:field="*{siDo}" class="form-control" required
+                                           th:classappend="${#fields.hasErrors('siDo')} ? 'border-danger' : ''" onblur="removeError(this)">
+                                    <p th:if="${#fields.hasErrors('siDo')}" th:errors="*{siDo}" class="text-danger my-1"></p>
                                     <div class="invalid-feedback">주소1 (시/도)을 입력해주세요.</div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label th:for="guGun" class="form-label">주소2 (구/군)</label>
-                                    <input type="text" th:field="*{guGun}" class="form-control" placeholder="강남구" required
-                                           th:class="${#fields.hasErrors('guGun')}? 'form-control border-danger' : 'form-control'">
-                                    <p th:if="${#fields.hasErrors('guGun')}" th:errors="*{guGun}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                    <input type="text" th:field="*{guGun}" class="form-control" required
+                                           th:classappend="${#fields.hasErrors('guGun')} ? 'border-danger' : ''" onblur="removeError(this)">
+                                    <p th:if="${#fields.hasErrors('guGun')}" th:errors="*{guGun}" class="text-danger my-1"></p>
                                     <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label th:for="dongRi" class="form-label">주소3 (동/리)</label>
-                                    <input type="text" th:field="*{dongRi}" class="form-control" placeholder="서초동" required
-                                           th:class="${#fields.hasErrors('dongRi')}? 'form-control border-danger' : 'form-control'">
-                                    <p th:if="${#fields.hasErrors('dongRi')}" th:errors="*{dongRi}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                    <input type="text" th:field="*{dongRi}" class="form-control" required
+                                           th:classappend="${#fields.hasErrors('dongRi')} ? 'border-danger' : ''" onblur="removeError(this)">
+                                    <p th:if="${#fields.hasErrors('dongRi')}" th:errors="*{dongRi}" class="text-danger my-1"></p>
                                     <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
                                 </div>
                             </div>
@@ -88,9 +89,9 @@
                         <div class="col-12">
                             <div class="form-check">
                                 <input type="checkbox" th:field="*{hasAcceptedTerms}" class="form-check-input" required
-                                       th:class="${#fields.hasErrors('hasAcceptedTerms')}? 'form-check-input border-danger' : 'form-check-input'">
+                                        th:classappend="${#fields.hasErrors('hasAcceptedTerms')} ? 'border-danger' : ''" onblur="removeError(this)">
                                 <label class="form-check-label" th:for="hasAcceptedTerms">회원가입 약관에 동의합니다.</label>
-                                <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1">에러 메시지 from 서버</p>
+                                <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1"></p>
                                 <div class="invalid-feedback">약관에 동의해야만 회원가입 할 수 있습니다.</div>
                             </div>
                         </div>
@@ -106,7 +107,7 @@
 
     <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <!-- Bootstrap validation -->
+    <!-- 부트스트랩 폼 검증 -->
     <script th:inline="javascript">
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (() => {
@@ -129,9 +130,16 @@
         })()
     </script>
 
-    <!-- 에러메시지 팝업 -->
-    <script th:if="${errorMessage}">
-        alert("[[${errorMessage}]]");
+    <!-- 서버에서 전달해준 검증에러 지우기 (해당 input에서 다른 곳으로 focus 이동시 작동) -->
+    <script>
+        function removeError(input) {
+            console.log("removeError(input) 실행됨");
+            input.classList.remove("border-danger");
+            let errorMessage = input.parentElement.querySelector(".text-danger");
+            if (errorMessage) {
+                errorMessage.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>
