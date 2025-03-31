@@ -5,19 +5,35 @@
 <body>
     <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
 
-    <main class="container mt-5 py-5">
+    <main class="container mt-5 py-3">
         <div class="form-signin w-100 mx-auto my-5" style="max-width: 330px;">
             <form action="/login" method="post" th:object="${loginForm}">
-                <h1 class="h3 mb-3 fw-normal">로그인</h1>
+                <div class="py-4 text-center">
+                    <h2>로그인</h2>
+                </div>
+                <div class="d-grid gap-3">
+                    <!-- TODO 로그인 ID/PW 클라이언트단 검증 구현 -->
+                    <div class="form-floating mb-1">
+                        <input type="email" class="form-control" th:field="*{email}" placeholder="email@example.com" required>
+                        <label th:for="email">이메일 주소</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" th:field="*{password}" placeholder="Password" required>
+                        <label th:for="password">비밀번호</label>
+                    </div>
+                    <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
+                    <a class="btn btn-warning w-100 py-2" href="/members/new" role="button">회원가입</a>
+                    <!-- TODO ID/PW 찾기 구현 -->
+                    <ul class="list-inline text-end">
+                        <li class="list-inline-item">
+                            <a class="" href="#">ID 찾기</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="" href="#">비밀번호 찾기</a>
+                        </li>
+                    </ul>
+                </div>
 
-                <div class="form-floating mb-1">
-                    <input type="email" class="form-control" th:field="*{email}" placeholder="email@example.com" required>
-                    <label th:for="email">이메일 주소</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" th:field="*{password}" placeholder="Password" required>
-                    <label th:for="password">비밀번호</label>
-                </div>
     <!--
                 <div class="form-check text-start my-3">
                     <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
@@ -26,21 +42,16 @@
                     </label>
                 </div>
     -->
-                <button class="btn btn-primary w-100 py-2 mt-3" type="submit">로그인</button>
+
             </form>
         </div>
     </main>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <!-- 에러메시지 팝업 -->
-    <script th:if="${errorMessage}">
-        alert("[[${errorMessage}]]");
-    </script>
-
-    <!-- 회원가입 성공메시지 팝업 -->
-    <script th:if="${signupSuccess}">
-        alert("[[${signupSuccess}]]");
+    <!-- 팝업 메시지 -->
+    <script th:if="${popUpMessage}">
+        alert("[[${popUpMessage}]]");
     </script>
 </body>
 </html>

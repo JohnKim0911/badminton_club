@@ -76,12 +76,48 @@
 
                     <div class="d-grid gap-3">
                         <a class="btn btn-primary" href="/members/update" role="button">회원정보 수정</a>
-                        <a class="btn btn-outline-primary" href="#" role="button">비밀번호 변경</a>
-                        <a class="btn btn-outline-secondary" href="#" role="button">회원탈퇴</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwModal">비밀번호 변경</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">회원탈퇴</button>
+<!--                        <a class="btn btn-outline-primary" href="#" role="button">비밀번호 변경</a>-->
+<!--                        <a class="btn btn-outline-secondary" href="#" role="button">회원탈퇴</a>-->
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="updatePwModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updatePwModalLabel">비밀번호 변경</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="currentPassword" class="col-form-label">기존 비밀번호:</label>
+                                <input type="password" class="form-control" id="currentPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="col-form-label">새로운 비밀번호:</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPasswordCheck" class="col-form-label">새로운 비밀번호 확인:</label>
+                                <input type="password" class="form-control" id="newPasswordCheck" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary">비밀번호 변경</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <div th:replace="~{fragments/footer :: footer}"></div>

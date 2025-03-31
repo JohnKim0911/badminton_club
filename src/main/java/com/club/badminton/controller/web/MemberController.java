@@ -42,14 +42,14 @@ public class MemberController {
 
         try {
             memberService.signUp(form);
-            redirectAttributes.addFlashAttribute("signupSuccess", "회원가입에 성공하였습니다.");
-            return "redirect:/login";
-
         } catch (DuplicatedEmailException | DuplicatedPhoneException e) {
             //회원가입 실패
             handleSignUpDuplicateException(e, bindingResult);
             return "members/signUpForm";
         }
+
+        redirectAttributes.addFlashAttribute("popUpMessage", "회원가입에 성공하였습니다.");
+        return "redirect:/login";
     }
 
     private void handleSignUpDuplicateException(RuntimeException e, BindingResult bindingResult) {
@@ -72,13 +72,12 @@ public class MemberController {
         try {
             LoginMember loginMember = memberService.login(loginForm);
             session.setAttribute("loginMember", loginMember);
-            return "redirect:/";
-
         } catch (NotRegisteredEmailException | PasswordNotMatchedException e) {
             //로그인 실패
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("popUpMessage", e.getMessage());
             return "members/login";
         }
+        return "redirect:/";
     }
 
     @PostMapping("/logout")
@@ -119,13 +118,13 @@ public class MemberController {
 
         try {
             memberService.update(form);
-            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
-            return "redirect:/myPage";
-
         } catch (DuplicatedPhoneException e) {
-            //회원정보수정 실패
+            //수정 실패
             handleSignUpDuplicateException(e, bindingResult);
             return "members/memberUpdate";
         }
+
+        redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
+        return "redirect:/myPage";
     }
 }

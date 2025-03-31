@@ -2,15 +2,17 @@ package com.club.badminton.dto.member;
 
 import com.club.badminton.entity.Member;
 import com.club.badminton.entity.address.Address;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@ToString
 public class MemberUpdateForm {
 
     private Long id;
@@ -22,6 +24,7 @@ public class MemberUpdateForm {
     @NotBlank
     private String phone;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
     @NotBlank

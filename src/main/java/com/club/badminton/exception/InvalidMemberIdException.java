@@ -1,4 +1,4 @@
-package com.club.badminton.exception.validation;
+package com.club.badminton.exception;
 
 public class InvalidMemberIdException extends RuntimeException {
     public InvalidMemberIdException() {

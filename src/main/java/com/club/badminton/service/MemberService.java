@@ -2,7 +2,7 @@ package com.club.badminton.service;
 
 import com.club.badminton.dto.member.*;
 import com.club.badminton.entity.Member;
-import com.club.badminton.exception.validation.InvalidMemberIdException;
+import com.club.badminton.exception.InvalidMemberIdException;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
@@ -25,22 +25,18 @@ public class MemberService {
 
     @Transactional
     public void signUp(MemberSignUpForm form) {
-        validateDuplicatedEmail(form.getEmail());
-        validateDuplicatedPhone(form.getPhone());
-
+        validateSignUp(form);
         Member member = form.toMember();
         memberRepository.save(member);
     }
 
-    private void validateDuplicatedEmail(String email) {
-        Optional<Member> byEmail = memberRepository.findByEmail(email);
+    private void validateSignUp(MemberSignUpForm form) {
+        Optional<Member> byEmail = memberRepository.findByEmail(form.getEmail());
         if (byEmail.isPresent()) {
             throw new DuplicatedEmailException();
         }
-    }
 
-    private void validateDuplicatedPhone(String phone) {
-        Optional<Member> byPhone = memberRepository.findByPhone(phone);
+        Optional<Member> byPhone = memberRepository.findByPhone(form.getPhone());
         if (byPhone.isPresent()) {
             throw new DuplicatedPhoneException();
         }
@@ -78,25 +74,31 @@ public class MemberService {
 
     public MemberUpdateForm updateForm(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
-            return MemberUpdateForm.toUpdateForm(member);
-        } else {
+        if (optionalMember.isEmpty()) {
             throw new InvalidMemberIdException();
         }
+
+        Member member = optionalMember.get();
+        return MemberUpdateForm.toUpdateForm(member);
     }
 
     @Transactional
     public void update(MemberUpdateForm form) {
-        validateDuplicatedPhone(form.getPhone());
+        validateUpdate(form);
 
         Optional<Member> optionalMember = memberRepository.findById(form.getId());
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
-            member.update(form);
-        } else {
+        if (optionalMember.isEmpty()) {
             throw new InvalidMemberIdException();
         }
 
+        Member member = optionalMember.get();
+        member.update(form);
+    }
+
+    private void validateUpdate(MemberUpdateForm form) {
+        Optional<Member> byPhone = memberRepository.findByPhone(form.getPhone());
+        if (byPhone.isPresent() && !byPhone.get().getId().equals(form.getId())) {
+            throw new DuplicatedPhoneException();
+        }
     }
 }
