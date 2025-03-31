@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header:: header}"></head>
+<body>
+    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+
+    <main class="container text-center" style="max-width: 800px;">
+        <div class="row py-4">
+            <h2>마이페이지</h2>
+        </div>
+
+        <div class="row">
+            <div class="col m-3 p-5 bg-secondary-subtle rounded">
+                <h4 class="mb-4">회원정보</h4>
+                <div class="d-grid gap-3">
+                    <a class="btn btn-primary" href="/member/update" role="button">회원정보 수정</a>
+                    <a class="btn btn-primary" href="#" role="button">프로필 사진변경</a>
+                    <a class="btn btn-primary" href="#" role="button">비밀번호 변경</a>
+                    <a class="btn btn-secondary" href="#" role="button">회원탈퇴</a>
+                </div>
+            </div>
+            <div class="col m-3 p-5 bg-secondary-subtle rounded">
+                <h4 class="mb-4">내 활동</h4>
+                <div class="d-grid gap-3">
+                    <a class="btn btn-info" href="#" role="button">가입한 클럽</a>
+                    <a class="btn btn-info" href="#" role="button">내가 쓴 글</a>
+                    <a class="btn btn-info" href="#" role="button">내가 쓴 댓글</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

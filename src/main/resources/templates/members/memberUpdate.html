@@ -6,36 +6,21 @@
 
     <main class="container" style="max-width: 500px;">
         <div class="py-4 text-center">
-            <h2>회원가입</h2>
+            <h2>회원정보 수정</h2>
         </div>
 
         <div class="row g-5">
             <div class="col">
-                <form action="/members/new" method="post" th:object="${memberSignUpForm}" class="needs-validation" novalidate>
+                <form action="/members/update" method="post" th:object="${memberUpdateForm}" class="needs-validation" novalidate>
+                    <input type="hidden" th:field="*{id}">
+
                     <div class="row g-3">
 
                         <div class="col-12">
                             <span class="text-danger"><b>*</b></span>
                             <label th:for="email" class="form-label">이메일</label>
-                            <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com" required
-                                   th:classappend="${#fields.hasErrors('email')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">이메일을 입력해주세요.</div>
+                            <input type="email" th:field="*{email}" class="form-control" disabled readonly>
                         </div>
-
-                        <div class="col-12">
-                            <span class="text-danger"><b>*</b></span>
-                            <label th:for="password" class="form-label">비밀번호</label>
-                            <input type="password" th:field="*{password}" class="form-control" required
-                                   th:classappend="${#fields.hasErrors('password')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
-                            <div id="passwordHelpBlock" class="form-text">
-                                비밀번호는 8 ~ 20자 사이여야 하며, 글자와 숫자를 포함해야 합니다.<br>
-                                (공백, 특수문자, 이모티콘은 사용할 수 없습니다.)
-                            </div>
-                        </div>
-                        <!-- TODO 비밀번호 제약 조건 update-->
 
                         <div class="col-12">
                             <span class="text-danger"><b>*</b></span>
@@ -94,20 +79,11 @@
                             </div>
                         </div>
 
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input type="checkbox" th:field="*{hasAcceptedTerms}" class="form-check-input" required
-                                        th:classappend="${#fields.hasErrors('hasAcceptedTerms')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                <label class="form-check-label" th:for="hasAcceptedTerms">회원가입 약관에 동의합니다.</label>
-                                <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1"></p>
-                                <div class="invalid-feedback">약관에 동의해야만 회원가입 할 수 있습니다.</div>
-                            </div>
-                        </div>
                     </div>
 
                     <hr class="my-4">
 
-                    <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">수정완료</button>
                 </form>
             </div>
         </div>

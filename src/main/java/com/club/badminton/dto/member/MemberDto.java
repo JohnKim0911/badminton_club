@@ -1,4 +1,4 @@
-package com.club.badminton.dto;
+package com.club.badminton.dto.member;
 
 
 import com.club.badminton.entity.Member;

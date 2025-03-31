@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header:: header}"></head>
+<style>
+    #profile-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        margin: auto;
+    }
+</style>
+<body>
+    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+
+    <main class="container" style="max-width: 500px;">
+        <div class="py-4 text-center">
+            <h2>회원정보</h2>
+        </div>
+
+        <div class="row g-5">
+            <div class="col">
+                <div th:object="${memberUpdateForm}">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="row g-3">
+
+                        <div class="col-12" style="text-align: center;">
+                            <img th:src="@{/images/default_profile.png}" alt="profile-img" id="profile-img"/>
+                            <a class="btn btn-outline-secondary btn-sm" href="#" role="button">프로필 사진변경</a>
+                        </div>
+
+                        <div class="col-12">
+                            <label th:for="email" class="form-label">이메일</label>
+                            <input type="email" th:field="*{email}" class="form-control" disabled readonly>
+                        </div>
+
+                        <div class="col-12">
+                            <label th:for="name" class="form-label">이름</label>
+                            <input type="text" th:field="*{name}" class="form-control" disabled readonly>
+                        </div>
+
+                        <div class="col-12">
+                            <label th:for="phone" class="form-label">연락처</label>
+                            <input type="text" th:field="*{phone}" class="form-control" disabled readonly>
+                        </div>
+
+                        <div class="col-12">
+                            <label th:for="birthday" class="form-label">생일</label>
+                            <input type="date" th:field="*{birthday}" class="form-control" disabled readonly>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="row gy-3">
+                                <div class="col-md-6">
+                                    <label th:for="siDo" class="form-label">주소1 (시/도)</label>
+                                    <input type="text" th:field="*{siDo}" class="form-control" disabled readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label th:for="guGun" class="form-label">주소2 (구/군)</label>
+                                    <input type="text" th:field="*{guGun}" class="form-control" disabled readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label th:for="dongRi" class="form-label">주소3 (동/리)</label>
+                                    <input type="text" th:field="*{dongRi}" class="form-control" disabled readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-grid gap-3">
+                        <a class="btn btn-primary" href="/members/update" role="button">회원정보 수정</a>
+                        <a class="btn btn-outline-primary" href="#" role="button">비밀번호 변경</a>
+                        <a class="btn btn-outline-secondary" href="#" role="button">회원탈퇴</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- 팝업 메시지 -->
+    <script th:if="${popUpMessage}">
+        alert("[[${popUpMessage}]]");
+    </script>
+</body>
+</html>

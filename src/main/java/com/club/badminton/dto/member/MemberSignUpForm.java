@@ -1,4 +1,4 @@
-package com.club.badminton.dto;
+package com.club.badminton.dto.member;
 
 import com.club.badminton.entity.Member;
 import com.club.badminton.entity.address.Address;
@@ -11,10 +11,10 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+
 @Getter
 @Setter
 public class MemberSignUpForm {
-    //TODO 자세한 제약조건들 추가
 
     @NotBlank
     @Email

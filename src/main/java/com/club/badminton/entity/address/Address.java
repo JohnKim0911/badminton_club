@@ -27,4 +27,10 @@ public class Address {
     private String siDo;
     private String guGun;
     private String dongRi;
+
+    public void update(String siDo, String guGun, String dongRi) {
+        this.siDo = siDo;
+        this.guGun = guGun;
+        this.dongRi = dongRi;
+    }
 }

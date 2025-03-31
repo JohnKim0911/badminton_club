@@ -13,6 +13,14 @@ spring:
       hibernate:
         format_sql: true
 
+# (thymeleaf 세팅은 아래가 default라 생략해도 됨)
+#  thymeleaf:
+#    prefix: classpath:/templates/
+#    suffix: .html
+#    cache: false #false로 하면 thymeleaf 수정 후 바로 반영됨.
+
 logging.level:
   org.hibernate.SQL: debug #logger를 통해 하이버네이트 실행 SQL을 남긴다.
 #  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
+
+

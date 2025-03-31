@@ -1,9 +1,8 @@
 package com.club.badminton.service;
 
-import com.club.badminton.dto.LoginForm;
-import com.club.badminton.dto.MemberDto;
-import com.club.badminton.dto.MemberSignUpForm;
+import com.club.badminton.dto.member.*;
 import com.club.badminton.entity.Member;
+import com.club.badminton.exception.validation.InvalidMemberIdException;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
@@ -25,27 +24,31 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long signUp(MemberSignUpForm form) {
-        validateSignUp(form);
+    public void signUp(MemberSignUpForm form) {
+        validateDuplicatedEmail(form.getEmail());
+        validateDuplicatedPhone(form.getPhone());
+
         Member member = form.toMember();
         memberRepository.save(member);
-        return member.getId();
     }
 
-    private void validateSignUp(MemberSignUpForm form) {
-        Optional<Member> byEmail = memberRepository.findByEmail(form.getEmail());
+    private void validateDuplicatedEmail(String email) {
+        Optional<Member> byEmail = memberRepository.findByEmail(email);
         if (byEmail.isPresent()) {
             throw new DuplicatedEmailException();
         }
-        Optional<Member> byPhone = memberRepository.findByPhone(form.getPhone());
+    }
+
+    private void validateDuplicatedPhone(String phone) {
+        Optional<Member> byPhone = memberRepository.findByPhone(phone);
         if (byPhone.isPresent()) {
             throw new DuplicatedPhoneException();
         }
     }
 
-    public MemberDto login(LoginForm loginForm) {
+    public LoginMember login(LoginForm loginForm) {
         Member member = validateLogin(loginForm);
-        return new MemberDto(member);
+        return new LoginMember(member);
     }
 
     private Member validateLogin(LoginForm loginForm) {
@@ -64,13 +67,36 @@ public class MemberService {
 
     public List<MemberDto> findMembers() {
         List<Member> members = memberRepository.findAll();
-        return getMemberDtos(members);
+        return toMemberDtos(members);
     }
 
-    private static List<MemberDto> getMemberDtos(List<Member> members) {
-        List<MemberDto> memberDtos = members.stream()
+    private static List<MemberDto> toMemberDtos(List<Member> members) {
+        return members.stream()
                 .map(m -> new MemberDto(m))
                 .collect(Collectors.toList());
-        return memberDtos;
+    }
+
+    public MemberUpdateForm updateForm(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            return MemberUpdateForm.toUpdateForm(member);
+        } else {
+            throw new InvalidMemberIdException();
+        }
+    }
+
+    @Transactional
+    public void update(MemberUpdateForm form) {
+        validateDuplicatedPhone(form.getPhone());
+
+        Optional<Member> optionalMember = memberRepository.findById(form.getId());
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            member.update(form);
+        } else {
+            throw new InvalidMemberIdException();
+        }
+
     }
 }

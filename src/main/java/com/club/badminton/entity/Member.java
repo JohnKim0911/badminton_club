@@ -1,5 +1,6 @@
 package com.club.badminton.entity;
 
+import com.club.badminton.dto.member.MemberUpdateForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.base.BaseTimeEntity;
 import com.club.badminton.entity.club.ClubMember;
@@ -48,5 +49,12 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
         this.birthday = birthday;
         this.address = address;
+    }
+
+    public void update(MemberUpdateForm form) {
+        this.name = form.getName();
+        this.phone = form.getPhone();
+        this.birthday = form.getBirthday();
+        this.address.update(form.getSiDo(), form.getGuGun(), form.getDongRi());
     }
 }

@@ -4,7 +4,7 @@
 <header th:fragment="bodyHeader" class="bg-dark p-3 mb-5">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <a href="/" class="d-flex mb-2 mb-lg-0 text-white text-decoration-none">
                 <span class="fs-4">동호회 플랫폼</span>
             </a>
 
@@ -13,12 +13,12 @@
                        th:classappend="${currentPath == '/' ? 'text-white' : 'text-secondary'}">Home</a></li>
                 <li><a href="/members" class="nav-link px-2"
                        th:classappend="${currentPath == '/members' ? 'text-white' : 'text-secondary'}">회원목록</a></li>
-                <li><a href="/" class="nav-link px-2"
-                       th:classappend="${currentPath == '#' ? 'text-white' : 'text-secondary'}">dummy</a></li>
-                <li><a href="/" class="nav-link px-2"
-                       th:classappend="${currentPath == '#' ? 'text-white' : 'text-secondary'}">dummy</a></li>
-                <li><a href="/" class="nav-link px-2"
-                       th:classappend="${currentPath == '#' ? 'text-white' : 'text-secondary'}">dummy</a></li>
+                <li><a href="/dummy1" class="nav-link px-2"
+                       th:classappend="${currentPath == '/dummy1' ? 'text-white' : 'text-secondary'}">dummy1</a></li>
+                <li><a href="/dummy2" class="nav-link px-2"
+                       th:classappend="${currentPath == '/dummy2' ? 'text-white' : 'text-secondary'}">dummy2</a></li>
+                <li><a href="/dummy3" class="nav-link px-2"
+                       th:classappend="${currentPath == '/dummy3' ? 'text-white' : 'text-secondary'}">dummy3</a></li>
             </ul>
 
             <!-- 로그인 전 -->
@@ -28,12 +28,15 @@
             </div>
 
             <!-- 로그인 후 -->
-            <div th:if="${session.loginMember != null}" class="dropdown text-end">
-                <a href="#" class="d-block text-white link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <div th:if="${session.loginMember != null}" class="dropdown">
+                <a href="#" class="d-block text-white link-body-emphasis text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
+                    <span class="me-2" style="line-height: 40px;"><b th:text="${session.loginMember.name}">홍길동</b>님</span>
                     <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small">
-                    <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                    <li><a class="dropdown-item" href="/myPage">마이페이지</a></li>
+                    <li><a class="dropdown-item" href="/members/myActivity">내 활동</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a href="#" class="dropdown-item" onclick="confirmLogout(event);">로그아웃</a>
@@ -55,9 +58,3 @@
         }
     </script>
 </header>
-
-<style>
-    header .nav-link:hover {
-        color: white !important;
-    }
-</style>

@@ -1,8 +1,6 @@
 package com.club.badminton.controller.web;
 
-import com.club.badminton.dto.LoginForm;
-import com.club.badminton.dto.MemberDto;
-import com.club.badminton.dto.MemberSignUpForm;
+import com.club.badminton.dto.member.*;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
@@ -45,7 +43,7 @@ public class MemberController {
         try {
             memberService.signUp(form);
             redirectAttributes.addFlashAttribute("signupSuccess", "회원가입에 성공하였습니다.");
-            return "redirect:/members/login";
+            return "redirect:/login";
 
         } catch (DuplicatedEmailException | DuplicatedPhoneException e) {
             //회원가입 실패
@@ -68,10 +66,11 @@ public class MemberController {
         return "members/login";
     }
 
+    //TODO restAPI 형식으로 URL 수정필요
     @PostMapping("/login")
     public String login(@ModelAttribute LoginForm loginForm, HttpSession session, Model model) {
         try {
-            MemberDto loginMember = memberService.login(loginForm);
+            LoginMember loginMember = memberService.login(loginForm);
             session.setAttribute("loginMember", loginMember);
             return "redirect:/";
 
@@ -94,5 +93,39 @@ public class MemberController {
         model.addAttribute("members", memberDtos);
         modelAddAttributeCurrentPath(model, request);
         return "members/memberList";
+    }
+
+    @GetMapping("/myPage")
+    public String myPage(HttpSession session, Model model) {
+        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
+        MemberUpdateForm form = memberService.updateForm(loginMember.getId());
+        model.addAttribute("memberUpdateForm", form);
+        return "members/myPage";
+    }
+
+    @GetMapping("/members/update")
+    public String updateForm(HttpSession session, Model model) {
+        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
+        MemberUpdateForm form = memberService.updateForm(loginMember.getId());
+        model.addAttribute("memberUpdateForm", form);
+        return "members/memberUpdate";
+    }
+
+    @PostMapping("/members/update")
+    public String update(@Valid MemberUpdateForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "members/memberUpdate";
+        }
+
+        try {
+            memberService.update(form);
+            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
+            return "redirect:/myPage";
+
+        } catch (DuplicatedPhoneException e) {
+            //회원정보수정 실패
+            handleSignUpDuplicateException(e, bindingResult);
+            return "members/memberUpdate";
+        }
     }
 }
