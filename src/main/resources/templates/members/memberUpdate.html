@@ -120,7 +120,6 @@
     <!-- 서버에서 전달해준 검증에러 지우기 (해당 input에서 다른 곳으로 focus 이동시 작동) -->
     <script>
         function removeError(input) {
-            console.log("removeError(input) 실행됨");
             input.classList.remove("border-danger");
             let errorMessage = input.parentElement.querySelector("p.text-danger");
             if (errorMessage) {

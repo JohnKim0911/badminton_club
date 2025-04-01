@@ -73,25 +73,23 @@ public class MemberService {
     }
 
     public MemberUpdateForm updateForm(Long memberId) {
+        Member member = findMemberById(memberId);
+        return MemberUpdateForm.toUpdateForm(member);
+    }
+
+    private Member findMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isEmpty()) {
             throw new InvalidMemberIdException();
         }
-
-        Member member = optionalMember.get();
-        return MemberUpdateForm.toUpdateForm(member);
+        return optionalMember.get();
     }
 
     @Transactional
     public void update(MemberUpdateForm form) {
         validateUpdate(form);
 
-        Optional<Member> optionalMember = memberRepository.findById(form.getId());
-        if (optionalMember.isEmpty()) {
-            throw new InvalidMemberIdException();
-        }
-
-        Member member = optionalMember.get();
+        Member member = findMemberById(form.getId());
         member.update(form);
     }
 
@@ -100,5 +98,16 @@ public class MemberService {
         if (byPhone.isPresent() && !byPhone.get().getId().equals(form.getId())) {
             throw new DuplicatedPhoneException();
         }
+    }
+
+    public boolean checkPassword(Long memberId, String inputPassword) {
+        Member member = findMemberById(memberId);
+        return inputPassword.equals(member.getPassword());
+    }
+
+    @Transactional
+    public void updatePassword(Long memberId, String newPassword) {
+        Member member = findMemberById(memberId);
+        member.changePassword(newPassword);
     }
 }

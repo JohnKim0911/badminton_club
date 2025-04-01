@@ -25,6 +25,7 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    //TODO 비밀번호 암호화
     @Column(nullable = false)
     private String password;
 
@@ -56,5 +57,9 @@ public class Member extends BaseTimeEntity {
         this.phone = form.getPhone();
         this.birthday = form.getBirthday();
         this.address.update(form.getSiDo(), form.getGuGun(), form.getDongRi());
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

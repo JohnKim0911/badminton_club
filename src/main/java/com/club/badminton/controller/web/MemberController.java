@@ -10,12 +10,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -24,6 +23,7 @@ import static com.club.badminton.controller.web.HomeController.*;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -127,4 +127,29 @@ public class MemberController {
         redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
         return "redirect:/myPage";
     }
+
+    @PostMapping("/member/checkPassword")
+    public @ResponseBody String checkPassword(@RequestParam("currentPassword") String password, HttpSession session) {
+        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
+        boolean isMatched = memberService.checkPassword(loginMember.getId(), password);
+        return isMatched ? "ok" : "wrong";
+    }
+
+    @PostMapping("/members/updatePassword")
+    public String updatePassword(@RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 HttpSession session, RedirectAttributes redirectAttributes) {
+
+        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
+        boolean isMatched = memberService.checkPassword(loginMember.getId(), currentPassword);
+
+        if (isMatched) {
+            memberService.updatePassword(loginMember.getId(), newPassword);
+            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("popUpMessage", "기존 비밀번호가 틀립니다.");
+        }
+        return "redirect:/myPage";
+    }
+
 }

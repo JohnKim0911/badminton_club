@@ -79,14 +79,12 @@
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwModal">비밀번호 변경</button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">회원탈퇴</button>
-<!--                        <a class="btn btn-outline-primary" href="#" role="button">비밀번호 변경</a>-->
-<!--                        <a class="btn btn-outline-secondary" href="#" role="button">회원탈퇴</a>-->
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal -->
+        <!-- 비밀번호 변경 Modal -->
         <div class="modal fade" id="updatePwModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -94,26 +92,29 @@
                         <h1 class="modal-title fs-5" id="updatePwModalLabel">비밀번호 변경</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="currentPassword" class="col-form-label">기존 비밀번호:</label>
-                                <input type="password" class="form-control" id="currentPassword" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newPassword" class="col-form-label">새로운 비밀번호:</label>
-                                <input type="password" class="form-control" id="newPassword" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newPasswordCheck" class="col-form-label">새로운 비밀번호 확인:</label>
-                                <input type="password" class="form-control" id="newPasswordCheck" required>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="button" class="btn btn-primary">비밀번호 변경</button>
-                    </div>
+                    <form action="/members/updatePassword" method="post" id="changePasswordForm" onsubmit="return validateForm(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
+                        <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="currentPassword" class="col-form-label">기존 비밀번호:</label>
+                                    <input type="password" class="form-control" id="currentPassword" name="currentPassword" required onblur="removeError(this);">
+                                    <p class="text-danger my-1" id="currentPasswordResult"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="col-form-label">새로운 비밀번호:</label>
+                                    <input type="password" class="form-control" id="newPassword" name="newPassword" required onblur="removeError(this);">
+                                    <p class="text-danger my-1" id="newPasswordResult"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPasswordCheck" class="col-form-label">새로운 비밀번호 확인:</label>
+                                    <input type="password" class="form-control" id="newPasswordCheck" required onblur="removeError(this);">
+                                    <p class="text-danger my-1" id="newPasswordCheckResult"></p>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="submit" class="btn btn-primary">비밀번호 변경</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -126,5 +127,87 @@
     <script th:if="${popUpMessage}">
         alert("[[${popUpMessage}]]");
     </script>
+
+    <!-- 비밀번호 변경 modal 관련 -->
+    <script th:inline="javascript">
+
+        async function validateForm(event) {
+            event.preventDefault(); // Stop the form from submitting immediately
+
+            const isValid = await isPasswordValid();
+            if (isValid) {
+                document.getElementById("changePasswordForm").submit(); // Manually submit if validation passes
+            }
+        }
+
+        async function isPasswordValid() {
+            //return isNewPasswordValid() && await isCurrentPasswordValid(); //이렇게 하면 안된다. 왜? isNewPasswordValid()가 false여도 isCurrentPasswordValid()는 실행된다. js 특징...
+            if (!isNewPasswordValid()) return false; // Stop if new password is invalid
+            return await isCurrentPasswordValid(); // Wait for AJAX check
+        }
+
+        function isNewPasswordValid() {
+            const newPasswordEl = document.getElementById("newPassword");
+            const newPasswordCheckEl = document.getElementById("newPasswordCheck");
+
+            const newPassword = newPasswordEl.value;
+            const newPasswordCheck = newPasswordCheckEl.value;
+            
+            if (newPassword.length < 8 || newPassword.length > 20) {
+                newPasswordEl.classList.add("border-danger");
+                const resultEl = document.getElementById("newPasswordResult");
+                resultEl.innerHTML = "비밀번호는 8 ~ 20자이어야 합니다.";
+                resultEl.style.display = "block";
+                return false;
+            }
+
+            if (newPassword !== newPasswordCheck) {
+                newPasswordCheckEl.classList.add("border-danger");
+                const resultEl = document.getElementById("newPasswordCheckResult");
+                resultEl.innerHTML = "입력한 비밀번호가 서로 일치하지 않습니다.";
+                resultEl.style.display = "block";
+                return false;
+            }
+            return true;
+        }
+
+        function isCurrentPasswordValid() {
+
+            const currentPassword = document.getElementById("currentPassword").value;
+            const checkResultEl = document.getElementById("currentPasswordResult");
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "post",
+                    url: "/member/checkPassword",
+                    data: {
+                        "currentPassword": currentPassword
+                    },
+                    success: function(result) {
+                        if (result == "ok") {
+                            resolve(true);
+                        } else {
+                            checkResultEl.innerHTML = "기존 비밀번호가 일치하지 않습니다.";
+                            checkResultEl.style.display = "block";
+                            resolve(false);
+                        }
+                    },
+                    error: function(error) {
+                        console.log("에러발생", error);
+                        reject(false);
+                    }
+                });
+            });
+        }
+
+        function removeError(input) {
+            input.classList.remove("border-danger");
+            let errorMessage = input.parentElement.querySelector("p.text-danger");
+            if (errorMessage) {
+                errorMessage.style.display = "none";
+            }
+        }
+    </script>
+
 </body>
 </html>
