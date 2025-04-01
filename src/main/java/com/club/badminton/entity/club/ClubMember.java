@@ -1,6 +1,6 @@
 package com.club.badminton.entity.club;
 
-import com.club.badminton.entity.Member;
+import com.club.badminton.entity.member.Member;
 import com.club.badminton.entity.budget.Transaction;
 import com.club.badminton.entity.base.BaseTimeEntity;
 import com.club.badminton.entity.post.Comment;

@@ -1,7 +1,7 @@
 package com.club.badminton.dto.member;
 
 
-import com.club.badminton.entity.Member;
+import com.club.badminton.entity.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 

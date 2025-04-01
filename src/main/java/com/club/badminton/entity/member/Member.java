@@ -1,4 +1,4 @@
-package com.club.badminton.entity;
+package com.club.badminton.entity.member;
 
 import com.club.badminton.dto.member.MemberUpdateForm;
 import com.club.badminton.entity.address.Address;
@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "email", "password", "name", "phone", "birthday", "address"})
+@ToString(of = {"id", "email", "password", "name", "phone", "birthday", "address", "status"})
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -40,6 +40,9 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private Address address;
 
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
@@ -50,6 +53,7 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
         this.birthday = birthday;
         this.address = address;
+        this.status = MemberStatus.ACTIVE;
     }
 
     public void update(MemberUpdateForm form) {
@@ -61,5 +65,9 @@ public class Member extends BaseTimeEntity {
 
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void changeStatus(MemberStatus status) {
+        this.status = status;
     }
 }

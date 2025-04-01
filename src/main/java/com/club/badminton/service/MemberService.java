@@ -1,14 +1,17 @@
 package com.club.badminton.service;
 
 import com.club.badminton.dto.member.*;
-import com.club.badminton.entity.Member;
+import com.club.badminton.entity.member.Member;
+import com.club.badminton.entity.member.MemberStatus;
 import com.club.badminton.exception.InvalidMemberIdException;
+import com.club.badminton.exception.validation.login.ResignedMemberException;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
 import com.club.badminton.exception.validation.login.PasswordNotMatchedException;
 import com.club.badminton.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +61,11 @@ public class MemberService {
         if (!member.getPassword().equals(loginForm.getPassword())) {
             throw new PasswordNotMatchedException();
         }
+
+        if (member.getStatus() == MemberStatus.RESIGNED) {
+            throw new ResignedMemberException();
+        }
+
         return member;
     }
 
@@ -109,5 +117,11 @@ public class MemberService {
     public void updatePassword(Long memberId, String newPassword) {
         Member member = findMemberById(memberId);
         member.changePassword(newPassword);
+    }
+
+    @Transactional
+    public void delete(Long memberId) {
+        Member member = findMemberById(memberId);
+        member.changeStatus(MemberStatus.RESIGNED);
     }
 }

@@ -1,6 +1,6 @@
 package com.club.badminton;
 
-import com.club.badminton.entity.Member;
+import com.club.badminton.entity.member.Member;
 import com.club.badminton.entity.address.Address;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;

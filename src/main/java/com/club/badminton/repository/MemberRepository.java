@@ -1,6 +1,6 @@
 package com.club.badminton.repository;
 
-import com.club.badminton.entity.Member;
+import com.club.badminton.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

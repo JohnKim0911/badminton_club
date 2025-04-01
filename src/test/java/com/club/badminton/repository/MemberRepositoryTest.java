@@ -1,12 +1,11 @@
 package com.club.badminton.repository;
 
-import com.club.badminton.entity.Member;
+import com.club.badminton.entity.member.Member;
 import com.club.badminton.entity.address.Address;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;

@@ -1,6 +1,7 @@
 package com.club.badminton.controller.web;
 
 import com.club.badminton.dto.member.*;
+import com.club.badminton.exception.validation.login.ResignedMemberException;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
@@ -72,7 +73,7 @@ public class MemberController {
         try {
             LoginMember loginMember = memberService.login(loginForm);
             session.setAttribute("loginMember", loginMember);
-        } catch (NotRegisteredEmailException | PasswordNotMatchedException e) {
+        } catch (NotRegisteredEmailException | PasswordNotMatchedException | ResignedMemberException e) {
             //로그인 실패
             model.addAttribute("popUpMessage", e.getMessage());
             return "members/login";
@@ -96,16 +97,19 @@ public class MemberController {
 
     @GetMapping("/myPage")
     public String myPage(HttpSession session, Model model) {
-        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
-        MemberUpdateForm form = memberService.updateForm(loginMember.getId());
+        MemberUpdateForm form = memberService.updateForm(getLoginMemberId(session));
         model.addAttribute("memberUpdateForm", form);
         return "members/myPage";
     }
 
+    private static Long getLoginMemberId(HttpSession session) {
+        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
+        return loginMember.getId();
+    }
+
     @GetMapping("/members/update")
     public String updateForm(HttpSession session, Model model) {
-        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
-        MemberUpdateForm form = memberService.updateForm(loginMember.getId());
+        MemberUpdateForm form = memberService.updateForm(getLoginMemberId(session));
         model.addAttribute("memberUpdateForm", form);
         return "members/memberUpdate";
     }
@@ -130,8 +134,7 @@ public class MemberController {
 
     @PostMapping("/member/checkPassword")
     public @ResponseBody String checkPassword(@RequestParam("currentPassword") String password, HttpSession session) {
-        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
-        boolean isMatched = memberService.checkPassword(loginMember.getId(), password);
+        boolean isMatched = memberService.checkPassword(getLoginMemberId(session), password);
         return isMatched ? "ok" : "wrong";
     }
 
@@ -140,16 +143,20 @@ public class MemberController {
                                  @RequestParam("newPassword") String newPassword,
                                  HttpSession session, RedirectAttributes redirectAttributes) {
 
-        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
-        boolean isMatched = memberService.checkPassword(loginMember.getId(), currentPassword);
+        memberService.updatePassword(getLoginMemberId(session), newPassword);
 
-        if (isMatched) {
-            memberService.updatePassword(loginMember.getId(), newPassword);
-            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
-        } else {
-            redirectAttributes.addFlashAttribute("popUpMessage", "기존 비밀번호가 틀립니다.");
-        }
+        redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
         return "redirect:/myPage";
+    }
+
+    @PostMapping("/members/delete")
+    public String delete(HttpSession session, RedirectAttributes redirectAttributes) {
+        memberService.delete(getLoginMemberId(session));
+
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("popUpMessage", "회원탈퇴에 성공하였습니다. 그 동안 이용해주셔서 감사합니다.");
+        //TODO 탈퇴회원 복구 기능 추가?
+        return "redirect:/login";
     }
 
 }
