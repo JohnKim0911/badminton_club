@@ -5,20 +5,21 @@
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="/" class="d-flex mb-2 mb-lg-0 text-white text-decoration-none">
-                <span class="fs-4">동호회 플랫폼</span>
+                <span class="fs-4">BadmintonClubs</span>
             </a>
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mx-5 mb-2 justify-content-center mb-md-0">
-                <li><a href="/" class="nav-link px-2"
-                       th:classappend="${currentPath == '/' ? 'text-white' : 'text-secondary'}">Home</a></li>
-                <li><a href="/members" class="nav-link px-2"
-                       th:classappend="${currentPath == '/members' ? 'text-white' : 'text-secondary'}">회원목록</a></li>
-                <li><a href="/dummy1" class="nav-link px-2"
-                       th:classappend="${currentPath == '/dummy1' ? 'text-white' : 'text-secondary'}">dummy1</a></li>
-                <li><a href="/dummy2" class="nav-link px-2"
-                       th:classappend="${currentPath == '/dummy2' ? 'text-white' : 'text-secondary'}">dummy2</a></li>
-                <li><a href="/dummy3" class="nav-link px-2"
-                       th:classappend="${currentPath == '/dummy3' ? 'text-white' : 'text-secondary'}">dummy3</a></li>
+            <!-- 로그인 전 -->
+            <ul th:if="${session.loginMember == null}" class="nav col-12 col-lg-auto me-lg-auto mx-5 mb-2 justify-content-center mb-md-0">
+            </ul>
+
+            <!-- 로그인 후 -->
+            <ul th:if="${session.loginMember != null}" class="nav col-12 col-lg-auto me-lg-auto mx-5 mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2" th:classappend="${currentPath == '/' ? 'text-white' : 'text-secondary'}">Home</a></li>
+                <li><a href="/clubs" class="nav-link px-2" th:classappend="${currentPath == '/clubs' ? 'text-white' : 'text-secondary'}">클럽목록</a></li>
+                <li><a href="/members" class="nav-link px-2" th:classappend="${currentPath == '/members' ? 'text-white' : 'text-secondary'}">회원목록</a></li>
+                <li><a href="/dummy1" class="nav-link px-2" th:classappend="${currentPath == '/dummy1' ? 'text-white' : 'text-secondary'}">dummy1</a></li>
+                <li><a href="/dummy2" class="nav-link px-2" th:classappend="${currentPath == '/dummy2' ? 'text-white' : 'text-secondary'}">dummy2</a></li>
+                <li><a href="/dummy3" class="nav-link px-2" th:classappend="${currentPath == '/dummy3' ? 'text-white' : 'text-secondary'}">dummy3</a></li>
             </ul>
 
             <!-- 로그인 전 -->

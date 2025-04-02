@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header:: header}"></head>
+<body>
+    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+
+    <main class="container mt-5 py-3">
+
+        <section class="container text-center border-bottom">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-bold text-body-emphasis">배드민턴 클럽 플랫폼</h1>
+                    <p class="lead text-body-secondary">
+                        지역별 배드민턴 클럽을 찾아보세요!<br>
+                        가입한 클럽에서 회원들과 다양한 방식으로 소통할 수 있어요.<br>
+                        게시판, 앨범, 일정, 회비 관리, 물품 거래, 레슨 신청, 채팅까지<br>
+                        ㅡ 모든 것을 한 곳에서! 지금 바로 시작하세요! 🏸
+                    </p>
+                    <div>
+                        <a href="/login" class="btn btn-outline-secondary my-2 btn-lg me-2">로그인</a>
+                        <a href="/members/new" class="btn btn-primary my-2 btn-lg">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container px-4 py-5" id="custom-cards">
+
+            <form class="row row-cols-lg-auto g-3 align-items-center mb-3">
+                <div class="col">
+                    <h2>클럽 목록</h2>
+                </div>
+
+                <div class="col d-flex ms-auto me-0 gap-2">
+                    <div>
+                        <label class="visually-hidden" for="siDo"></label>
+                        <select class="form-select" id="siDo">
+                            <option selected>시/도</option>
+                            <option value="1">서울특별시</option>
+                            <option value="2">경기도</option>
+                            <option value="3">제주도</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="visually-hidden" for="guGun"></label>
+                        <select class="form-select" id="guGun">
+                            <option selected>구/군</option>
+                            <option value="1">용산구</option>
+                            <option value="2">서초구</option>
+                            <option value="3">해운대구</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="visually-hidden" for="search"></label>
+                        <input type="text" class="form-control" id="search" placeholder="클럽 이름">
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary">검색</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">클럽 이름</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <a href="#" class="btn btn-primary">둘러보기</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- row -->
+
+            <nav class="row mt-5" aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </section>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

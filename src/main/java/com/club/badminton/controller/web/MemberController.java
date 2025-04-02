@@ -132,7 +132,7 @@ public class MemberController {
         return "redirect:/myPage";
     }
 
-    @PostMapping("/member/checkPassword")
+    @PostMapping("/members/checkPassword")
     public @ResponseBody String checkPassword(@RequestParam("currentPassword") String password, HttpSession session) {
         boolean isMatched = memberService.checkPassword(getLoginMemberId(session), password);
         return isMatched ? "ok" : "wrong";
