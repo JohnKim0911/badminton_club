@@ -3,7 +3,7 @@
 
 <head th:replace="~{fragments/header:: header}"></head>
 <body>
-    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
     <main class="container mt-5 py-3">
         <div class="form-signin w-100 mx-auto my-5" style="max-width: 330px;">
@@ -47,10 +47,9 @@
         </div>
     </main>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <!-- 팝업 메시지 -->
-    <script th:if="${popUpMessage}">
+    <script th:if="${popUpMessage}"> // 팝업 메시지
         alert("[[${popUpMessage}]]");
     </script>
 </body>

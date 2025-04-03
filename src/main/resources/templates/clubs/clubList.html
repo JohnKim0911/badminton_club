@@ -2,11 +2,13 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header:: header}"></head>
 <body>
-    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <section th:replace="~{clubs/clubListFragment:: clubListFragment}"></section>
+    <main class="container">
+        <section th:replace="~{clubs/clubListFragment:: clubListFragment}"></section>
+    </main>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
 

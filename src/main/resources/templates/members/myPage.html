@@ -12,7 +12,7 @@
     }
 </style>
 <body>
-    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
     <main class="container" style="max-width: 500px;">
         <div class="py-4 text-center">
@@ -124,7 +124,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="deleteAccountModal">회원탈퇴</h1>
+                        <h1 class="modal-title fs-5">회원탈퇴</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/members/delete" method="post" id="deleteForm" onsubmit="return validateDeleteForm(event);">
@@ -147,31 +147,41 @@
 
     </main>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <!-- 팝업 메시지 -->
-    <script th:if="${popUpMessage}">
+    <script th:if="${popUpMessage}"> // 팝업 메시지
         alert("[[${popUpMessage}]]");
     </script>
 
-    <!-- 비밀번호 변경 modal 관련 -->
     <script th:inline="javascript">
 
+        // 비밀번호 변경 modal
         async function validateUpdatePwForm(event) {
-            event.preventDefault(); // Stop the form from submitting immediately
+            event.preventDefault();
 
-            const isValid = await isPasswordValid();
+            const isValid = await isUpdatePwFormValid();
             if (isValid) {
-                document.getElementById("changePasswordForm").submit(); // Manually submit if validation passes
+                document.getElementById("changePasswordForm").submit();
             }
         }
 
-        async function isPasswordValid() {
-            //return isNewPasswordValid() && await isCurrentPasswordValid(); //이렇게 하면 안된다. 왜? isNewPasswordValid()가 false여도 isCurrentPasswordValid()는 실행된다. js 특징...
-            if (!isNewPasswordValid()) return false; // Stop if new password is invalid
-            return await isCurrentPasswordValid("update"); // Wait for AJAX check
+        // 회원탈퇴 modal
+        async function validateDeleteForm(event) {
+            event.preventDefault();
+
+            const isValid = await isCurrentPasswordValid("delete");
+            if (isValid) {
+                document.getElementById("deleteForm").submit();
+            }
         }
 
+        // 전용 - 비밀번호 변경 modal
+        async function isUpdatePwFormValid() {
+            if (!isNewPasswordValid()) return false;
+            return await isCurrentPasswordValid("update");
+        }
+
+        // 전용 - 비밀번호 변경 modal
         function isNewPasswordValid() {
             const newPasswordEl = document.getElementById("newPassword");
             const newPasswordCheckEl = document.getElementById("newPasswordCheck");
@@ -197,6 +207,7 @@
             return true;
         }
 
+        // 공통 - 비밀번호 변경, 회원탈퇴 modal
         function isCurrentPasswordValid(keyword) {
             let currentPassword;
             let checkResultEl;
@@ -233,6 +244,7 @@
             });
         }
 
+        // 공통 - 비밀번호 변경, 회원탈퇴 modal
         function removeError(input) {
             input.classList.remove("border-danger");
             let errorMessage = input.parentElement.querySelector("p.text-danger");
@@ -240,19 +252,7 @@
                 errorMessage.style.display = "none";
             }
         }
-    </script>
 
-    <!-- 회원탈퇴 modal 관련 -->
-    <script th:inline="javascript">
-
-        async function validateDeleteForm(event) {
-            event.preventDefault();
-
-            const isValid = await isCurrentPasswordValid("delete");
-            if (isValid) {
-                document.getElementById("deleteForm").submit();
-            }
-        }
     </script>
     
 </body>

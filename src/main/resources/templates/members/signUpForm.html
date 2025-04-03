@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header:: header}"></head>
 <body>
-    <div th:replace="~{fragments/bodyHeader:: bodyHeader}"></div>
+    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
     <main class="container" style="max-width: 500px;">
         <div class="py-4 text-center">
@@ -113,18 +113,16 @@
         </div>
     </main>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <!-- 부트스트랩 폼 검증 -->
     <script th:inline="javascript">
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
+
+        // 부트스트랩 폼 검증
         (() => {
           'use strict'
 
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
           const forms = document.querySelectorAll('.needs-validation')
 
-          // Loop over them and prevent submission
           Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
               if (!form.checkValidity()) {
@@ -136,10 +134,8 @@
             }, false)
           })
         })()
-    </script>
 
-    <!-- 서버에서 전달해준 검증에러 지우기 (해당 input에서 다른 곳으로 focus 이동시 작동) -->
-    <script>
+        // 서버에서 전달해준 검증에러 지우기 (해당 input에서 다른 곳으로 focus 이동시 작동)
         function removeError(input) {
             console.log("removeError(input) 실행됨");
             input.classList.remove("border-danger");
@@ -148,6 +144,8 @@
                 errorMessage.style.display = "none";
             }
         }
+
     </script>
+
 </body>
 </html>
