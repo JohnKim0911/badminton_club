@@ -12,13 +12,18 @@ public class ClubController {
         return "clubs/clubDetail";
     }
 
-    @GetMapping("/clubs/{id}/board")
-    public String clubBoard(@PathVariable Long id) {
+    @GetMapping("/clubs/{id}/home")
+    public String clubHome(@PathVariable Long id) {
         return "clubs/clubDetail";
     }
 
-    @GetMapping("/clubs/{id}/album")
-    public String clubAlbum(@PathVariable Long id) {
+    @GetMapping("/clubs/{id}/members")
+    public String clubMembers(@PathVariable Long id) {
+        return "clubs/clubDetail";
+    }
+
+    @GetMapping("/clubs/{id}/posts")
+    public String clubPosts(@PathVariable Long id) {
         return "clubs/clubDetail";
     }
 
