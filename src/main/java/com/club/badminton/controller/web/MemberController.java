@@ -7,7 +7,6 @@ import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
 import com.club.badminton.exception.validation.login.PasswordNotMatchedException;
 import com.club.badminton.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
-import static com.club.badminton.controller.web.HomeController.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -88,10 +85,9 @@ public class MemberController {
     }
 
     @GetMapping("/members")
-    public String memberList(Model model, HttpServletRequest request) {
+    public String memberList(Model model) {
         List<MemberDto> memberDtos = memberService.findMembers();
         model.addAttribute("members", memberDtos);
-        modelAddAttributeCurrentPath(model, request);
         return "members/memberList";
     }
 
