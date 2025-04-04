@@ -67,14 +67,17 @@ public class MemberController {
     //TODO restAPI 형식으로 URL 수정필요
     @PostMapping("/login")
     public String login(@ModelAttribute LoginForm loginForm, HttpSession session, Model model) {
+
+        LoginMember loginMember;
         try {
-            LoginMember loginMember = memberService.login(loginForm);
-            session.setAttribute("loginMember", loginMember);
+            loginMember = memberService.login(loginForm);
         } catch (NotRegisteredEmailException | PasswordNotMatchedException | ResignedMemberException e) {
             //로그인 실패
             model.addAttribute("popUpMessage", e.getMessage());
             return "members/login";
         }
+
+        session.setAttribute("loginMember", loginMember);
         return "redirect:/";
     }
 
@@ -148,7 +151,6 @@ public class MemberController {
     @PostMapping("/members/delete")
     public String delete(HttpSession session, RedirectAttributes redirectAttributes) {
         memberService.delete(getLoginMemberId(session));
-
         session.invalidate();
         redirectAttributes.addFlashAttribute("popUpMessage", "회원탈퇴에 성공하였습니다. 그 동안 이용해주셔서 감사합니다.");
         //TODO 탈퇴회원 복구 기능 추가?
