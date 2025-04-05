@@ -29,9 +29,10 @@ public class Club extends BaseEntity {
     @Column(unique = true)
     private String name; //클럽명
 
-    @Embedded
-    private Address address;
+//    @Embedded
+//    private Address address;
 
+    //TODO 클럽 소개는 다른 엔티티로 빼기? 클럽 사진도 추가
     private String description; //간단한 소개
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -49,7 +50,7 @@ public class Club extends BaseEntity {
 
     public Club(String name, Address address, String description) {
         this.name = name;
-        this.address = address;
+//        this.address = address;
         this.description = description;
     }
 }

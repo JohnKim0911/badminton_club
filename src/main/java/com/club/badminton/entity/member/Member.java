@@ -37,8 +37,8 @@ public class Member extends BaseTimeEntity {
 
     private LocalDate birthday;
 
-    @Embedded
-    private Address address;
+//    @Embedded
+//    private Address address;
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
@@ -52,7 +52,7 @@ public class Member extends BaseTimeEntity {
         this.name = name;
         this.phone = phone;
         this.birthday = birthday;
-        this.address = address;
+//        this.address = address;
         this.status = MemberStatus.ACTIVE;
     }
 
@@ -60,7 +60,7 @@ public class Member extends BaseTimeEntity {
         this.name = form.getName();
         this.phone = form.getPhone();
         this.birthday = form.getBirthday();
-        this.address.update(form.getSiDo(), form.getGuGun(), form.getDongRi());
+//        this.address.update(form.getSiDo(), form.getGuGun(), form.getDongRi());
     }
 
     public void changePassword(String newPassword) {

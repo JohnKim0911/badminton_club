@@ -25,7 +25,7 @@ public class MemberDto {
         name = member.getName();
         phone = member.getPhone();
         birthday = member.getBirthday();
-        address = member.getAddress();
+//        address = member.getAddress();
     }
 
 }

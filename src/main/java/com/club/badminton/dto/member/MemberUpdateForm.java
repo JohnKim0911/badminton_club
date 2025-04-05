@@ -44,10 +44,10 @@ public class MemberUpdateForm {
         form.setPhone(m.getPhone());
         form.setBirthday(m.getBirthday());
 
-        Address address = m.getAddress();
-        form.setSiDo(address.getSiDo());
-        form.setGuGun(address.getGuGun());
-        form.setDongRi(address.getDongRi());
+//        Address address = m.getAddress();
+//        form.setSiDo(address.getSiDo());
+//        form.setGuGun(address.getGuGun());
+//        form.setDongRi(address.getDongRi());
         return form;
     }
 }

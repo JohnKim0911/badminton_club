@@ -3,34 +3,25 @@ package com.club.badminton.entity.address;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Embeddable
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@ToString
+@ToString(of = {"id", "depth1", "depth2", "depth3"})
 public class Address {
-    //TODO 주소 어떻게 관리하는게 좋을지?
-/*
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "si_do_id")
-    private SiDo siDo;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gu_gun_id")
-    private GuGun guGun;
+    @Id
+    @GeneratedValue
+    @Column(name = "address_id")
+    private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dong_ri_id")
-    private DongRi dongRi;
-*/
+    private String depth1;
+    private String depth2;
+    private String depth3;
 
-    private String siDo;
-    private String guGun;
-    private String dongRi;
-
-    public void update(String siDo, String guGun, String dongRi) {
-        this.siDo = siDo;
-        this.guGun = guGun;
-        this.dongRi = dongRi;
+    public Address(String depth1, String depth2, String depth3) {
+        this.depth1 = depth1;
+        this.depth2 = depth2;
+        this.depth3 = depth3;
     }
+
 }
