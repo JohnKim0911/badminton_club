@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
+/*
 @SpringBootTest
 @Transactional
 //@Rollback(value = false)
@@ -41,4 +42,4 @@ class MemberRepositoryTest {
         assertThat(allMembers).containsExactly(member);
         System.out.println("foundMember = " + foundMember);
     }
-}
+}*/

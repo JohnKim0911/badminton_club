@@ -30,6 +30,6 @@ public class CreateClubForm {
 
     //TODO 주소 엔티티에서 동/리 빼기
     public Club toClub() {
-        return new Club(name, new Address(siDo, guGun, "-"), description);
+        return new Club(name, null /*new Address(siDo, guGun, "-")*/, description);
     }
 }

@@ -3,10 +3,13 @@ package com.club.badminton.entity.address;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "depth1", "depth2", "depth3"})
+@ToString(of = {"id", "name", "parent", "depth"})
 public class Address {
 
     @Id
@@ -14,14 +17,20 @@ public class Address {
     @Column(name = "address_id")
     private Long id;
 
-    private String depth1;
-    private String depth2;
-    private String depth3;
+    private String name;
 
-    public Address(String depth1, String depth2, String depth3) {
-        this.depth1 = depth1;
-        this.depth2 = depth2;
-        this.depth3 = depth3;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Address parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Address> children = new ArrayList<>();
+
+    private int depth; //1: 시도, 2: 시군구, 3: 동면읍
+
+    public Address(String name, Address parent, int depth) {
+        this.name = name;
+        this.parent = parent;
+        this.depth = depth;
     }
-
 }

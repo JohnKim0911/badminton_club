@@ -33,28 +33,37 @@ public class InitAddressService {
     }
 
     private void saveAddresses(Map<String, Object> map) {
-        for (String depth1 : map.keySet()) {
-            Object value = map.get(depth1);
+        for (Map.Entry<String, Object> entry1 : map.entrySet()) {
+            String depth1Name = entry1.getKey();
+            Object depth2Obj = entry1.getValue();
 
-            if (value instanceof List<?> list) {
-                for (Object depth2 : list) {
-                    em.persist(new Address(depth1, depth2.toString(), ""));
+            Address depth1Entity = createAndPersistAddress(depth1Name, null, 1);
+
+            if (depth2Obj instanceof List<?> depth2List) {
+                for (Object depth2 : depth2List) {
+                    createAndPersistAddress(depth2.toString(), depth1Entity, 2);
                 }
 
-            } else if (value instanceof Map<?, ?> depth2Map) {
-                for (Map.Entry<?, ?> depth2Entry : depth2Map.entrySet()) {
-                    String depth2 = depth2Entry.getKey().toString();
-                    Object depth3Obj = depth2Entry.getValue();
+            } else if (depth2Obj instanceof Map<?, ?> depth2Map) {
+                for (Map.Entry<?, ?> entry2 : depth2Map.entrySet()) {
+                    String depth2Name = entry2.getKey().toString();
+                    Object depth3Obj = entry2.getValue();
+
+                    Address depth2Entity = createAndPersistAddress(depth2Name, depth1Entity, 2);
 
                     if (depth3Obj instanceof List<?> depth3List && !depth3List.isEmpty()) {
                         for (Object depth3 : depth3List) {
-                            em.persist(new Address(depth1, depth2, depth3.toString()));
+                            createAndPersistAddress(depth3.toString(), depth2Entity, 3);
                         }
-                    } else {
-                        em.persist(new Address(depth1, depth2, ""));
                     }
                 }
             }
         }
+    }
+
+    private Address createAndPersistAddress(String name, Address parent, int depth) {
+        Address address = new Address(name, parent, depth);
+        em.persist(address);
+        return address;
     }
 }

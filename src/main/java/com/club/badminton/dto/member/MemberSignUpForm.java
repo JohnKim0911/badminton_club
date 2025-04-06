@@ -45,6 +45,6 @@ public class MemberSignUpForm {
     private Boolean hasAcceptedTerms;
 
     public Member toMember() {
-        return new Member(email, password, name, phone, birthday, new Address(siDo, guGun, dongRi));
+        return new Member(email, password, name, phone, birthday, null/*new Address(siDo, guGun, dongRi)*/);
     }
 }
