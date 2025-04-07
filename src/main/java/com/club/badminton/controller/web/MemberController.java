@@ -6,6 +6,7 @@ import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
 import com.club.badminton.exception.validation.login.PasswordNotMatchedException;
+import com.club.badminton.service.AddressService;
 import com.club.badminton.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -25,10 +26,13 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final AddressService addressService;
 
     @GetMapping("/members/new")
     public String signUpForm(Model model) {
         model.addAttribute("memberSignUpForm", new MemberSignUpForm());
+        model.addAttribute("addressByDepth1List", addressService.getByDepth(1));
+        model.addAttribute("childrenAddressMap", addressService.getChildrenAddressMap());
         return "members/signUpForm";
     }
 

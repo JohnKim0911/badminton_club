@@ -13,7 +13,7 @@ public class InitMember {
     private final InitMemberService initMemberService;
 
     @PostConstruct
-    public void init() {
+    private void init() {
         initMemberService.createMembers(50); //50명 랜덤 데이터 추가
     }
 

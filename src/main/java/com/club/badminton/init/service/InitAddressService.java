@@ -27,6 +27,7 @@ public class InitAddressService {
     }
 
     private Map<String, Object> getJsonData() throws IOException {
+        //json 데이터 출처 (2025.04.05 기준): https://ko.wikipedia.org/wiki/대한민국의_행정_구역
         InputStream jsonStream = getClass().getResourceAsStream("/addresses.json");
         TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {};
         return objectMapper.readValue(jsonStream, typeRef);

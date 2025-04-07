@@ -64,32 +64,29 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="row gy-3">
-                                <div class="col-md-6">
-                                    <span class="text-danger"><b>*</b></span>
-                                    <label th:for="siDo" class="form-label">주소1 (시/도)</label>
-                                    <input type="text" th:field="*{siDo}" class="form-control" required
-                                           th:classappend="${#fields.hasErrors('siDo')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                    <p th:if="${#fields.hasErrors('siDo')}" th:errors="*{siDo}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">주소1 (시/도)을 입력해주세요.</div>
+                            <span class="text-danger"><b>*</b></span>
+                            <label th:for="depth1" class="form-label">주소</label><br>
+                            <div class="row">
+                                <div class="col-4">
+                                    <select id="depth1" class="form-select" onchange="loadAddressDepth2()" required>
+                                        <option selected disabled value="">선택</option>
+                                        <th:block th:each="address : ${addressByDepth1List}">
+                                            <option th:value="${address.id}" th:text="${address.name}"></option>
+                                        </th:block>
+                                    </select>
+                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <span class="text-danger"><b>*</b></span>
-                                    <label th:for="guGun" class="form-label">주소2 (구/군)</label>
-                                    <input type="text" th:field="*{guGun}" class="form-control" required
-                                           th:classappend="${#fields.hasErrors('guGun')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                    <p th:if="${#fields.hasErrors('guGun')}" th:errors="*{guGun}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
+                                <div class="col-4">
+                                    <select id="depth2" class="form-select" onchange="loadAddressDepth3()" required>
+                                        <option selected disabled value="">선택</option>
+                                    </select>
+                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <span class="text-danger"><b>*</b></span>
-                                    <label th:for="dongRi" class="form-label">주소3 (동/리)</label>
-                                    <input type="text" th:field="*{dongRi}" class="form-control" required
-                                           th:classappend="${#fields.hasErrors('dongRi')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                    <p th:if="${#fields.hasErrors('dongRi')}" th:errors="*{dongRi}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
+                                <div class="col-4">
+                                    <select id="depth3" class="form-select" style="display: none;">
+                                        <option selected disabled value="">선택</option>
+                                    </select>
+                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
                             </div>
                         </div>
@@ -142,6 +139,50 @@
             let errorMessage = input.parentElement.querySelector("p.text-danger");
             if (errorMessage) {
                 errorMessage.style.display = "none";
+            }
+        }
+
+        // 주소 관련
+        const childrenAddressMap = /*[[${childrenAddressMap}]]*/ {};
+
+        function loadAddressDepth2() {
+            const depth1Id = document.getElementById("depth1").value;
+            const depth2 = document.getElementById("depth2");
+            const depth3 = document.getElementById("depth3");
+
+            depth2.innerHTML = '<option selected disabled value="">선택</option>';
+            depth3.innerHTML = '<option selected disabled value="">선택</option>';
+
+            if (depth1Id && childrenAddressMap[depth1Id]) {
+                childrenAddressMap[depth1Id].forEach(child => {
+                    const option = document.createElement("option");
+                    option.value = child.id;
+                    option.text = child.name;
+                    depth2.appendChild(option);
+                });
+            }
+        }
+
+        function loadAddressDepth3() {
+            const depth2Id = document.getElementById("depth2").value;
+            const depth3 = document.getElementById("depth3");
+
+            depth3.innerHTML = '<option selected disabled value="">선택</option>';
+	        depth3.style.display = "none";
+            depth3.removeAttribute("required");
+
+            if (depth2Id && childrenAddressMap[depth2Id]) {
+                const children = childrenAddressMap[depth2Id];
+                if (children.length > 0) {
+                    children.forEach(child => {
+                        const option = document.createElement("option");
+                        option.value = child.id;
+                        option.text = child.name;
+                        depth3.appendChild(option);
+                    });
+                    depth3.style.display = "block";
+                    depth3.setAttribute("required", "required");
+                }
             }
         }
 

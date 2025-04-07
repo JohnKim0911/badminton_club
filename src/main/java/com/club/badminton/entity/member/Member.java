@@ -37,8 +37,9 @@ public class Member extends BaseTimeEntity {
 
     private LocalDate birthday;
 
-//    @Embedded
-//    private Address address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address; //가장 구체적인 주소만 저장. - 예)서울특별시 서초구에서 서초구만 저장.
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
@@ -52,7 +53,7 @@ public class Member extends BaseTimeEntity {
         this.name = name;
         this.phone = phone;
         this.birthday = birthday;
-//        this.address = address;
+        this.address = address;
         this.status = MemberStatus.ACTIVE;
     }
 
@@ -60,7 +61,7 @@ public class Member extends BaseTimeEntity {
         this.name = form.getName();
         this.phone = form.getPhone();
         this.birthday = form.getBirthday();
-//        this.address.update(form.getSiDo(), form.getGuGun(), form.getDongRi());
+//        this.address = form.getAddress();
     }
 
     public void changePassword(String newPassword) {

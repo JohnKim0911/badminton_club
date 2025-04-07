@@ -33,18 +33,12 @@ public class MemberSignUpForm {
     private LocalDate birthday;
 
     @NotBlank
-    private String siDo;
-
-    @NotBlank
-    private String guGun;
-
-    @NotBlank
-    private String dongRi;
+    private Address address;
 
     @AssertTrue
     private Boolean hasAcceptedTerms;
 
     public Member toMember() {
-        return new Member(email, password, name, phone, birthday, null/*new Address(siDo, guGun, dongRi)*/);
+        return new Member(email, password, name, phone, birthday, address);
     }
 }
