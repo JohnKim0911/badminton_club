@@ -31,8 +31,8 @@ public class MemberController {
     @GetMapping("/members/new")
     public String signUpForm(Model model) {
         model.addAttribute("memberSignUpForm", new MemberSignUpForm());
-        model.addAttribute("addressByDepth1List", addressService.getByDepth(1));
-        model.addAttribute("childrenAddressMap", addressService.getChildrenAddressMap());
+        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
+        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
         return "members/signUpForm";
     }
 

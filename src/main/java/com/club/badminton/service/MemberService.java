@@ -1,6 +1,7 @@
 package com.club.badminton.service;
 
 import com.club.badminton.dto.member.*;
+import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.member.Member;
 import com.club.badminton.entity.member.MemberStatus;
 import com.club.badminton.exception.InvalidMemberIdException;
@@ -24,11 +25,13 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final AddressService addressService;
 
     @Transactional
     public void signUp(MemberSignUpForm form) {
         validateSignUp(form);
-        Member member = form.toMember();
+        Address address = addressService.findById(form.getAddressId());
+        Member member = form.toMember(address);
         memberRepository.save(member);
     }
 

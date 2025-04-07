@@ -67,6 +67,7 @@
                             <span class="text-danger"><b>*</b></span>
                             <label th:for="depth1" class="form-label">주소</label><br>
                             <div class="row">
+                                <input type="hidden" th:field="*{addressId}" id="addressId" />
                                 <div class="col-4">
                                     <select id="depth1" class="form-select" onchange="loadAddressDepth2()" required>
                                         <option selected disabled value="">선택</option>
@@ -77,13 +78,13 @@
                                     <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
                                 <div class="col-4">
-                                    <select id="depth2" class="form-select" onchange="loadAddressDepth3()" required>
+                                    <select id="depth2" class="form-select" onchange="loadAddressDepth3(); updateAddressId();" required>
                                         <option selected disabled value="">선택</option>
                                     </select>
                                     <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
                                 <div class="col-4">
-                                    <select id="depth3" class="form-select" style="display: none;">
+                                    <select id="depth3" class="form-select" onchange="updateAddressId();" style="display: none;">
                                         <option selected disabled value="">선택</option>
                                     </select>
                                     <div class="invalid-feedback">주소를 선택해주세요.</div>
@@ -184,6 +185,22 @@
                     depth3.setAttribute("required", "required");
                 }
             }
+        }
+
+        // 선택된 주소 ID를 hidden input에 저장
+        function updateAddressId() {
+            const depth3 = document.getElementById("depth3");
+            const depth2 = document.getElementById("depth2");
+
+            let addressId = "";
+
+            if (depth3 && depth3.style.display !== "none" && depth3.value) {
+                addressId = depth3.value;
+            } else if (depth2 && depth2.value) {
+                addressId = depth2.value;
+            }
+
+            document.getElementById("addressId").value = addressId;
         }
 
     </script>
