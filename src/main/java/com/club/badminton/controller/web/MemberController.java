@@ -1,5 +1,6 @@
 package com.club.badminton.controller.web;
 
+import com.club.badminton.dto.address.AddressDto;
 import com.club.badminton.dto.member.*;
 import com.club.badminton.exception.validation.login.ResignedMemberException;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -101,7 +103,9 @@ public class MemberController {
     @GetMapping("/myPage")
     public String myPage(HttpSession session, Model model) {
         MemberUpdateForm form = memberService.updateForm(getLoginMemberId(session));
+        Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
         model.addAttribute("memberUpdateForm", form);
+        model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
         return "members/myPage";
     }
 

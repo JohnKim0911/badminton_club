@@ -14,7 +14,7 @@
 <body>
     <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container" style="max-width: 500px;">
+    <main class="container" style="max-width: 400px;">
         <div class="py-4 text-center">
             <h2>회원정보</h2>
         </div>
@@ -52,20 +52,24 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="row gy-3">
-                                <div class="col-md-6">
-                                    <label th:for="siDo" class="form-label">주소1 (시/도)</label>
-                                    <input type="text" th:field="*{siDo}" class="form-control" disabled readonly>
+                            <input type="hidden" th:field="*{addressId}" id="addressId" />
+                            <label th:for="depth1" class="form-label">주소</label><br>
+                            <div class="row">
+                                <div class="col">
+                                    <select id="depth1" class="form-select" disabled>
+                                    </select>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <label th:for="guGun" class="form-label">주소2 (구/군)</label>
-                                    <input type="text" th:field="*{guGun}" class="form-control" disabled readonly>
+                                <div class="col">
+                                    <select id="depth2" class="form-select" disabled>
+                                    </select>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <label th:for="dongRi" class="form-label">주소3 (동/리)</label>
-                                    <input type="text" th:field="*{dongRi}" class="form-control" disabled readonly>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6">
+                                    <select id="depth3" class="form-select" disabled style="display: none;">
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -253,6 +257,25 @@
             }
         }
 
+        // 주소 관련
+        const addressDtoMapByDepth = /*[[${addressDtoMapByDepth}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
+        displayAddress();
+
+        function displayAddress() {
+            const depth1 = document.getElementById("depth1");
+            const depth2 = document.getElementById("depth2");
+            const depth3 = document.getElementById("depth3");
+
+            depth1.innerHTML = '<option selected>' + addressDtoMapByDepth["1"]["name"] + '</option>';
+            depth2.innerHTML = '<option selected>' + addressDtoMapByDepth["2"]["name"] + '</option>';
+
+            if (addressDtoMapByDepth["3"]) {
+                depth3.innerHTML = '<option selected>' + addressDtoMapByDepth["3"]["name"] + '</option>';
+                depth3.style.display = "block";
+            } else {
+                depth3.style.display = "none";
+            }
+        }
     </script>
     
 </body>

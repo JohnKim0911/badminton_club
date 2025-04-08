@@ -1,8 +1,8 @@
 package com.club.badminton.dto.member;
 
 import com.club.badminton.entity.member.Member;
-import com.club.badminton.entity.address.Address;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,14 +27,8 @@ public class MemberUpdateForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
-    @NotBlank
-    private String siDo;
-
-    @NotBlank
-    private String guGun;
-
-    @NotBlank
-    private String dongRi;
+    @NotNull
+    private Long addressId;
 
     public static MemberUpdateForm toUpdateForm(Member m) {
         MemberUpdateForm form = new MemberUpdateForm();
@@ -43,11 +37,7 @@ public class MemberUpdateForm {
         form.setName(m.getName());
         form.setPhone(m.getPhone());
         form.setBirthday(m.getBirthday());
-
-//        Address address = m.getAddress();
-//        form.setSiDo(address.getSiDo());
-//        form.setGuGun(address.getGuGun());
-//        form.setDongRi(address.getDongRi());
+        form.setAddressId(m.getAddress().getId());
         return form;
     }
 }

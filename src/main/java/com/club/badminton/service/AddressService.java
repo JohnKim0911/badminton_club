@@ -37,6 +37,8 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
+    @Getter
+    private final Map<Long, AddressDto> allDtoMap = new HashMap<>();
     private final Map<Integer, List<AddressDto>> dtoMapByDepth = new HashMap<>();
     @Getter
     private final Map<Long, List<AddressDto>> childrenDtoMap = new HashMap<>();
@@ -46,6 +48,7 @@ public class AddressService {
 
         for (Address address : allAddresses) {
             AddressDto dto = new AddressDto(address);
+            allDtoMap.put(dto.getId(), dto);
             dtoMapByDepth.computeIfAbsent(dto.getDepth(), d -> new ArrayList<>()).add(dto);
 
             if (dto.getParentId() != null) {
@@ -62,6 +65,24 @@ public class AddressService {
         Optional<Address> byId = addressRepository.findById(id);
 //        return byId.isPresent() ? byId.get() : null;
         return byId.orElse(null);
+    }
+
+    public Map<Integer, AddressDto> getRelatedDtoMapByDepth(Long addressId) {
+        Map<Integer, AddressDto> map = new HashMap<>();
+
+        AddressDto current = allDtoMap.get(addressId);
+        map.put(current.getDepth(), current);
+
+        while (current != null && current.getParentId() != null) {
+            AddressDto parent = allDtoMap.get(current.getParentId());
+            if (parent == null) {
+                break;
+            }
+            map.put(parent.getDepth(), parent);
+            current = parent;
+        }
+
+        return map;
     }
 
 }
