@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /*
-메모리 데이터 예시)
+메모리 데이터 예시) 실제론 Address 가 아닌, AddressDto 사용함. key & value 구조만 참고.
 
 엔티티
 Address(id=1, name="서울특별시", parent=null, depth=1),
@@ -49,6 +49,7 @@ public class AddressService {
         for (Address address : allAddresses) {
             AddressDto dto = new AddressDto(address);
             allDtoMap.put(dto.getId(), dto);
+
             dtoMapByDepth.computeIfAbsent(dto.getDepth(), d -> new ArrayList<>()).add(dto);
 
             if (dto.getParentId() != null) {
@@ -83,6 +84,18 @@ public class AddressService {
         }
 
         return map;
+    }
+
+    public List<AddressDto> getMostSpecificDtoList() {
+        List<AddressDto> mostSpecificList = new ArrayList<>();
+
+        for (AddressDto dto : allDtoMap.values()) {
+            List<AddressDto> children = childrenDtoMap.get(dto.getId());
+            if (children == null || children.isEmpty()) {
+                mostSpecificList.add(dto);
+            }
+        }
+        return mostSpecificList;
     }
 
 }
