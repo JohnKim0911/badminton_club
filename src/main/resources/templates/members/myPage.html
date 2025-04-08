@@ -28,7 +28,7 @@
 
                         <div class="col-12" style="text-align: center;">
                             <img th:src="@{/images/default_profile.png}" alt="profile-img" id="profile-img"/>
-                            <a class="btn btn-outline-secondary btn-sm" href="#" role="button">프로필 사진변경</a>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#profileImgModal">프로필 사진변경</button>
                         </div>
 
                         <div class="col-12">
@@ -88,6 +88,30 @@
             </div>
         </div>
 
+        <!-- 프로필 사진변경 Modal -->
+        <div class="modal fade" id="profileImgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileImgModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="profileImgModalLabel">새로운 프로필 사진을 선택해주세요.</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/members/updateProfileImg" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="profileImg" class="form-label">프로필 사진 첨부파일:</label>
+                                <input type="file" class="form-control" id="profileImg" name="attachment" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="submit" class="btn btn-primary">프로필 사진변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- 비밀번호 변경 Modal -->
         <div class="modal fade" id="updatePwModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -124,11 +148,11 @@
         </div>
 
         <!-- 회원탈퇴 Modal -->
-        <div class="modal fade" id="deleteAccountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteAccountModal" aria-hidden="true">
+        <div class="modal fade" id="deleteAccountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5">회원탈퇴</h1>
+                        <h1 class="modal-title fs-5" id="deleteAccountModalLabel">회원탈퇴</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/members/delete" method="post" id="deleteForm" onsubmit="return validateDeleteForm(event);">

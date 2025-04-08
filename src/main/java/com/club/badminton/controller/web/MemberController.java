@@ -2,6 +2,7 @@ package com.club.badminton.controller.web;
 
 import com.club.badminton.dto.address.AddressDto;
 import com.club.badminton.dto.member.*;
+import com.club.badminton.exception.NoFileException;
 import com.club.badminton.exception.validation.login.ResignedMemberException;
 import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
 import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -160,6 +163,22 @@ public class MemberController {
         memberService.updatePassword(getLoginMemberId(session), newPassword);
 
         redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
+        return "redirect:/myPage";
+    }
+
+    @PostMapping("/members/updateProfileImg")
+    public String updateProfileImg(@RequestParam("attachment") MultipartFile file, HttpSession session, RedirectAttributes redirectAttributes) {
+        Long loginMemberId = getLoginMemberId(session);
+
+        try {
+            memberService.updateProfileImage(loginMemberId, file);
+            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 프로필 사진을 변경하였습니다.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 중 오류가 발생했습니다.");
+        } catch (NoFileException e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
+        }
         return "redirect:/myPage";
     }
 

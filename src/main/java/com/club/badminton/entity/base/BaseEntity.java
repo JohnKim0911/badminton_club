@@ -14,6 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 public class BaseEntity extends BaseTimeEntity {
 
+    //TODO 제대로 작동하는지 확인
+
     @CreatedBy
     @Column(updatable = false)
     private Long createdBy;

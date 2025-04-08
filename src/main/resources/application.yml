@@ -28,3 +28,6 @@ server:
   servlet:
     session:
       tracking-modes: cookie
+
+file:
+  upload-dir: C:/club-file-upload/

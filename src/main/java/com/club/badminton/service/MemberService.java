@@ -2,6 +2,7 @@ package com.club.badminton.service;
 
 import com.club.badminton.dto.member.*;
 import com.club.badminton.entity.address.Address;
+import com.club.badminton.entity.attachment.Attachment;
 import com.club.badminton.entity.member.Member;
 import com.club.badminton.entity.member.MemberStatus;
 import com.club.badminton.exception.InvalidMemberIdException;
@@ -14,7 +15,9 @@ import com.club.badminton.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +29,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final AddressService addressService;
+    private final AttachmentService attachmentService;
 
     @Transactional
     public void signUp(MemberSignUpForm form) {
@@ -127,4 +131,14 @@ public class MemberService {
         Member member = findMemberById(memberId);
         member.changeStatus(MemberStatus.RESIGNED);
     }
+
+    @Transactional
+    public void updateProfileImage(Long memberId, MultipartFile file) throws IOException {
+        Long savedFileId = attachmentService.save(memberId, file);
+        Attachment attachment = attachmentService.findById(savedFileId);
+
+        Member member = findMemberById(memberId);
+        member.changeProfileImg(attachment);
+    }
+
 }
