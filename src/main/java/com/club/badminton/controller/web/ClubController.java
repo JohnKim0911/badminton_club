@@ -2,6 +2,7 @@ package com.club.badminton.controller.web;
 
 import com.club.badminton.dto.club.CreateClubForm;
 import com.club.badminton.exception.validation.club.DuplicatedClubNameException;
+import com.club.badminton.service.AddressService;
 import com.club.badminton.service.ClubService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ClubController {
 
     private final ClubService clubService;
+    private final AddressService addressService;
 
     @GetMapping("/clubs/{id}/detail")
     public String clubList(@PathVariable Long id) {
@@ -62,6 +64,8 @@ public class ClubController {
     @GetMapping("/clubs/new")
     public String createForm (Model model) {
         model.addAttribute("createClubForm", new CreateClubForm());
+        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
+        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
         return "clubs/createClubForm";
     }
 

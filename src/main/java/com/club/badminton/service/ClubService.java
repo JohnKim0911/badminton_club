@@ -1,6 +1,7 @@
 package com.club.badminton.service;
 
 import com.club.badminton.dto.club.CreateClubForm;
+import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.club.Club;
 import com.club.badminton.exception.validation.club.DuplicatedClubNameException;
 import com.club.badminton.repository.ClubRepository;
@@ -17,11 +18,13 @@ import java.util.Optional;
 public class ClubService {
 
     private final ClubRepository clubRepository;
+    private final AddressService addressService;
 
     @Transactional
     public Long create(@Valid CreateClubForm form) {
         validateCreate(form);
-        Club club = form.toClub();
+        Address address = addressService.findById(form.getAddressId());
+        Club club = form.toClub(address);
         clubRepository.save(club);
         return club.getId();
     }

@@ -25,6 +25,7 @@
                     <td th:text="${member.phone}"></td>
                     <td th:text="${member.birthday}"></td>
                     <td th:text="${member.addressId}"></td>
+                    <!-- TODO 각 회원 상세 페이지 링크 처리 -->
                     <td><a th:href="@{/members/{id}(id=${member.id})}" class="btn btn-primary">자세히</a></td> <!-- example: /members/1 -->
                 </tr>
             </tbody>
