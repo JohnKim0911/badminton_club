@@ -93,10 +93,13 @@ public class MemberController {
         return "redirect:/";
     }
 
+    //TODO paging 처리
     @GetMapping("/members")
     public String memberList(Model model) {
         List<MemberDto> memberDtos = memberService.findMembers();
+        Map<Long, AddressDto> allAddressDtoMap = addressService.getAllDtoMap();
         model.addAttribute("members", memberDtos);
+        model.addAttribute("allAddressDtoMap", allAddressDtoMap);
         return "members/memberList";
     }
 

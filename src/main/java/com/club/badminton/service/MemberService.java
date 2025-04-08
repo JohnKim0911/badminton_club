@@ -76,7 +76,7 @@ public class MemberService {
         return toMemberDtos(members);
     }
 
-    private static List<MemberDto> toMemberDtos(List<Member> members) {
+    private List<MemberDto> toMemberDtos(List<Member> members) {
         return members.stream()
                 .map(m -> new MemberDto(m))
                 .collect(Collectors.toList());

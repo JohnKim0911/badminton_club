@@ -14,21 +14,53 @@
                     <th scope="col">연락처</th>
                     <th scope="col">생일</th>
                     <th scope="col">주소</th>
+                    <th scope="col">자세히</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="member : ${members}">
+                <tr th:each="member : ${members}" class="align-middle">
                     <td th:text="${member.id}"></td>
                     <td th:text="${member.email}"></td>
                     <td th:text="${member.name}"></td>
                     <td th:text="${member.phone}"></td>
                     <td th:text="${member.birthday}"></td>
-                    <td th:text="${member.address.siDo} + ' ' + ${member.address.guGun} + ' ' + ${member.address.dongRi}"></td>
+                    <td th:text="${member.addressId}"></td>
+                    <td><a th:href="@{/members/{id}(id=${member.id})}" class="btn btn-primary">자세히</a></td> <!-- example: /members/1 -->
                 </tr>
             </tbody>
         </table>
     </main>
 
     <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:inline="javascript">
+
+        // 주소 관련
+        const allAddressDtoMap = /*[[${allAddressDtoMap}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
+
+        function displayFullAddress() {
+            // Loop through each row in the table
+            document.querySelectorAll("tbody tr").forEach(row => {
+                const td = row.querySelector("td:nth-child(6)"); // 6th column is 주소
+                const addressId = td.textContent.trim();
+
+                // Convert to full address using allAddressDtoMap
+                let fullAddress = '';
+                let currentId = addressId;
+
+                while (currentId && allAddressDtoMap[currentId]) {
+                    const addressObj = allAddressDtoMap[currentId];
+                    fullAddress = addressObj.name + (fullAddress ? ' ' + fullAddress : '');
+                    currentId = addressObj.parentId;
+                }
+
+                td.textContent = fullAddress || '주소 정보 없음';
+            });
+        }
+
+        // Run after page loads
+        window.addEventListener("DOMContentLoaded", displayFullAddress);
+
+    </script>
 </body>
 </html>

@@ -2,7 +2,6 @@ package com.club.badminton.dto.member;
 
 
 import com.club.badminton.entity.member.Member;
-import com.club.badminton.entity.address.Address;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +16,7 @@ public class MemberDto {
     private String name;
     private String phone;
     private LocalDate birthday;
-    private Address address;
+    private Long addressId;
 
     public MemberDto(Member member) {
         id = member.getId();
@@ -25,7 +24,7 @@ public class MemberDto {
         name = member.getName();
         phone = member.getPhone();
         birthday = member.getBirthday();
-//        address = member.getAddress();
+        addressId = member.getAddress().getId();
     }
 
 }
