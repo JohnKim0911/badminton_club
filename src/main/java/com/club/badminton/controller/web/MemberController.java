@@ -117,7 +117,11 @@ public class MemberController {
     @GetMapping("/members/update")
     public String updateForm(HttpSession session, Model model) {
         MemberUpdateForm form = memberService.updateForm(getLoginMemberId(session));
+        Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
         model.addAttribute("memberUpdateForm", form);
+        model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
+        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
+        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
         return "members/memberUpdate";
     }
 

@@ -100,7 +100,8 @@ public class MemberService {
         validateUpdate(form);
 
         Member member = findMemberById(form.getId());
-        member.update(form);
+        Address address = addressService.findById(form.getAddressId());
+        member.update(form, address);
     }
 
     private void validateUpdate(MemberUpdateForm form) {

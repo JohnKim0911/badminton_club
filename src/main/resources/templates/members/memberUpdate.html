@@ -4,7 +4,7 @@
 <body>
     <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container" style="max-width: 500px;">
+    <main class="container" style="max-width: 400px;">
         <div class="py-4 text-center">
             <h2>회원정보 수정</h2>
         </div>
@@ -49,32 +49,34 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="row gy-3">
-                                <div class="col-md-6">
-                                    <span class="text-danger"><b>*</b></span>
-                                    <label th:for="siDo" class="form-label">주소1 (시/도)</label>
-                                    <input type="text" th:field="*{siDo}" class="form-control" required
-                                           th:classappend="${#fields.hasErrors('siDo')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                    <p th:if="${#fields.hasErrors('siDo')}" th:errors="*{siDo}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">주소1 (시/도)을 입력해주세요.</div>
+                            <input type="hidden" th:field="*{addressId}" id="addressId" />
+                            <span class="text-danger"><b>*</b></span>
+                            <label th:for="depth1" class="form-label">주소</label><br>
+                            <div class="row">
+                                <div class="col">
+                                    <select id="depth1" class="form-select" onchange="loadAddressDepth2()" required>
+                                        <option selected disabled value="">선택</option>
+                                        <th:block th:each="address : ${addressByDepth1List}">
+                                            <option th:value="${address.id}" th:text="${address.name}"></option>
+                                        </th:block>
+                                    </select>
+                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <span class="text-danger"><b>*</b></span>
-                                    <label th:for="guGun" class="form-label">주소2 (구/군)</label>
-                                    <input type="text" th:field="*{guGun}" class="form-control" required
-                                           th:classappend="${#fields.hasErrors('guGun')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                    <p th:if="${#fields.hasErrors('guGun')}" th:errors="*{guGun}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
+                                <div class="col">
+                                    <select id="depth2" class="form-select" onchange="loadAddressDepth3(); updateAddressId();" required>
+                                        <option selected disabled value="">선택</option>
+                                    </select>
+                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <span class="text-danger"><b>*</b></span>
-                                    <label th:for="dongRi" class="form-label">주소3 (동/리)</label>
-                                    <input type="text" th:field="*{dongRi}" class="form-control" required
-                                           th:classappend="${#fields.hasErrors('dongRi')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                    <p th:if="${#fields.hasErrors('dongRi')}" th:errors="*{dongRi}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">주소2 (구/군)을 입력해주세요.</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6">
+                                    <select id="depth3" class="form-select" onchange="updateAddressId();" style="display: none;">
+                                        <option selected disabled value="">선택</option>
+                                    </select>
+                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
                             </div>
                         </div>
@@ -121,6 +123,105 @@
             if (errorMessage) {
                 errorMessage.style.display = "none";
             }
+        }
+
+        // 주소 관련
+        const childrenAddressMap = /*[[${childrenAddressMap}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
+        const addressDtoMapByDepth = /*[[${addressDtoMapByDepth}]]*/ {};
+
+        function loadAddressDepth2() {
+            const depth1Id = document.getElementById("depth1").value;
+            const depth2 = document.getElementById("depth2");
+            const depth3 = document.getElementById("depth3");
+
+            depth2.innerHTML = '<option selected disabled value="">선택</option>';
+            depth3.innerHTML = '<option selected disabled value="">선택</option>';
+
+            if (depth1Id && childrenAddressMap[depth1Id]) {
+                childrenAddressMap[depth1Id].forEach(child => {
+                    const option = document.createElement("option");
+                    option.value = child.id;
+                    option.text = child.name;
+                    depth2.appendChild(option);
+                });
+            }
+        }
+
+        function loadAddressDepth3() {
+            const depth2Id = document.getElementById("depth2").value;
+            const depth3 = document.getElementById("depth3");
+
+            depth3.innerHTML = '<option selected disabled value="">선택</option>';
+	        depth3.style.display = "none";
+            depth3.removeAttribute("required");
+
+            if (depth2Id && childrenAddressMap[depth2Id]) {
+                const children = childrenAddressMap[depth2Id];
+                if (children.length > 0) {
+                    children.forEach(child => {
+                        const option = document.createElement("option");
+                        option.value = child.id;
+                        option.text = child.name;
+                        depth3.appendChild(option);
+                    });
+                    depth3.style.display = "block";
+                    depth3.setAttribute("required", "required");
+                }
+            }
+        }
+
+        // 선택된 주소 ID를 hidden input에 저장
+        function updateAddressId() {
+            const depth3 = document.getElementById("depth3");
+            const depth2 = document.getElementById("depth2");
+
+            let addressId = "";
+
+            if (depth3 && depth3.style.display !== "none" && depth3.value) {
+                addressId = depth3.value;
+            } else if (depth2 && depth2.value) {
+                addressId = depth2.value;
+            }
+
+            document.getElementById("addressId").value = addressId;
+        }
+
+        // 이전에 선택했던 주소 보여주기
+        displayPreviousAddress();
+        
+        function displayPreviousAddress() {
+            const depth1 = document.getElementById("depth1");
+            const depth2 = document.getElementById("depth2");
+            const depth3 = document.getElementById("depth3");
+
+            const selectedDepth1Id = addressDtoMapByDepth["1"].id;
+            const selectedDepth2Id = addressDtoMapByDepth["2"].id;
+            const selectedDepth3 = addressDtoMapByDepth["3"]; // May be undefined
+
+            // 1. Set selected option in depth1
+            Array.from(depth1.options).forEach(option => {
+                option.selected = option.value == selectedDepth1Id;
+            });
+
+            // 2. Load and select options for depth2
+            loadAddressDepth2();
+            Array.from(depth2.options).forEach(option => {
+                option.selected = option.value == selectedDepth2Id;
+            });
+
+            // 3. Load and select options for depth3 (if applicable)
+            loadAddressDepth3();
+            if (selectedDepth3) {
+                depth3.style.display = "block";
+                Array.from(depth3.options).forEach(option => {
+                    option.selected = option.value == selectedDepth3.id;
+                });
+            } else {
+                depth3.style.display = "none";
+            }
+
+            // 4. Update hidden address ID
+            updateAddressId();
         }
         
     </script>

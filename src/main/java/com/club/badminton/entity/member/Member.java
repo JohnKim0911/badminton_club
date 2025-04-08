@@ -57,11 +57,11 @@ public class Member extends BaseTimeEntity {
         this.status = MemberStatus.ACTIVE;
     }
 
-    public void update(MemberUpdateForm form) {
+    public void update(MemberUpdateForm form, Address address) {
         this.name = form.getName();
         this.phone = form.getPhone();
         this.birthday = form.getBirthday();
-//        this.address = form.getAddress();
+        this.address = address;
     }
 
     public void changePassword(String newPassword) {
