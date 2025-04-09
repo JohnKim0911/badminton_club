@@ -100,7 +100,7 @@
                     <form action="/members/updateProfileImg" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div style="text-align: center;">
-                                <img id="previewImg" src="/images/default_profile.png" alt="preview-image" class="profile-img"/>
+                                <img th:src="${memberUpdateForm.profileImg != null} ? @{'/upload/' + ${memberUpdateForm.profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
                             </div>
                             <div class="my-3">
                                 <label for="profileImg" class="form-label">새로운 프로필 사진을 선택해주세요.</label>

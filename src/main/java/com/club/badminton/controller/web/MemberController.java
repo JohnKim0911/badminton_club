@@ -175,7 +175,6 @@ public class MemberController {
         try {
             LoginMember loginMember = memberService.updateProfileImage(loginMemberId, file);
             session.setAttribute("loginMember", loginMember);
-            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 프로필 사진을 변경하였습니다.");
         } catch (IOException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 중 오류가 발생했습니다.");

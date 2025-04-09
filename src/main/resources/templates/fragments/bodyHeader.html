@@ -33,7 +33,7 @@
                        data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
                         <span class="me-2" style="line-height: 40px;"><b th:text="${session.loginMember.name}">홍길동</b>님</span>
                         <img th:src="${session.loginMember.profileImg != null} ? @{'/upload/' + ${session.loginMember.profileImg}} : @{/images/default_profile.png}" 
-                            alt="header-profile-img" width="40" height="40" class="rounded-circle">
+                            alt="header-profile-img" width="40" height="40" class="rounded-circle" style="object-fit: cover;">
                     </a>
                     <ul class="dropdown-menu text-small">
                         <li><a class="dropdown-item" href="/myPage">마이페이지</a></li>
