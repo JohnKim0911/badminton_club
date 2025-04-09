@@ -100,12 +100,13 @@ public class MemberService {
     }
 
     @Transactional
-    public void update(MemberUpdateForm form) {
+    public LoginMember update(MemberUpdateForm form) {
         validateUpdate(form);
 
         Member member = findMemberById(form.getId());
         Address address = addressService.findById(form.getAddressId());
         member.update(form, address);
+        return new LoginMember(member);
     }
 
     private void validateUpdate(MemberUpdateForm form) {
@@ -133,12 +134,13 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateProfileImage(Long memberId, MultipartFile file) throws IOException {
+    public LoginMember updateProfileImage(Long memberId, MultipartFile file) throws IOException {
         Long savedFileId = attachmentService.save(memberId, file);
         Attachment attachment = attachmentService.findById(savedFileId);
 
         Member member = findMemberById(memberId);
         member.changeProfileImg(attachment);
+        return new LoginMember(member);
     }
 
 }

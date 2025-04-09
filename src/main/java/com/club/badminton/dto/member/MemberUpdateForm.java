@@ -14,6 +14,9 @@ import java.time.LocalDate;
 public class MemberUpdateForm {
 
     private Long id;
+
+    private String profileImg;
+
     private String email;
 
     @NotBlank
@@ -30,12 +33,17 @@ public class MemberUpdateForm {
 
     public static MemberUpdateForm toUpdateForm(Member m) {
         MemberUpdateForm form = new MemberUpdateForm();
+
+        if (m.getProfileImg() != null) {
+            form.setProfileImg(m.getProfileImg().getStoredName());
+        }
         form.setId(m.getId());
         form.setEmail(m.getEmail());
         form.setName(m.getName());
         form.setPhone(m.getPhone());
         form.setBirthday(m.getBirthday());
         form.setAddressId(m.getAddress().getId());
+
         return form;
     }
 }

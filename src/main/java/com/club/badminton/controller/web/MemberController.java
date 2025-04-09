@@ -132,19 +132,21 @@ public class MemberController {
     }
 
     @PostMapping("/members/update")
-    public String update(@Valid MemberUpdateForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String update(@Valid MemberUpdateForm form, BindingResult bindingResult, HttpSession session, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "members/memberUpdate";
         }
 
+        LoginMember loginMember;
         try {
-            memberService.update(form);
+            loginMember = memberService.update(form);
         } catch (DuplicatedPhoneException e) {
             //수정 실패
             handleSignUpDuplicateException(e, bindingResult);
             return "members/memberUpdate";
         }
 
+        session.setAttribute("loginMember", loginMember);
         redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
         return "redirect:/myPage";
     }
@@ -171,7 +173,8 @@ public class MemberController {
         Long loginMemberId = getLoginMemberId(session);
 
         try {
-            memberService.updateProfileImage(loginMemberId, file);
+            LoginMember loginMember = memberService.updateProfileImage(loginMemberId, file);
+            session.setAttribute("loginMember", loginMember);
             redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 프로필 사진을 변경하였습니다.");
         } catch (IOException e) {
             e.printStackTrace();
