@@ -1,4 +1,4 @@
-package com.club.badminton.exception;
+package com.club.badminton.exception.attachment;
 
 public class NoFileException extends RuntimeException {
 

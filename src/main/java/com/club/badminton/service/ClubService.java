@@ -3,7 +3,7 @@ package com.club.badminton.service;
 import com.club.badminton.dto.club.CreateClubForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.club.Club;
-import com.club.badminton.exception.validation.club.DuplicatedClubNameException;
+import com.club.badminton.exception.club.DuplicatedClubNameException;
 import com.club.badminton.repository.ClubRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

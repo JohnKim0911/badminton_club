@@ -1,7 +1,7 @@
 package com.club.badminton.controller.web;
 
 import com.club.badminton.dto.club.CreateClubForm;
-import com.club.badminton.exception.validation.club.DuplicatedClubNameException;
+import com.club.badminton.exception.club.DuplicatedClubNameException;
 import com.club.badminton.service.AddressService;
 import com.club.badminton.service.ClubService;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.club.badminton.exception.validation.login;
+package com.club.badminton.exception.member.login;
 
 public class NotRegisteredEmailException extends RuntimeException {
 

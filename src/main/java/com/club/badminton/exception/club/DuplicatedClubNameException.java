@@ -1,4 +1,4 @@
-package com.club.badminton.exception.validation.club;
+package com.club.badminton.exception.club;
 
 public class DuplicatedClubNameException extends RuntimeException {
 
