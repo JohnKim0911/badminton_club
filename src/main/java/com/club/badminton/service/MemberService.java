@@ -137,7 +137,6 @@ public class MemberService {
 
     @Transactional
     public LoginMember updateProfileImage(Long memberId, MultipartFile file) throws IOException {
-        log.trace("MemberService.updateProfileImage");
         Member member = findMemberById(memberId);
         Attachment newFIle = attachmentService.save(memberId, file);
         deletePreviousProfileImg(member);
@@ -146,7 +145,6 @@ public class MemberService {
     }
 
     private void deletePreviousProfileImg(Member member) throws IOException {
-        log.trace("MemberService.deletePreviousProfileImg");
         Attachment oldFile = member.getProfileImg();
         if (oldFile != null) {
             attachmentService.delete(oldFile.getId());

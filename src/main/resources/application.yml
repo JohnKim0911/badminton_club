@@ -19,8 +19,8 @@ spring:
       enabled: always
 
 logging.level:
-  com.club.badminton: trace
   org.hibernate.SQL: debug
+  com.club.badminton: trace
 
 # 세션을 url이 아닌 쿠키를 사용하도록 강제함. (로그인시 jsessionid가 url에 들어가면서 404 에러나는 것을 방지함)
 server:

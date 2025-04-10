@@ -1,4 +1,4 @@
-package com.club.badminton.init.service;
+package com.club.badminton.config.init_db.service;
 
 import com.club.badminton.dto.address.AddressDto;
 import com.club.badminton.entity.address.Address;

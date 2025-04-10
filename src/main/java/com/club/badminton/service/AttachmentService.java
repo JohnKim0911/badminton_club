@@ -53,16 +53,14 @@ public class AttachmentService {
 
 
     public void delete(Long id) throws IOException {
-        log.trace("AttachmentService.delete");
         deletePhysicalFile(id);
         attachmentRepository.deleteById(id);
     }
 
     private void deletePhysicalFile(Long id) throws IOException {
-        log.trace("AttachmentService.deletePhysicalFile");
         Attachment attachment = findById(id);
         Path file = Path.of(uploadDir + attachment.getStoredName());
         Files.delete(file);
-        log.trace("파일 삭제 완료. (삭제된 파일: {}, 삭제된 attachment_id: {})", file, id);
+        log.trace("삭제된 파일: {}, 삭제된 attachment_id: {}", file, id);
     }
 }

@@ -1,6 +1,6 @@
-package com.club.badminton.init;
+package com.club.badminton.config.init_db;
 
-import com.club.badminton.init.service.InitAddressService;
+import com.club.badminton.config.init_db.service.InitAddressService;
 import com.club.badminton.service.AddressService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

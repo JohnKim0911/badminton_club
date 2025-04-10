@@ -1,6 +1,6 @@
-package com.club.badminton.init;
+package com.club.badminton.config.init_db;
 
-import com.club.badminton.init.service.InitMemberService;
+import com.club.badminton.config.init_db.service.InitMemberService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
