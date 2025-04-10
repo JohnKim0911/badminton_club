@@ -2,12 +2,13 @@ package com.club.badminton.controller.web;
 
 import com.club.badminton.dto.address.AddressDto;
 import com.club.badminton.dto.member.*;
-import com.club.badminton.exception.NoFileException;
-import com.club.badminton.exception.validation.login.ResignedMemberException;
-import com.club.badminton.exception.validation.signup.DuplicatedEmailException;
-import com.club.badminton.exception.validation.signup.DuplicatedPhoneException;
-import com.club.badminton.exception.validation.login.NotRegisteredEmailException;
-import com.club.badminton.exception.validation.login.PasswordNotMatchedException;
+import com.club.badminton.exception.attachment.FileTooBigException;
+import com.club.badminton.exception.attachment.NoFileException;
+import com.club.badminton.exception.member.login.ResignedMemberException;
+import com.club.badminton.exception.member.signup.DuplicatedEmailException;
+import com.club.badminton.exception.member.signup.DuplicatedPhoneException;
+import com.club.badminton.exception.member.login.NotRegisteredEmailException;
+import com.club.badminton.exception.member.login.PasswordNotMatchedException;
 import com.club.badminton.service.AddressService;
 import com.club.badminton.service.MemberService;
 import jakarta.servlet.http.HttpSession;
@@ -178,7 +179,7 @@ public class MemberController {
         } catch (IOException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 중 오류가 발생했습니다.");
-        } catch (NoFileException e) {
+        } catch (NoFileException | FileTooBigException e) {
             redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
         }
         return "redirect:/myPage";

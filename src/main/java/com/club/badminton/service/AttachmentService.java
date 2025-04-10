@@ -1,7 +1,8 @@
 package com.club.badminton.service;
 
 import com.club.badminton.entity.attachment.Attachment;
-import com.club.badminton.exception.NoFileException;
+import com.club.badminton.exception.attachment.FileTooBigException;
+import com.club.badminton.exception.attachment.NoFileException;
 import com.club.badminton.repository.AttachmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class AttachmentService {
+
+    public static final long MAX_SIZE_IN_MB = 10; // 10MB;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -45,6 +48,12 @@ public class AttachmentService {
         if (file == null || file.isEmpty()) {
             throw new NoFileException();
         }
+
+        long maxSizeInBytes = MAX_SIZE_IN_MB * 1024 * 1024; // ex) 10 * 1024 * 1024 = 10MB;
+        if (file.getSize() > maxSizeInBytes) {
+            throw new FileTooBigException();
+        }
+
     }
 
     public Attachment findById(Long id) {
