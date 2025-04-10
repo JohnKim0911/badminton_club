@@ -1,4 +1,4 @@
-package com.club.badminton.exception;
+package com.club.badminton.controller.web;
 
 import com.club.badminton.exception.attachment.FileTooBigException;
 import jakarta.servlet.http.HttpServletRequest;
