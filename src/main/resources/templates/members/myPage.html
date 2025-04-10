@@ -103,8 +103,9 @@
                                 <img th:src="${memberUpdateForm.profileImg != null} ? @{'/upload/' + ${memberUpdateForm.profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
                             </div>
                             <div class="my-3">
-                                <label for="profileImg" class="form-label">새로운 프로필 사진을 선택해주세요.</label>
-                                <input type="file" class="form-control" id="profileImg" name="attachment" required onchange="displayPreviewImg(this); checkFileSize(this);">
+                                <label for="profileImgInput" class="form-label">새로운 프로필 사진을 선택해주세요.</label>
+                                <input type="file" class="form-control" id="profileImgInput" name="attachment" onchange="handleProfileImgChange(this);">
+                                <button type="button" class="btn btn-secondary btn-sm mt-3" id="useDefaultImgBtn">기본사진 사용</button>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -187,30 +188,62 @@
 
     <script th:inline="javascript">
 
-        // 프로필 사진변경 modal - 사진 미리보기
-        function displayPreviewImg(input) {
+        // 프로필 사진변경 modal - 이미지 검증 & 미리보기
+        function handleProfileImgChange(input) {
             const file = input.files[0];
             const preview = document.getElementById("previewImg");
-
-            if (file && file.type.startsWith("image/")) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "/images/default_profile.png"; // fallback
-            }
-        }
-
-        // 프로필 사진변경 modal - 파일크기 검증
-        function checkFileSize(input) {
             const maxSize = 10 * 1024 * 1024; // 10MB
-            if (input.files[0].size > maxSize) {
-                alert("파일이 너무 큽니다. 최대 업로드 크기 1MB를 초과했습니다.");
-                input.value = ""; // Clear the input
+
+            if (!file) return;
+
+            // 1. Validate file type
+            if (!file.type.startsWith("image/")) {
+                alert("이미지 파일만 업로드 가능합니다.");
+                input.value = "";
+                return;
             }
+
+            // 2. Validate file size
+            if (file.size > maxSize) {
+                alert("파일이 너무 큽니다. 최대 업로드 크기 1MB를 초과했습니다.");
+                input.value = "";
+                
+                // Restore preview image to current valid profile image
+                const currentImg = /*[[${memberUpdateForm.profileImg}]]*/ null;
+                preview.src = currentImg ? `/upload/${currentImg}` : '/images/default_profile.png';
+                return;
+            }
+
+            // 3. Show preview if valid
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
+
+        // 프로필 사진변경 modal - "기본 이미지 사용" 버튼
+        document.getElementById("useDefaultImgBtn").addEventListener("click", function() {
+            const preview = document.getElementById("previewImg");
+            const fileInput = document.getElementById("profileImgInput");
+
+            // Clear selected file
+            fileInput.value = "";
+
+            // Change preview image to default
+            preview.src = "/images/default_profile.png";
+
+            // Optional: add a hidden input to mark "reset to default"
+            let defaultFlag = document.getElementById("resetToDefault");
+            if (!defaultFlag) {
+                defaultFlag = document.createElement("input");
+                defaultFlag.type = "hidden";
+                defaultFlag.name = "resetToDefault";
+                defaultFlag.value = "true";
+                defaultFlag.id = "resetToDefault";
+                document.getElementById("changeProfileImgForm").appendChild(defaultFlag);
+            }
+        });
 
         // 비밀번호 변경 modal
         async function validateUpdatePwForm(event) {

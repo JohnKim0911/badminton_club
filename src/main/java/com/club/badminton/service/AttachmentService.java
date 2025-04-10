@@ -60,7 +60,7 @@ public class AttachmentService {
         return attachmentRepository.findById(id).get();
     }
 
-
+    @Transactional
     public void delete(Long id) throws IOException {
         deletePhysicalFile(id);
         attachmentRepository.deleteById(id);

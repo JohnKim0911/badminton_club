@@ -170,19 +170,39 @@ public class MemberController {
     }
 
     @PostMapping("/members/updateProfileImg")
-    public String updateProfileImg(@RequestParam("attachment") MultipartFile file, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String updateProfileImg(@RequestParam(value = "resetToDefault", required = false) boolean resetToDefault,
+                                   @RequestParam(value = "attachment", required = false) MultipartFile file,
+                                   HttpSession session, RedirectAttributes redirectAttributes) {
+
         Long loginMemberId = getLoginMemberId(session);
 
+        if (resetToDefault) {
+            handleProfileImgReset(session, redirectAttributes, loginMemberId);
+        } else {
+            handleProfileImgUpload(file, session, redirectAttributes, loginMemberId);
+        }
+
+        return "redirect:/myPage";
+    }
+
+    private void handleProfileImgReset(HttpSession session, RedirectAttributes redirectAttributes, Long loginMemberId) {
         try {
-            LoginMember loginMember = memberService.updateProfileImage(loginMemberId, file);
+            LoginMember loginMember = memberService.setDefaultProfileImg(loginMemberId);
             session.setAttribute("loginMember", loginMember);
         } catch (IOException e) {
-            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("popUpMessage", "파일 삭제 중 오류가 발생했습니다.");
+        }
+    }
+
+    private void handleProfileImgUpload(MultipartFile file, HttpSession session, RedirectAttributes redirectAttributes, Long loginMemberId) {
+        try {
+            LoginMember loginMember = memberService.updateProfileImg(loginMemberId, file);
+            session.setAttribute("loginMember", loginMember);
+        } catch (IOException e) {
             redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 중 오류가 발생했습니다.");
         } catch (NoFileException | FileTooBigException e) {
             redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
         }
-        return "redirect:/myPage";
     }
 
     @PostMapping("/members/delete")

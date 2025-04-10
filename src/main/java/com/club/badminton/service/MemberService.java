@@ -136,19 +136,34 @@ public class MemberService {
     }
 
     @Transactional
-    public LoginMember updateProfileImage(Long memberId, MultipartFile file) throws IOException {
+    public LoginMember setDefaultProfileImg(Long memberId) throws IOException {
         Member member = findMemberById(memberId);
-        Attachment newFIle = attachmentService.save(memberId, file);
-        deletePreviousProfileImg(member);
-        member.changeProfileImg(newFIle);
+
+        Attachment previousFile = member.getProfileImg();
+
+        deleteOldProfileImg(previousFile);
+        member.changeProfileImg(null);
+
         return new LoginMember(member);
     }
 
-    private void deletePreviousProfileImg(Member member) throws IOException {
+    @Transactional
+    public LoginMember updateProfileImg(Long memberId, MultipartFile file) throws IOException {
+        Member member = findMemberById(memberId);
+
         Attachment oldFile = member.getProfileImg();
+        Attachment newFIle = attachmentService.save(memberId, file);
+
+        deleteOldProfileImg(oldFile);
+        member.changeProfileImg(newFIle);
+
+        return new LoginMember(member);
+    }
+
+    @Transactional
+    private void deleteOldProfileImg(Attachment oldFile) throws IOException {
         if (oldFile != null) {
             attachmentService.delete(oldFile.getId());
         }
     }
-
 }

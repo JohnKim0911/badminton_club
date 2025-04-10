@@ -79,6 +79,8 @@ public class Member extends BaseTimeEntity {
 
     public void changeProfileImg(Attachment attachment) {
         this.profileImg = attachment;
-        attachment.changeMember(this);
+        if (attachment != null) {
+            attachment.changeMember(this);
+        }
     }
 }
