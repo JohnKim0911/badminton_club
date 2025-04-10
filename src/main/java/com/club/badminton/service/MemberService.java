@@ -13,6 +13,7 @@ import com.club.badminton.exception.validation.login.NotRegisteredEmailException
 import com.club.badminton.exception.validation.login.PasswordNotMatchedException;
 import com.club.badminton.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -135,12 +137,20 @@ public class MemberService {
 
     @Transactional
     public LoginMember updateProfileImage(Long memberId, MultipartFile file) throws IOException {
-        Long savedFileId = attachmentService.save(memberId, file);
-        Attachment attachment = attachmentService.findById(savedFileId);
-
+        log.trace("MemberService.updateProfileImage");
         Member member = findMemberById(memberId);
-        member.changeProfileImg(attachment);
+        Attachment newFIle = attachmentService.save(memberId, file);
+        deletePreviousProfileImg(member);
+        member.changeProfileImg(newFIle);
         return new LoginMember(member);
+    }
+
+    private void deletePreviousProfileImg(Member member) throws IOException {
+        log.trace("MemberService.deletePreviousProfileImg");
+        Attachment oldFile = member.getProfileImg();
+        if (oldFile != null) {
+            attachmentService.delete(oldFile.getId());
+        }
     }
 
 }

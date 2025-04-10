@@ -13,15 +13,14 @@ spring:
       hibernate:
         format_sql: true
 
-# (thymeleaf 세팅은 아래가 default라 생략해도 됨)
-#  thymeleaf:
-#    prefix: classpath:/templates/
-#    suffix: .html
-#    cache: false #false로 하면 thymeleaf 수정 후 바로 반영됨.
+# 로그 색상나오게 출력
+  output:
+    ansi:
+      enabled: always
 
 logging.level:
-  org.hibernate.SQL: debug #logger를 통해 하이버네이트 실행 SQL을 남긴다.
-#  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
+  com.club.badminton: trace
+  org.hibernate.SQL: debug
 
 # 세션을 url이 아닌 쿠키를 사용하도록 강제함. (로그인시 jsessionid가 url에 들어가면서 404 에러나는 것을 방지함)
 server:
