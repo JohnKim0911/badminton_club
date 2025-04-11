@@ -29,12 +29,13 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
     private final AddressService addressService;
 
-    @GetMapping("/members/new")
+    @GetMapping("/new")
     public String signUpForm(Model model) {
         model.addAttribute("memberSignUpForm", new MemberSignUpForm());
         model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
@@ -42,8 +43,8 @@ public class MemberController {
         return "members/signUpForm";
     }
 
-    @PostMapping("/members/new")
-    public String signUp(@Valid MemberSignUpForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    @PostMapping("/new")
+    public String signUp(@Valid MemberSignUpForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "members/signUpForm";
         }
@@ -52,15 +53,17 @@ public class MemberController {
             memberService.signUp(form);
         } catch (DuplicatedEmailException | DuplicatedPhoneException e) {
             //회원가입 실패
-            handleSignUpDuplicateException(e, bindingResult);
+            handleDuplicateException(e, bindingResult);
+            model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
+            model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
             return "members/signUpForm";
         }
 
         redirectAttributes.addFlashAttribute("popUpMessage", "회원가입에 성공하였습니다.");
-        return "redirect:/login";
+        return "redirect:/members/login";
     }
 
-    private void handleSignUpDuplicateException(RuntimeException e, BindingResult bindingResult) {
+    private void handleDuplicateException(RuntimeException e, BindingResult bindingResult) {
         if (e instanceof DuplicatedEmailException) {
             bindingResult.rejectValue("email", "duplicated.email", e.getMessage());
         } else if (e instanceof DuplicatedPhoneException) {
@@ -74,21 +77,19 @@ public class MemberController {
         return "members/login";
     }
 
-    //TODO restAPI 형식으로 URL 수정필요
     @PostMapping("/login")
     public String login(@ModelAttribute LoginForm loginForm, HttpSession session, Model model) {
 
-        LoginMember loginMember;
         try {
-            loginMember = memberService.login(loginForm);
+            LoginMember loginMember = memberService.login(loginForm);
+            session.setAttribute("loginMember", loginMember);
+            return "redirect:/";
+
         } catch (NotRegisteredEmailException | PasswordNotMatchedException | ResignedMemberException e) {
             //로그인 실패
             model.addAttribute("popUpMessage", e.getMessage());
             return "members/login";
         }
-
-        session.setAttribute("loginMember", loginMember);
-        return "redirect:/";
     }
 
     @PostMapping("/logout")
@@ -98,22 +99,26 @@ public class MemberController {
     }
 
     //TODO paging 처리
-    @GetMapping("/members")
+    @GetMapping("/")
     public String memberList(Model model) {
         List<MemberDto> memberDtos = memberService.findMembers();
+
         Map<Long, AddressDto> allAddressDtoMap = addressService.getAllDtoMap();
         model.addAttribute("members", memberDtos);
         model.addAttribute("allAddressDtoMap", allAddressDtoMap);
+
         return "members/memberList";
     }
 
-    @GetMapping("/myPage")
-    public String myPage(HttpSession session, Model model) {
-        MemberUpdateForm form = memberService.updateForm(getLoginMemberId(session));
+    @GetMapping("/{id}/detail")
+    public String detail(@PathVariable Long id, Model model) {
+        MemberUpdateForm form = memberService.updateForm(id);
+
         Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
         model.addAttribute("memberUpdateForm", form);
         model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
-        return "members/myPage";
+
+        return "members/memberDetail";
     }
 
     private static Long getLoginMemberId(HttpSession session) {
@@ -121,82 +126,84 @@ public class MemberController {
         return loginMember.getId();
     }
 
-    @GetMapping("/members/update")
-    public String updateForm(HttpSession session, Model model) {
-        MemberUpdateForm form = memberService.updateForm(getLoginMemberId(session));
-        Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
+    @GetMapping("/{id}/update")
+    public String updateForm(@PathVariable Long id, Model model) {
+        MemberUpdateForm form = memberService.updateForm(id);
+
         model.addAttribute("memberUpdateForm", form);
-        model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
+        model.addAttribute("addressDtoMapByDepth", addressService.getRelatedDtoMapByDepth(form.getAddressId()));
         model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
         model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
+
         return "members/memberUpdate";
     }
 
-    @PostMapping("/members/update")
-    public String update(@Valid MemberUpdateForm form, BindingResult bindingResult, HttpSession session, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable Long id, @Valid MemberUpdateForm form, BindingResult bindingResult,
+                         HttpSession session, RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             return "members/memberUpdate";
         }
 
-        LoginMember loginMember;
         try {
-            loginMember = memberService.update(form);
+            LoginMember loginMember = memberService.update(form);
+
+            session.setAttribute("loginMember", loginMember);
+            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
+            return "redirect:/members/" + id + "/detail";
+
         } catch (DuplicatedPhoneException e) {
             //수정 실패
-            handleSignUpDuplicateException(e, bindingResult);
+            handleDuplicateException(e, bindingResult);
             return "members/memberUpdate";
         }
-
-        session.setAttribute("loginMember", loginMember);
-        redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
-        return "redirect:/myPage";
     }
 
-    @PostMapping("/members/checkPassword")
-    public @ResponseBody String checkPassword(@RequestParam("currentPassword") String password, HttpSession session) {
-        boolean isMatched = memberService.checkPassword(getLoginMemberId(session), password);
+    @PostMapping("/{id}/checkPassword")
+    public @ResponseBody String checkPassword(@PathVariable Long id, @RequestParam("currentPassword") String password) {
+        boolean isMatched = memberService.checkPassword(id, password);
         return isMatched ? "ok" : "wrong";
     }
 
-    @PostMapping("/members/updatePassword")
-    public String updatePassword(@RequestParam("currentPassword") String currentPassword,
-                                 @RequestParam("newPassword") String newPassword,
-                                 HttpSession session, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{id}/updatePassword")
+    public String updatePassword(@PathVariable Long id, @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword, RedirectAttributes redirectAttributes) {
 
-        memberService.updatePassword(getLoginMemberId(session), newPassword);
+        //TODO 비밀번호 이중으로 검증?
+        memberService.updatePassword(id, newPassword);
 
         redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
-        return "redirect:/myPage";
+        return "redirect:/members/" + id + "/detail";
     }
 
-    @PostMapping("/members/updateProfileImg")
-    public String updateProfileImg(@RequestParam(value = "resetToDefault", required = false) boolean resetToDefault,
+    @PostMapping("/{id}/updateProfileImg")
+    public String updateProfileImg(@PathVariable Long id,
+                                   @RequestParam(value = "resetToDefault", required = false) boolean resetToDefault,
                                    @RequestParam(value = "attachment", required = false) MultipartFile file,
                                    HttpSession session, RedirectAttributes redirectAttributes) {
 
-        Long loginMemberId = getLoginMemberId(session);
-
         if (resetToDefault) {
-            handleProfileImgReset(session, redirectAttributes, loginMemberId);
+            handleProfileImgReset(id, session, redirectAttributes);
         } else {
-            handleProfileImgUpload(file, session, redirectAttributes, loginMemberId);
+            handleProfileImgUpload(id, file, session, redirectAttributes);
         }
 
-        return "redirect:/myPage";
+        return "redirect:/members/" + id + "/detail";
     }
 
-    private void handleProfileImgReset(HttpSession session, RedirectAttributes redirectAttributes, Long loginMemberId) {
+    private void handleProfileImgReset(Long memberId, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
-            LoginMember loginMember = memberService.setDefaultProfileImg(loginMemberId);
+            LoginMember loginMember = memberService.setDefaultProfileImg(memberId);
             session.setAttribute("loginMember", loginMember);
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("popUpMessage", "파일 삭제 중 오류가 발생했습니다.");
         }
     }
 
-    private void handleProfileImgUpload(MultipartFile file, HttpSession session, RedirectAttributes redirectAttributes, Long loginMemberId) {
+    private void handleProfileImgUpload(Long memberId, MultipartFile file, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
-            LoginMember loginMember = memberService.updateProfileImg(loginMemberId, file);
+            LoginMember loginMember = memberService.updateProfileImg(memberId, file);
             session.setAttribute("loginMember", loginMember);
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 중 오류가 발생했습니다.");
@@ -205,13 +212,13 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/members/delete")
-    public String delete(HttpSession session, RedirectAttributes redirectAttributes) {
-        memberService.delete(getLoginMemberId(session));
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        memberService.delete(id);
         session.invalidate();
         redirectAttributes.addFlashAttribute("popUpMessage", "회원탈퇴에 성공하였습니다. 그 동안 이용해주셔서 감사합니다.");
         //TODO 탈퇴회원 복구 기능 추가?
-        return "redirect:/login";
+        return "redirect:/members/login";
     }
 
 }

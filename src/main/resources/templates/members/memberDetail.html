@@ -80,7 +80,7 @@
                     <hr class="my-4">
 
                     <div class="d-grid gap-3">
-                        <a class="btn btn-primary" href="/members/update" role="button">회원정보 수정</a>
+                        <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwModal">비밀번호 변경</button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">회원탈퇴</button>
@@ -97,7 +97,7 @@
                         <h1 class="modal-title fs-5" id="profileImgModalLabel">프로필 사진변경</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="/members/updateProfileImg" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
+                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/updateProfileImg'}" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div style="text-align: center;">
                                 <img th:src="${memberUpdateForm.profileImg != null} ? @{'/upload/' + ${memberUpdateForm.profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
@@ -105,7 +105,7 @@
                             <div class="my-3">
                                 <label for="profileImgInput" class="form-label">새로운 프로필 사진을 선택해주세요.</label>
                                 <input type="file" class="form-control" id="profileImgInput" name="attachment" onchange="handleProfileImgChange(this);">
-                                <button type="button" class="btn btn-secondary btn-sm mt-3" id="useDefaultImgBtn">기본사진 사용</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm mt-3" id="useDefaultImgBtn">기본사진 사용</button>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -125,7 +125,7 @@
                         <h1 class="modal-title fs-5" id="updatePwModalLabel">비밀번호 변경</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="/members/updatePassword" method="post" id="changePasswordForm" onsubmit="return validateUpdatePwForm(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
+                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/updatePassword'}" method="post" id="changePasswordForm" onsubmit="return validateUpdatePwForm(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="currentPassword" class="col-form-label">기존 비밀번호:</label>
@@ -160,7 +160,7 @@
                         <h1 class="modal-title fs-5" id="deleteAccountModalLabel">회원탈퇴</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="/members/delete" method="post" id="deleteForm" onsubmit="return validateDeleteForm(event);">
+                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="return validateDeleteForm(event);">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <p class="my-2">정말로 탈퇴하시겠습니까?<br>탈퇴하시려면, 비밀번호를 입력해주세요.</p>
@@ -187,6 +187,8 @@
     </script>
 
     <script th:inline="javascript">
+
+        const loginMemberId = /*[[${session.loginMember.id}]]*/ "";  //Thymeleaf's JavaScript inlining syntax.
 
         // 프로필 사진변경 modal - 이미지 검증 & 미리보기
         function handleProfileImgChange(input) {
@@ -245,7 +247,7 @@
             }
         });
 
-        // 비밀번호 변경 modal
+        // 비밀번호 변경 modal - 새로운/현재 비밀번호 검증 통과시 sumbit
         async function validateUpdatePwForm(event) {
             event.preventDefault();
 
@@ -255,7 +257,7 @@
             }
         }
 
-        // 회원탈퇴 modal
+        // 회원탈퇴 modal - 현재 비밀번호 검증 통과시 sumbit
         async function validateDeleteForm(event) {
             event.preventDefault();
 
@@ -265,13 +267,13 @@
             }
         }
 
-        // 전용 - 비밀번호 변경 modal
+        // 비밀번호 변경 modal - 새로운 비밀번호 양식 검증 후, 현재 비밀번호 일치여부 검증
         async function isUpdatePwFormValid() {
             if (!isNewPasswordValid()) return false;
             return await isCurrentPasswordValid("update");
         }
 
-        // 전용 - 비밀번호 변경 modal
+        // 비밀번호 변경 modal - 새로운 비밀번호 양식 검증
         function isNewPasswordValid() {
             const newPasswordEl = document.getElementById("newPassword");
             const newPasswordCheckEl = document.getElementById("newPasswordCheck");
@@ -297,7 +299,7 @@
             return true;
         }
 
-        // 공통 - 비밀번호 변경, 회원탈퇴 modal
+        // (공통) 비밀번호 변경, 회원탈퇴 modal - 현재 비밀번호 일치여부 검증
         function isCurrentPasswordValid(keyword) {
             let currentPassword;
             let checkResultEl;
@@ -313,7 +315,7 @@
             return new Promise((resolve, reject) => {
                 $.ajax({
                     type: "post",
-                    url: "/members/checkPassword",
+                    url: "/members/" + loginMemberId +"/checkPassword",
                     data: {
                         "currentPassword": currentPassword
                     },
@@ -334,7 +336,7 @@
             });
         }
 
-        // 공통 - 비밀번호 변경, 회원탈퇴 modal
+        // (공통) 비밀번호 변경, 회원탈퇴 modal - 에러 효과 지우기
         function removeError(input) {
             input.classList.remove("border-danger");
             let errorMessage = input.parentElement.querySelector("p.text-danger");
@@ -343,7 +345,7 @@
             }
         }
 
-        // 주소 관련
+        // 주소 - 선택된 상위 주소에 맞게 하위 주소 보여주기
         const addressDtoMapByDepth = /*[[${addressDtoMapByDepth}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
         displayAddress();
 

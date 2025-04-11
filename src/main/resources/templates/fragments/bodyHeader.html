@@ -26,7 +26,7 @@
             <div class="col-2 d-flex justify-content-end align-items-center">
                 <div th:if="${session.loginMember == null}"> <!-- 로그인 전 -->
                     <a class="btn btn-warning me-2" href="/members/new">회원가입</a>
-                    <a class="btn btn-outline-light" href="/login">로그인</a>
+                    <a class="btn btn-outline-light" href="/members/login">로그인</a>
                 </div>
                 <div th:if="${session.loginMember != null}" class="dropdown"> <!-- 로그인 후 -->
                     <a href="#" class="d-block text-white link-body-emphasis text-decoration-none dropdown-toggle"
@@ -36,13 +36,13 @@
                             alt="header-profile-img" width="40" height="40" class="rounded-circle" style="object-fit: cover;">
                     </a>
                     <ul class="dropdown-menu text-small">
-                        <li><a class="dropdown-item" href="/myPage">마이페이지</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/members/' + ${session.loginMember.id} + '/detail'}">마이페이지</a></li>
                         <li><a class="dropdown-item" href="#">내 활동</a></li>
                         <li><a class="dropdown-item" href="/members">관리자페이지</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a href="#" class="dropdown-item" onclick="confirmLogout(event);">로그아웃</a>
-                            <form id="bodyHeaderLogoutForm" action="/logout" method="post" style="display: none;"></form>
+                            <form id="bodyHeaderLogoutForm" action="/members/logout" method="post" style="display: none;"></form>
                         </li>
                     </ul>
                 </div>
