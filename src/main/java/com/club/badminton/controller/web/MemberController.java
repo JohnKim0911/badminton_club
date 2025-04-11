@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -96,18 +95,6 @@ public class MemberController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
-    }
-
-    //TODO paging 처리
-    @GetMapping("/")
-    public String memberList(Model model) {
-        List<MemberDto> memberDtos = memberService.findMembers();
-
-        Map<Long, AddressDto> allAddressDtoMap = addressService.getAllDtoMap();
-        model.addAttribute("members", memberDtos);
-        model.addAttribute("allAddressDtoMap", allAddressDtoMap);
-
-        return "members/memberList";
     }
 
     @GetMapping("/{id}/detail")

@@ -25,8 +25,7 @@
                     <td th:text="${member.phone}"></td>
                     <td th:text="${member.birthday}"></td>
                     <td th:text="${member.addressId}"></td>
-                    <!-- TODO 각 회원 상세 페이지 링크 처리 -->
-                    <td><a th:href="@{/members/{id}(id=${member.id})}" class="btn btn-primary">자세히</a></td> <!-- example: /members/1 -->
+                    <td><a th:href="@{/members/{id}/detail(id=${member.id})}" class="btn btn-primary">자세히</a></td> <!-- example: /members/1 -->
                 </tr>
             </tbody>
         </table>
@@ -36,7 +35,7 @@
 
     <script th:inline="javascript">
 
-        // 주소 관련
+        // 주소 합친후 화면에 보여주기. (예: 서울시 + 서초구)
         const allAddressDtoMap = /*[[${allAddressDtoMap}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
 
         function displayFullAddress() {
