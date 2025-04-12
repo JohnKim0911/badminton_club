@@ -50,7 +50,7 @@ public class MemberController {
 
         try {
             memberService.signUp(form);
-        } catch (DuplicatedEmailException | DuplicatedPhoneException e) {
+        } catch (DuplicatedEmailException | DuplicatedPhoneException e) { //TODO 이렇게 예외 잡는게 좋은 방법인지?..
             //회원가입 실패
             handleDuplicateException(e, bindingResult);
             model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
@@ -100,42 +100,31 @@ public class MemberController {
     @GetMapping("/{id}/detail")
     public String detail(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
-
         Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
         model.addAttribute("memberUpdateForm", form);
         model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
-
         return "members/memberDetail";
-    }
-
-    private static Long getLoginMemberId(HttpSession session) {
-        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
-        return loginMember.getId();
     }
 
     @GetMapping("/{id}/update")
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
-
         model.addAttribute("memberUpdateForm", form);
         model.addAttribute("addressDtoMapByDepth", addressService.getRelatedDtoMapByDepth(form.getAddressId()));
         model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
         model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
-
         return "members/memberUpdate";
     }
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable Long id, @Valid MemberUpdateForm form, BindingResult bindingResult,
                          HttpSession session, RedirectAttributes redirectAttributes) {
-
         if (bindingResult.hasErrors()) {
             return "members/memberUpdate";
         }
 
         try {
             LoginMember loginMember = memberService.update(form);
-
             session.setAttribute("loginMember", loginMember);
             redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 회원정보를 수정하였습니다.");
             return "redirect:/members/" + id + "/detail";

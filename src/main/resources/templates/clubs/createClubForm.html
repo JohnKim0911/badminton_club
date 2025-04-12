@@ -26,7 +26,7 @@
                         <div class="col-12">
                             <input type="hidden" th:field="*{addressId}" id="addressId" />
                             <span class="text-danger"><b>*</b></span>
-                            <label th:for="depth1" class="form-label">주소</label><br>
+                            <label th:for="depth1" class="form-label">지역</label><br>
                             <div class="row">
                                 <div class="col">
                                     <select id="depth1" class="form-select" onchange="loadAddressDepth2()" required>
@@ -44,7 +44,7 @@
                                     <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row my-3">
                                 <div class="col-6">
                                 </div>
                                 <div class="col-6">
@@ -54,20 +54,19 @@
                                     <div class="invalid-feedback">주소를 선택해주세요.</div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label th:for="description" class="form-label">간단한 클럽소개</label>
-                            <textarea  type="text" th:field="*{description}" class="form-control" rows="3"
-                                   th:classappend="${#fields.hasErrors('description')} ? 'border-danger' : ''" onblur="removeError(this)"></textarea>
-                            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger my-1"></p>
+                            <div class="row my-3">
+                                <div class="col">
+                                    <label th:for="detailAddress" class="form-label">상세위치</label>
+                                    <input type="text" th:field="*{detailAddress}" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-12">
                             <div class="form-check">
                                 <input type="checkbox" th:field="*{hasAcceptedTerms}" class="form-check-input" required
                                         th:classappend="${#fields.hasErrors('hasAcceptedTerms')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                <label class="form-check-label" th:for="hasAcceptedTerms">클럽생성 약관에 동의합니다.</label>
+                                <label class="form-check-label" th:for="hasAcceptedTerms">클럽 약관에 동의합니다.</label>
                                 <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1"></p>
                                 <div class="invalid-feedback">약관에 동의해야만 클럽을 생성할 수 있습니다.</div>
                             </div>

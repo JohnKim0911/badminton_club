@@ -51,7 +51,7 @@
                         <div class="col-12">
                             <input type="hidden" th:field="*{addressId}" id="addressId" />
                             <span class="text-danger"><b>*</b></span>
-                            <label th:for="depth1" class="form-label">주소</label><br>
+                            <label th:for="depth1" class="form-label">지역</label><br>
                             <div class="row">
                                 <div class="col">
                                     <select id="depth1" class="form-select" onchange="loadAddressDepth2()" required>
@@ -60,13 +60,13 @@
                                             <option th:value="${address.id}" th:text="${address.name}"></option>
                                         </th:block>
                                     </select>
-                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
+                                    <div class="invalid-feedback">지역을 선택해주세요.</div>
                                 </div>
                                 <div class="col">
                                     <select id="depth2" class="form-select" onchange="loadAddressDepth3(); updateAddressId();" required>
                                         <option selected disabled value="">선택</option>
                                     </select>
-                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
+                                    <div class="invalid-feedback">지역을 선택해주세요.</div>
                                 </div>
                             </div>
                             <div class="row mt-2">
@@ -76,7 +76,7 @@
                                     <select id="depth3" class="form-select" onchange="updateAddressId();" style="display: none;">
                                         <option selected disabled value="">선택</option>
                                     </select>
-                                    <div class="invalid-feedback">주소를 선택해주세요.</div>
+                                    <div class="invalid-feedback">지역을 선택해주세요.</div>
                                 </div>
                             </div>
                         </div>

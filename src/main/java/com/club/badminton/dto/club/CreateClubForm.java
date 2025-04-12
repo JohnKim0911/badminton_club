@@ -20,13 +20,12 @@ public class CreateClubForm {
     @NotNull
     private Long addressId;
 
-    @Size(max = 150, message = "클럽소개는 최대 150자까지 가능합니다.")
-    private String description;
+    private String detailAddress;
 
     @AssertTrue
     private Boolean hasAcceptedTerms;
 
     public Club toClub(Address address) {
-        return new Club(name, address, description);
+        return new Club(name, address, detailAddress);
     }
 }

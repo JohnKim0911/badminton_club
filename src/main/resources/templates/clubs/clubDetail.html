@@ -5,22 +5,26 @@
     <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
     <main class="container">
-        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2">
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2" th:object="${club}">
             <div class="col">
-                <h1 class="fw-bold text-body-emphasis">클럽 이름</h1>
+                <h1 class="fw-bold text-body-emphasis mb-3" th:text="*{name}">XXXX클럽</h1>
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th scope="row">장소</th>
-                            <td colspan="3">서울특별시 서초구 서초동 서초체육관</td>
+                            <th scope="row">지역</th>
+                            <td colspan="3" th:text="*{addressId}">XXXXX시 XX구</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">상세위치</th>
+                            <td th:text="*{detailAddress}">xxx체육관</td>
                         </tr>
                         <tr>
                             <th scope="row">회원수</th>
-                            <td>100</td>
+                            <td th:text="*{memberCount}">xxx</td>
                         </tr>
                         <tr>
                             <th scope="row">창립일</th>
-                            <td>2020-01-02</td>
+                            <td th:text="*{createdDate}">XXXX-XX-XX</td>
                         </tr>
                     </tbody>
                 </table>
@@ -28,7 +32,7 @@
                     <a href="#" class="btn btn-primary my-2 btn-lg me-2">클럽가입</a>
                     <a href="#" class="btn btn-outline-secondary my-2 btn-lg">공유하기</a>
                 </div>
-                <p>
+                <p th:text="*{description}">
                     운동합시다!<br>
                     xxxx은 실력에 관계없이 모든 회원이 같이 운동하는걸 권장합니다.<br>
                     <br>
@@ -53,7 +57,8 @@
                 </p>
             </div>
             <div class="col">
-                <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="img-fluid rounded object-fit-cover w-100" alt="club-main-img">
+                <img th:src="*{clubImg != null} ? @{'/upload/' + *{clubImg}} : @{/images/default_club.jpg}"
+                    class="img-fluid rounded object-fit-cover w-100" alt="club-main-img">
             </div>
         </div>
     </main>

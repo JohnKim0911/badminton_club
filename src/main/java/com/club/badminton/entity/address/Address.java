@@ -12,6 +12,9 @@ import java.util.List;
 @ToString(of = {"id", "name", "parent", "depth"})
 public class Address {
 
+    //TODO 주소 구조 변경 - 현재는 로직 구현하기 까다로움.
+    //TODO "지역"(LOCATION)이 더 나은 네이밍이 될 듯.
+
     @Id
     @GeneratedValue
     @Column(name = "address_id")

@@ -7,7 +7,7 @@
 
     <main class="container mt-5 py-3">
         <div class="form-signin w-100 mx-auto my-5" style="max-width: 330px;">
-            <form action="/members/login" method="post" th:object="${loginForm}">
+            <form th:action="@{/members/login}" method="post" th:object="${loginForm}">
                 <div class="pb-4 text-center">
                     <h2>로그인</h2>
                 </div>
@@ -49,6 +49,7 @@
 
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 
+    <!-- TODO 팝업 메시지 공통 처리 -->
     <script th:if="${popUpMessage}"> // 팝업 메시지
         alert("[[${popUpMessage}]]");
     </script>

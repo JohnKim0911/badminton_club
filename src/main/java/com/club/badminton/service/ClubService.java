@@ -1,5 +1,6 @@
 package com.club.badminton.service;
 
+import com.club.badminton.dto.club.ClubDto;
 import com.club.badminton.dto.club.CreateClubForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.club.Club;
@@ -23,8 +24,10 @@ public class ClubService {
     @Transactional
     public Long create(@Valid CreateClubForm form) {
         validateCreate(form);
+
         Address address = addressService.findById(form.getAddressId());
         Club club = form.toClub(address);
+
         clubRepository.save(club);
         return club.getId();
     }
@@ -34,5 +37,11 @@ public class ClubService {
         if (byName.isPresent()) {
             throw new DuplicatedClubNameException();
         }
+    }
+
+    public ClubDto findById(Long id) {
+        Club club = clubRepository.findById(id).get();
+        return new ClubDto(club);
+
     }
 }

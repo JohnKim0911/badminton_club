@@ -10,25 +10,38 @@
             </div>
 
             <div class="col-8 text-center">
-                <a th:if="${currentPath.startsWith('/clubs/')}" class="fs-4 text-white text-decoration-none" href="/clubs/1/detail">XXXXXX클럽</a>
-                <div th:if="${currentPath.startsWith('/clubs/') && session.loginMember != null}" class="mt-2">
-                    <a href="/clubs/1/home" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/home' ? 'text-white' : 'text-secondary'}">Home</a>
-                    <a href="/clubs/1/detail" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/detail' ? 'text-white' : 'text-secondary'}">소개</a>
-                    <a href="/clubs/1/posts" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/posts' ? 'text-white' : 'text-secondary'}">게시판</a>
-                    <a href="/clubs/1/budget" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/budget' ? 'text-white' : 'text-secondary'}">회비</a>
-                    <a href="/clubs/1/schedule" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/schedule' ? 'text-white' : 'text-secondary'}">일정</a>
-                    <a href="/clubs/1/lesson" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/lesson' ? 'text-white' : 'text-secondary'}">레슨</a>
-                    <a href="/clubs/1/trade" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/trade' ? 'text-white' : 'text-secondary'}">거래</a>
-                    <a href="/clubs/1/members" class="text-decoration-none m-2" th:classappend="${currentPath == '/clubs/1/members' ? 'text-white' : 'text-secondary'}">회원</a>
+                <div th:if="${club != null}" th:object="${club}">
+                    <a th:href="@{/clubs/{id}/detail(id=*{id})}" th:text="*{name}" class="fs-4 text-white text-decoration-none"></a>
+                    <div class="mt-2">
+                        <a th:href="@{/clubs/{id}/home(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/home') ? 'text-white' : 'text-secondary'}">Home</a>
+                        <a th:href="@{/clubs/{id}/detail(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/detail') ? 'text-white' : 'text-secondary'}">소개</a>
+                        <a th:href="@{/clubs/{id}/posts(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/posts') ? 'text-white' : 'text-secondary'}">게시판</a>
+                        <a th:href="@{/clubs/{id}/budget(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/budget') ? 'text-white' : 'text-secondary'}">회비</a>
+                        <a th:href="@{/clubs/{id}/schedule(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/schedule') ? 'text-white' : 'text-secondary'}">일정</a>
+                        <a th:href="@{/clubs/{id}/lesson(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/lesson') ? 'text-white' : 'text-secondary'}">레슨</a>
+                        <a th:href="@{/clubs/{id}/trade(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/trade') ? 'text-white' : 'text-secondary'}">거래</a>
+                        <a th:href="@{/clubs/{id}/members(id=*{id})}" class="text-decoration-none m-2"
+                           th:classappend="${#strings.contains(currentPath, '/members') ? 'text-white' : 'text-secondary'}">회원</a>
+                    </div>
                 </div>
             </div>
 
             <div class="col-2 d-flex justify-content-end align-items-center">
-                <div th:if="${session.loginMember == null}"> <!-- 로그인 전 -->
+                <!-- 로그인 전 -->
+                <div th:if="${session.loginMember == null}">
                     <a class="btn btn-warning me-2" href="/members/new">회원가입</a>
                     <a class="btn btn-outline-light" href="/members/login">로그인</a>
                 </div>
-                <div th:if="${session.loginMember != null}" class="dropdown"> <!-- 로그인 후 -->
+
+                <!-- 로그인 후 -->
+                <div th:if="${session.loginMember != null}" class="dropdown">
                     <a href="#" class="d-block text-white link-body-emphasis text-decoration-none dropdown-toggle"
                        data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
                         <span class="me-2" style="line-height: 40px;"><b th:text="${session.loginMember.name}">홍길동</b>님</span>
