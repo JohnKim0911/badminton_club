@@ -1,5 +1,6 @@
 package com.club.badminton.entity.member;
 
+import com.club.badminton.dto.member.MemberSignUpForm;
 import com.club.badminton.dto.member.MemberUpdateForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.attachment.Attachment;
@@ -40,7 +41,9 @@ public class Member extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
-    private Address address; //가장 구체적인 주소만 저장. - 예)서울특별시 서초구에서 서초구만 저장.
+    private Address address;
+
+    private String detailAddress;
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
@@ -52,13 +55,14 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
-    public Member(String email, String password, String name, String phone, LocalDate birthday, Address address) {
+    public Member(String email, String password, String name, String phone, LocalDate birthday, Address address, String detailAddress) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.birthday = birthday;
         this.address = address;
+        this.detailAddress = detailAddress;
         this.status = MemberStatus.ACTIVE;
     }
 
@@ -79,8 +83,17 @@ public class Member extends BaseTimeEntity {
 
     public void changeProfileImg(Attachment attachment) {
         this.profileImg = attachment;
-        if (attachment != null) {
-            attachment.changeMember(this);
-        }
+    }
+
+    public static Member toEntity(MemberSignUpForm form, Address address) {
+        return new Member(
+            form.getEmail(),
+            form.getPassword(),
+            form.getName(),
+            form.getPhone(),
+            form.getBirthday(),
+            address,
+            form.getDetailAddress()
+        );
     }
 }

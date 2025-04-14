@@ -1,8 +1,8 @@
 package com.club.badminton.entity.club;
 
+import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.attachment.Attachment;
 import com.club.badminton.entity.schedule.Schedule;
-import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.base.BaseEntity;
 import com.club.badminton.entity.budget.Budget;
 import com.club.badminton.entity.post.Post;

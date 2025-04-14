@@ -24,7 +24,7 @@ public class AdminController {
     private final MemberService memberService;
     private final AddressService addressService;
 
-    //TODO paging 처리
+/*    //TODO paging 처리
     @GetMapping("/members")
     public String memberList(Model model) {
         List<MemberDto> memberDtos = memberService.findMembers();
@@ -35,4 +35,5 @@ public class AdminController {
 
         return "admin/memberList";
     }
+*/
 }

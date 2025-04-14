@@ -11,6 +11,7 @@ import com.club.badminton.exception.member.signup.DuplicatedEmailException;
 import com.club.badminton.exception.member.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.member.login.NotRegisteredEmailException;
 import com.club.badminton.exception.member.login.PasswordNotMatchedException;
+import com.club.badminton.exception.member.signup.NullAddressLv3Exception;
 import com.club.badminton.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,8 @@ public class MemberService {
     @Transactional
     public void signUp(MemberSignUpForm form) {
         validateSignUp(form);
-        Address address = addressService.findById(form.getAddressId());
-        Member member = form.toMember(address);
+        Address address = addressService.findByLevelIds(form.getAddressLv1(), form.getAddressLv2(), form.getAddressLv3());
+        Member member = Member.toEntity(form, address);
         memberRepository.save(member);
     }
 
@@ -50,6 +51,10 @@ public class MemberService {
         Optional<Member> byPhone = memberRepository.findByPhone(form.getPhone());
         if (byPhone.isPresent()) {
             throw new DuplicatedPhoneException();
+        }
+
+        if (form.getAddressLv3() == null && addressService.shouldHaveLv3(form.getAddressLv2()) ) {
+            throw new NullAddressLv3Exception();
         }
     }
 

@@ -1,6 +1,5 @@
 package com.club.badminton.entity.post;
 
-import com.club.badminton.entity.attachment.Attachment;
 import com.club.badminton.entity.base.BaseTimeEntity;
 import com.club.badminton.entity.club.Club;
 import com.club.badminton.entity.club.ClubMember;
@@ -35,8 +34,8 @@ public class Post extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private AttachmentStatus attachmentStatus;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Attachment> attachments = new ArrayList<>();
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+//    private List<Attachment> attachments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();

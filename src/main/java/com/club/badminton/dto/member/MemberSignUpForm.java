@@ -1,7 +1,7 @@
 package com.club.badminton.dto.member;
 
-import com.club.badminton.entity.member.Member;
 import com.club.badminton.entity.address.Address;
+import com.club.badminton.entity.member.Member;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,14 +30,18 @@ public class MemberSignUpForm {
     private LocalDate birthday;
 
     @NotNull
-    private Long addressId;
+    private Long addressLv1;
+
+    @NotNull
+    private Long addressLv2;
+
+    private Long addressLv3;
+
+    private String detailAddress;
 
     @AssertTrue
     private Boolean hasAcceptedTerms;
 
-    public Member toMember(Address address) {
-        return new Member(email, password, name, phone, birthday, address);
-    }
 }
 
 /*

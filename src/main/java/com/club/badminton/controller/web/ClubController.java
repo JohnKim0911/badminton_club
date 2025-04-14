@@ -27,8 +27,8 @@ public class ClubController {
     @GetMapping("/new")
     public String createForm (Model model) {
         model.addAttribute("createClubForm", new CreateClubForm());
-        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
-        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
+//        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
+//        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
         return "clubs/createClubForm";
     }
 

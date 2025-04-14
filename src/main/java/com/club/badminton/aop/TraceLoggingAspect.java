@@ -1,4 +1,4 @@
-package com.club.badminton.config.aop;
+package com.club.badminton.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -31,12 +31,9 @@ public class TraceLoggingAspect {
         String methodName = joinPoint.getSignature().getName();
 
         log.trace("{}.{}", className, methodName);
-//        log.trace("{}.{} - called", className, methodName);
 
         try {
-            Object result = joinPoint.proceed();
-//            log.trace("{}.{} - completed", className, methodName);
-            return result;
+            return joinPoint.proceed();
         } catch (Throwable ex) {
             log.trace("{}.{} - exception: {}", className, methodName, ex.getMessage());
             throw ex;

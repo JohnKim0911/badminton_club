@@ -1,6 +1,5 @@
 package com.club.badminton.controller.web;
 
-import com.club.badminton.dto.address.AddressDto;
 import com.club.badminton.dto.member.*;
 import com.club.badminton.exception.attachment.FileTooBigException;
 import com.club.badminton.exception.attachment.NoFileException;
@@ -9,7 +8,7 @@ import com.club.badminton.exception.member.signup.DuplicatedEmailException;
 import com.club.badminton.exception.member.signup.DuplicatedPhoneException;
 import com.club.badminton.exception.member.login.NotRegisteredEmailException;
 import com.club.badminton.exception.member.login.PasswordNotMatchedException;
-import com.club.badminton.service.AddressService;
+import com.club.badminton.exception.member.signup.NullAddressLv3Exception;
 import com.club.badminton.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,7 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.Map;
+
+import static com.club.badminton.InitApp.ADDRESSES;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,13 +32,12 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AddressService addressService;
 
     @GetMapping("/new")
     public String signUpForm(Model model) {
         model.addAttribute("memberSignUpForm", new MemberSignUpForm());
-        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
-        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
+        model.addAttribute("addressLv1List", ADDRESSES.getLv1List());
+        model.addAttribute("addressChildrenMap", ADDRESSES.getChildrenMap());
         return "members/signUpForm";
     }
 
@@ -48,13 +47,14 @@ public class MemberController {
             return "members/signUpForm";
         }
 
+        //TODO 이렇게 예외처리하는게 좋은 방법인지?..
         try {
             memberService.signUp(form);
-        } catch (DuplicatedEmailException | DuplicatedPhoneException e) { //TODO 이렇게 예외 잡는게 좋은 방법인지?..
+        } catch (DuplicatedEmailException | DuplicatedPhoneException | NullAddressLv3Exception e) {
             //회원가입 실패
-            handleDuplicateException(e, bindingResult);
-            model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
-            model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
+            handleException(e, bindingResult);
+            model.addAttribute("addressLv1List", ADDRESSES.getLv1List());
+            model.addAttribute("addressChildrenMap", ADDRESSES.getChildrenMap());
             return "members/signUpForm";
         }
 
@@ -62,11 +62,13 @@ public class MemberController {
         return "redirect:/members/login";
     }
 
-    private void handleDuplicateException(RuntimeException e, BindingResult bindingResult) {
+    private void handleException(RuntimeException e, BindingResult bindingResult) {
         if (e instanceof DuplicatedEmailException) {
             bindingResult.rejectValue("email", "duplicated.email", e.getMessage());
         } else if (e instanceof DuplicatedPhoneException) {
             bindingResult.rejectValue("phone", "duplicated.phone", e.getMessage());
+        } else if (e instanceof NullAddressLv3Exception) {
+            bindingResult.rejectValue("addressLv3", "required.addressLv3", e.getMessage());
         }
     }
 
@@ -100,9 +102,9 @@ public class MemberController {
     @GetMapping("/{id}/detail")
     public String detail(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
-        Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
+//        Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
         model.addAttribute("memberUpdateForm", form);
-        model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
+//        model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
         return "members/memberDetail";
     }
 
@@ -110,9 +112,9 @@ public class MemberController {
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
         model.addAttribute("memberUpdateForm", form);
-        model.addAttribute("addressDtoMapByDepth", addressService.getRelatedDtoMapByDepth(form.getAddressId()));
-        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
-        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
+//        model.addAttribute("addressDtoMapByDepth", addressService.getRelatedDtoMapByDepth(form.getAddressId()));
+//        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
+//        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
         return "members/memberUpdate";
     }
 
@@ -131,7 +133,7 @@ public class MemberController {
 
         } catch (DuplicatedPhoneException e) {
             //수정 실패
-            handleDuplicateException(e, bindingResult);
+            handleException(e, bindingResult);
             return "members/memberUpdate";
         }
     }

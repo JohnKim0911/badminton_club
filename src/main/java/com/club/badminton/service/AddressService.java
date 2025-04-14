@@ -1,114 +1,82 @@
 package com.club.badminton.service;
 
-import com.club.badminton.dto.address.AddressDto;
+import com.club.badminton.dto.address.AddressHierarchyDto;
+import com.club.badminton.dto.address.SimpleAddressDto;
 import com.club.badminton.entity.address.Address;
+import com.club.badminton.entity.address.AddressLv1;
+import com.club.badminton.entity.address.AddressLv2;
+import com.club.badminton.exception.address.InvalidAddressIdException;
+import com.club.badminton.repository.AddressLv1Repository;
+import com.club.badminton.repository.AddressLv3Repository;
 import com.club.badminton.repository.AddressRepository;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-/*
-메모리 데이터 예시) 실제론 Address 가 아닌, AddressDto 사용함. key & value 구조만 참고.
-
-엔티티
-Address(id=1, name="서울특별시", parent=null, depth=1),
-Address(id=2, name="강남구", parent=1, depth=2),
-Address(id=3, name="역삼동", parent=2, depth=3),
-Address(id=4, name="서초구", parent=1, depth=2)
-
-메모리 데이터
-dtoMapByDepth = {
-    1: [ Address(id=1, name="서울특별시") ],
-    2: [ Address(id=2, name="강남구"), Address(id=4, name="서초구") ],
-    3: [ Address(id=3, name="역삼동") ]
-}
-
-childrenDtoMap = {
-    1L: [ Address(id=2, name="강남구"), Address(id=4, name="서초구") ],
-    2L: [ Address(id=3, name="역삼동") ]
-}
-*/
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AddressService {
 
     private final AddressRepository addressRepository;
+    private final AddressLv1Repository addressLv1Repository;
+    private final AddressLv3Repository addressLv3Repository;
 
-    @Getter
-    private final Map<Long, AddressDto> allDtoMap = new HashMap<>();
-    private final Map<Integer, List<AddressDto>> dtoMapByDepth = new HashMap<>();
-    @Getter
-    private final Map<Long, List<AddressDto>> childrenDtoMap = new HashMap<>();
+    /**
+     * DB -> 자바 메모리로 전체 주소구조 가져옴.
+     * 애플리케이션 실행시 단 한번만 자동실행됨.
+     */
+    public AddressHierarchyDto getFullAddressHierarchy() {
+        Map<String, Map<Long, List<SimpleAddressDto>>> fullMap = new HashMap<>();
+        fullMap.put("lv1", new HashMap<>());
+        fullMap.put("lv2", new HashMap<>());
 
-    public void loadCache() {
-        List<Address> allAddresses = addressRepository.findAll();
+        List<SimpleAddressDto> lv1Dtos = new ArrayList<>();
 
-        for (Address address : allAddresses) {
-            AddressDto dto = new AddressDto(address);
-            allDtoMap.put(dto.getId(), dto);
+        List<AddressLv1> lv1List = addressLv1Repository.findAll();
 
-            dtoMapByDepth.computeIfAbsent(dto.getDepth(), d -> new ArrayList<>()).add(dto);
+        for (AddressLv1 lv1 : lv1List) {
+            Long lv1Id = lv1.getId();
+            lv1Dtos.add(new SimpleAddressDto(lv1Id, lv1.getName()));
 
-            if (dto.getParentId() != null) {
-                childrenDtoMap.computeIfAbsent(dto.getParentId(), id -> new ArrayList<>()).add(dto);
+            List<SimpleAddressDto> lv2Dtos = lv1.getChildList().stream()
+                    .map(lv2 -> new SimpleAddressDto(lv2.getId(), lv2.getName()))
+                    .collect(Collectors.toList());
+            fullMap.get("lv1").put(lv1Id, lv2Dtos);
+
+            for (AddressLv2 lv2 : lv1.getChildList()) {
+                Long lv2Id = lv2.getId();
+                List<SimpleAddressDto> lv3Dtos = lv2.getChildList().stream()
+                        .map(lv3 -> new SimpleAddressDto(lv3.getId(), lv3.getName()))
+                        .collect(Collectors.toList());
+                fullMap.get("lv2").put(lv2Id, lv3Dtos);
             }
         }
-    }
 
-    public List<AddressDto> getDtoListByDepth(int depth) {
-        return dtoMapByDepth.getOrDefault(depth, List.of());
+        return new AddressHierarchyDto(lv1Dtos, fullMap);
     }
 
     public Address findById(Long id) {
-        Optional<Address> byId = addressRepository.findById(id);
-//        return byId.isPresent() ? byId.get() : null;
-        return byId.orElse(null);
+        Optional<Address> optionalAddress = addressRepository.findById(id);
+        return getAddress(optionalAddress);
     }
 
-    public Map<Integer, AddressDto> getRelatedDtoMapByDepth(Long addressId) {
-        Map<Integer, AddressDto> map = new HashMap<>();
-
-        AddressDto current = allDtoMap.get(addressId);
-        map.put(current.getDepth(), current);
-
-        while (current != null && current.getParentId() != null) {
-            AddressDto parent = allDtoMap.get(current.getParentId());
-            if (parent == null) {
-                break;
-            }
-            map.put(parent.getDepth(), parent);
-            current = parent;
-        }
-
-        return map;
+    public Address findByLevelIds(Long lv1Id, Long lv2Id, Long lv3Id) {
+        Optional<Address> optionalAddress = addressRepository.findByLevelIds(lv1Id, lv2Id, lv3Id);
+        return getAddress(optionalAddress);
     }
 
-    public List<AddressDto> getMostSpecificDtoList() {
-        List<AddressDto> mostSpecificList = new ArrayList<>();
-
-        for (AddressDto dto : allDtoMap.values()) {
-            List<AddressDto> children = childrenDtoMap.get(dto.getId());
-            if (children == null || children.isEmpty()) {
-                mostSpecificList.add(dto);
-            }
+    private Address getAddress(Optional<Address> optionalAddress) {
+        if (optionalAddress.isPresent()) {
+            return optionalAddress.get();
+        } else {
+            throw new InvalidAddressIdException();
         }
-        return mostSpecificList;
+    }
+
+    public boolean shouldHaveLv3(Long addressLv2Id) {
+        return addressLv3Repository.existsByParent_Id(addressLv2Id);
     }
 
 }
-
-
-/*
-computeIfAbsent 에 대해서...
-
-if (!map.containsKey(key)) {
-    map.put(key, new ArrayList<>());
-}
-map.get(key).add(value);
-
-위 코드를 다음과 같이 줄일 수 있음.
-map.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
- */
