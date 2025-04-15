@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface AddressLv1Repository extends JpaRepository<AddressLv1, Long> {
 
-    @EntityGraph(attributePaths = {"childList", "childList.childList"})
+    @EntityGraph(attributePaths = {"childSet", "childSet.childSet"})
     List<AddressLv1> findAll();
 
 /*
