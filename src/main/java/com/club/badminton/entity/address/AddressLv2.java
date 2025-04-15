@@ -6,10 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,15 +30,14 @@ public class AddressLv2 {
 
     @JsonIgnore
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    @OrderColumn(name = "order_index")
-    private List<AddressLv3> childList = new ArrayList<>();
+    private Set<AddressLv3> childSet = new HashSet<>();
 
     public AddressLv2(String name) {
         this.name = name;
     }
 
     public void addChild(AddressLv3 child) {
-        childList.add(child);
+        childSet.add(child);
         child.setParent(this);
     }
 

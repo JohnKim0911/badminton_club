@@ -40,14 +40,14 @@ public class AddressService {
             Long lv1Id = lv1.getId();
             lv1Dtos.add(new SimpleAddressDto(lv1Id, lv1.getName()));
 
-            List<SimpleAddressDto> lv2Dtos = lv1.getChildList().stream()
+            List<SimpleAddressDto> lv2Dtos = lv1.getChildSet().stream()
                     .map(lv2 -> new SimpleAddressDto(lv2.getId(), lv2.getName()))
                     .collect(Collectors.toList());
             fullMap.get("lv1").put(lv1Id, lv2Dtos);
 
-            for (AddressLv2 lv2 : lv1.getChildList()) {
+            for (AddressLv2 lv2 : lv1.getChildSet()) {
                 Long lv2Id = lv2.getId();
-                List<SimpleAddressDto> lv3Dtos = lv2.getChildList().stream()
+                List<SimpleAddressDto> lv3Dtos = lv2.getChildSet().stream()
                         .map(lv3 -> new SimpleAddressDto(lv3.getId(), lv3.getName()))
                         .collect(Collectors.toList());
                 fullMap.get("lv2").put(lv2Id, lv3Dtos);

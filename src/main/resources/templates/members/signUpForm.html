@@ -8,7 +8,8 @@
         <div class="py-4 text-center">
             <h2>회원가입</h2>
         </div>
-
+        
+        <!-- TODO 각종 REGEX 검증 -->
         <div class="row g-5">
             <div class="col">
                 <form th:action="@{/members/new}" method="post" th:object="${memberSignUpForm}" class="needs-validation" novalidate>
@@ -68,7 +69,7 @@
                                 <div class="col">
                                     <select th:field="*{addressLv1}" id="lv1Select" class="form-select" required
                                             th:classappend="${#fields.hasErrors('addressLv1')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                        <option selected disabled value="">==선택==</option>
+                                        <option value="" selected disabled>==선택==</option>
                                         <th:block th:each="lv1 : ${addressLv1List}">
                                             <option th:value="${lv1.id}" th:text="${lv1.name}"></option>
                                         </th:block>
@@ -79,7 +80,7 @@
                                 <div class="col">
                                     <select th:field="*{addressLv2}" id="lv2Select" class="form-select" required
                                             th:classappend="${#fields.hasErrors('addressLv2')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                        <option selected disabled value="">==선택==</option>
+                                        <option value="" selected disabled>==선택==</option>
                                     </select>
                                     <p th:if="${#fields.hasErrors('addressLv2')}" th:errors="*{addressLv2}" class="text-danger my-1"></p>
                                     <div class="invalid-feedback">지역을 선택해주세요.</div>
@@ -90,7 +91,7 @@
                                 <div class="col-6">
                                     <select th:field="*{addressLv3}" id="lv3Select" class="form-select" style="display: none;"
                                             th:classappend="${#fields.hasErrors('addressLv3')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                        <option selected disabled value="">==선택==</option>
+                                        <option value="" selected disabled>==선택==</option>
                                     </select>
                                     <p th:if="${#fields.hasErrors('addressLv3')}" th:errors="*{addressLv3}" class="text-danger my-1"></p>
                                     <div class="invalid-feedback">지역을 선택해주세요.</div>
@@ -162,30 +163,27 @@
         const lv2Select = document.getElementById("lv2Select");
         const lv3Select = document.getElementById("lv3Select");
 
-        // 주소 lv1 선택시, 해당하는 lv2 보여주기
-        lv1Select.addEventListener("change", function () {
+        // 주소 lv2 조작
+        function populateLv2Options(selectedLv2Id) {
             const lv1Id = lv1Select.value;
-            const lv2List = addressChildrenMap.lv1[lv1Id] || [];
+            const lv2List = (addressChildrenMap.lv1 && addressChildrenMap.lv1[lv1Id]) || [];
 
-            lv2Select.innerHTML = '<option selected disabled value="">==선택==</option>';
-            lv3Select.innerHTML = '<option selected disabled value="">==선택==</option>';
-            lv3Select.style.display = "none"; // Reset and hide lv3 on lv1 change
-
+            lv2Select.innerHTML = '<option value="" selected disabled>==선택==</option>';
             lv2List.forEach(lv2 => {
                 const option = document.createElement("option");
                 option.value = lv2.id;
                 option.text = lv2.name;
+                if (lv2.id == selectedLv2Id) option.selected = true;
                 lv2Select.appendChild(option);
             });
-        });
+        }
 
-        // 주소 lv2 선택시, 해당하는 lv3 보여주기
-        lv2Select.addEventListener("change", function () {
+        // 주소 lv3 조작
+        function populateLv3Options(selectedLv3Id) {
             const lv2Id = lv2Select.value;
-            const lv3List = addressChildrenMap.lv2[lv2Id] || [];
+            const lv3List = (addressChildrenMap.lv2 && addressChildrenMap.lv2[lv2Id]) || [];
 
-            lv3Select.innerHTML = '<option selected disabled value="">==선택==</option>';
-
+            lv3Select.innerHTML = '<option value="" selected disabled>==선택==</option>';
             if (lv3List.length > 0) {
                 lv3Select.style.display = "block";
                 lv3Select.setAttribute("required", "required");
@@ -193,11 +191,45 @@
                     const option = document.createElement("option");
                     option.value = lv3.id;
                     option.text = lv3.name;
+                    if (lv3.id == selectedLv3Id) option.selected = true;
                     lv3Select.appendChild(option);
                 });
             } else {
                 lv3Select.style.display = "none";
                 lv3Select.removeAttribute("required");
+            }
+        }
+
+        // 주소 lv1 선택시
+        lv1Select.addEventListener("change", function () {
+            populateLv2Options(null);
+            lv3Select.innerHTML = '<option value="" selected disabled>==선택==</option>';
+            lv3Select.style.display = "none";
+        });
+
+        // 주소 lv2 선택시
+        lv2Select.addEventListener("change", function () {
+            populateLv3Options(null);
+        });
+
+        // 페이지 로딩시, 이전 주소값 넣기
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectedLv1Id = /*[[${memberSignUpForm.addressLv1}]]*/ null;
+            const selectedLv2Id = /*[[${memberSignUpForm.addressLv2}]]*/ null;
+            const selectedLv3Id = /*[[${memberSignUpForm.addressLv3}]]*/ null;
+
+            // Reset lv1, lv2 to "==선택==" if not selected
+            if (!selectedLv1Id) {
+                lv1Select.selectedIndex = 0; // This selects the first <option>
+                lv2Select.selectedIndex = 0;
+            }
+
+            if (lv1Select.value) {
+                populateLv2Options(selectedLv2Id);
+            }
+
+            if (selectedLv2Id) {
+                populateLv3Options(selectedLv3Id);
             }
         });
 

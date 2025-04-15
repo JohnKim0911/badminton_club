@@ -36,6 +36,7 @@ public class MemberService {
 
     @Transactional
     public void signUp(MemberSignUpForm form) {
+        log.info("MemberSignUpForm: {}", form);
         validateSignUp(form);
         Address address = addressService.findByLevelIds(form.getAddressLv1(), form.getAddressLv2(), form.getAddressLv3());
         Member member = Member.toEntity(form, address);

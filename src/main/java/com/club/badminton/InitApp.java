@@ -31,7 +31,8 @@ import java.util.Random;
 @Slf4j
 public class InitApp {
 
-    private final InitDbService initDbService;
+    private final InitAddressService initAddressService;
+    private final InitMemberService initMemberService;
     private final AddressService addressService;
 
     public static AddressHierarchyDto ADDRESSES; // 애플리케이션에서 계속 공유할 주소
@@ -39,8 +40,12 @@ public class InitApp {
     @PostConstruct
     public void init() {
         log.info("InitApp.init");
-        initDbService.insertAllAddresses(initDbService.readJson());
-        initDbService.initMembers(50);
+
+        Map<String, Object> addressMap = initAddressService.readJson();
+        log.info("addressMap: {}", addressMap);
+
+        initAddressService.insertAllAddresses(addressMap);
+        initMemberService.insertMembers(50);
 
         ADDRESSES = addressService.getFullAddressHierarchy();
     }
@@ -48,10 +53,9 @@ public class InitApp {
     @Component
     @Transactional
     @RequiredArgsConstructor
-    static class InitDbService {
+    static class InitAddressService {
 
         private final EntityManager em;
-        private final AddressRepository addressRepository;
 
         public Map<String, Object> readJson() {
             ObjectMapper mapper = new ObjectMapper();
@@ -69,41 +73,62 @@ public class InitApp {
                 Object lv2Obj = lv1Entry.getValue();
 
                 AddressLv1 lv1 = new AddressLv1(lv1Name);
+                em.persist(lv1);  // Persist parent FIRST so it’s managed
 
                 if (lv2Obj instanceof List) {
-                    // Only 2 levels: AddressLv1 → AddressLv2
                     List<String> lv2Names = (List<String>) lv2Obj;
-                    for (String lv2Name : lv2Names) {
+                    if (lv2Names.isEmpty()) {
+                        // e.g., "경기도": { "의정부시": [] } (if you're using 2-level JSON)
+                        // probably not used in this block actually
+                    } else {
+                        for (String lv2Name : lv2Names) {
+                            AddressLv2 lv2 = new AddressLv2(lv2Name);
+                            lv1.addChild(lv2);
+                            em.persist(lv2); // optional (if cascade = ALL on lv1→lv2)
+
+                            Address address = new Address(lv1, lv2, null);
+                            em.persist(address);
+                            log.info("Inserting Address: {}, {}", lv1Name, lv2.getName());
+                        }
+                    }
+                } else if (lv2Obj instanceof Map) {
+                    Map<String, List<String>> lv2Map = (Map<String, List<String>>) lv2Obj;
+                    for (Map.Entry<String, List<String>> lv2Entry : lv2Map.entrySet()) {
+                        String lv2Name = lv2Entry.getKey();
+                        List<String> lv3Names = lv2Entry.getValue();
+
                         AddressLv2 lv2 = new AddressLv2(lv2Name);
                         lv1.addChild(lv2);
 
-                        // Insert Address (Lv1, Lv2, null)
-                        Address address = new Address(lv1, lv2, null);
-                        em.persist(address);
-                    }
-                } else if (lv2Obj instanceof Map) {
-                    // 3 levels: AddressLv1 → AddressLv2 → AddressLv3
-                    Map<String, List<String>> lv2Map = (Map<String, List<String>>) lv2Obj;
-                    for (Map.Entry<String, List<String>> lv2Entry : lv2Map.entrySet()) {
-                        AddressLv2 lv2 = new AddressLv2(lv2Entry.getKey());
-                        List<String> lv3Names = lv2Entry.getValue();
-                        for (String lv3Name : lv3Names) {
-                            AddressLv3 lv3 = new AddressLv3(lv3Name);
-                            lv2.addChild(lv3);
-
-                            // Insert Address (Lv1, Lv2, Lv3)
-                            Address address = new Address(lv1, lv2, lv3);
+                        if (lv3Names.isEmpty()) {
+                            Address address = new Address(lv1, lv2, null);
                             em.persist(address);
+                            log.info("Inserting Address: {}, {}", lv1Name, lv2.getName());
+                        } else {
+                            for (String lv3Name : lv3Names) {
+                                AddressLv3 lv3 = new AddressLv3(lv3Name);
+                                lv2.addChild(lv3);
+
+                                Address address = new Address(lv1, lv2, lv3);
+                                em.persist(address);
+                                log.info("Inserting Address: {}, {}, {}", lv1Name, lv2.getName(), lv3Name);
+                            }
                         }
-                        lv1.addChild(lv2);
                     }
                 }
-
-                em.persist(lv1); // Persist hierarchy
             }
         }
+    }
 
-        public void initMembers(int memberCount) {
+    @Component
+    @Transactional
+    @RequiredArgsConstructor
+    static class InitMemberService {
+
+        private final EntityManager em;
+        private final AddressRepository addressRepository;
+
+        public void insertMembers(int memberCount) {
             long addressSize = addressRepository.count();
 
             for (int i = 1; i <= memberCount; i++) {
@@ -139,6 +164,6 @@ public class InitApp {
             long randomAddressId = 1 + random.nextLong(addressSize); //address IDs start from 1
             return addressRepository.findById(randomAddressId).get();
         }
-
     }
+
 }

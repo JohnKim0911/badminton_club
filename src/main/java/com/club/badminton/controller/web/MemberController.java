@@ -1,6 +1,7 @@
 package com.club.badminton.controller.web;
 
 import com.club.badminton.dto.member.*;
+import com.club.badminton.exception.address.InvalidAddressIdException;
 import com.club.badminton.exception.attachment.FileTooBigException;
 import com.club.badminton.exception.attachment.NoFileException;
 import com.club.badminton.exception.member.login.ResignedMemberException;
@@ -44,22 +45,25 @@ public class MemberController {
     @PostMapping("/new")
     public String signUp(@Valid MemberSignUpForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("addressLv1List", ADDRESSES.getLv1List());
+            model.addAttribute("addressChildrenMap", ADDRESSES.getChildrenMap());
             return "members/signUpForm";
         }
 
         //TODO 이렇게 예외처리하는게 좋은 방법인지?..
         try {
             memberService.signUp(form);
-        } catch (DuplicatedEmailException | DuplicatedPhoneException | NullAddressLv3Exception e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", "회원가입에 성공하였습니다.");
+            return "redirect:/members/login";
+
+        } catch (DuplicatedEmailException | DuplicatedPhoneException | NullAddressLv3Exception |
+                 InvalidAddressIdException e) {
             //회원가입 실패
-            handleException(e, bindingResult);
             model.addAttribute("addressLv1List", ADDRESSES.getLv1List());
             model.addAttribute("addressChildrenMap", ADDRESSES.getChildrenMap());
+            handleException(e, bindingResult);
             return "members/signUpForm";
         }
-
-        redirectAttributes.addFlashAttribute("popUpMessage", "회원가입에 성공하였습니다.");
-        return "redirect:/members/login";
     }
 
     private void handleException(RuntimeException e, BindingResult bindingResult) {
@@ -69,6 +73,8 @@ public class MemberController {
             bindingResult.rejectValue("phone", "duplicated.phone", e.getMessage());
         } else if (e instanceof NullAddressLv3Exception) {
             bindingResult.rejectValue("addressLv3", "required.addressLv3", e.getMessage());
+        } else if (e instanceof InvalidAddressIdException) {
+            bindingResult.rejectValue("addressLv3", "invalid.addressLv3", e.getMessage());
         }
     }
 

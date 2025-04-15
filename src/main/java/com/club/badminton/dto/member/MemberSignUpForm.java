@@ -1,16 +1,17 @@
 package com.club.badminton.dto.member;
 
-import com.club.badminton.entity.address.Address;
-import com.club.badminton.entity.member.Member;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 
 @Getter
 @Setter
+@ToString
 public class MemberSignUpForm {
 
     @NotBlank
@@ -27,6 +28,7 @@ public class MemberSignUpForm {
     @NotBlank
     private String phone;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
     @NotNull
