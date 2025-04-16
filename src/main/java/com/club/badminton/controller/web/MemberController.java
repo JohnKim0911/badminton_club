@@ -146,6 +146,23 @@ public class MemberController {
         return "redirect:/members/" + id + "/detail";
     }
 
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id, @RequestParam("pwdToDelete") String currentPwd,
+                         HttpSession session, RedirectAttributes redirectAttributes) {
+
+        try {
+            memberService.delete(id, currentPwd);
+            session.invalidate();
+            redirectAttributes.addFlashAttribute("popUpMessage", "회원탈퇴에 성공하였습니다. 그 동안 이용해주셔서 감사합니다.");
+            return "redirect:/members/login";
+            //TODO 탈퇴회원 복구 기능 추가?
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
+            return "redirect:/members/" + id + "/detail";
+        }
+    }
+
     @GetMapping("/{id}/update")
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
@@ -174,15 +191,6 @@ public class MemberController {
             handleException(e, bindingResult);
             return "members/memberUpdate";
         }
-    }
-
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        memberService.delete(id);
-        session.invalidate();
-        redirectAttributes.addFlashAttribute("popUpMessage", "회원탈퇴에 성공하였습니다. 그 동안 이용해주셔서 감사합니다.");
-        //TODO 탈퇴회원 복구 기능 추가?
-        return "redirect:/members/login";
     }
 
 }

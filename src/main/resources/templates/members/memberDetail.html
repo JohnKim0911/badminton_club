@@ -85,7 +85,7 @@
                         <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">회원탈퇴</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">회원탈퇴</button>
                     </div>
                 </div>
             </div>
@@ -155,20 +155,20 @@
         </div>
 
         <!-- 회원탈퇴 Modal -->
-        <div class="modal fade" id="deleteAccountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="deleteAccountModalLabel">회원탈퇴</h1>
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">회원탈퇴</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="isDeleteFormValid(event);">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <p class="my-2">정말로 탈퇴하시겠습니까?<br>탈퇴하시려면, 비밀번호를 입력해주세요.</p>
-                                <label for="pwdOnDeleteModal" class="col-form-label">비밀번호:</label>
-                                <input type="password" class="form-control" id="pwdOnDeleteModal" name="pwdOnDeleteModal" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="pwdOnDeleteModalResult"></p>
+                                <label for="pwdToDelete" class="col-form-label">비밀번호:</label>
+                                <input type="password" class="form-control" id="pwdToDelete" name="pwdToDelete" required onblur="removeError(this);">
+                                <p class="text-danger my-1" id="pwdToDeleteResult"></p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -189,8 +189,6 @@
     </script>
 
     <script th:inline="javascript">
-
-        const loginMemberId = /*[[${session.loginMember.id}]]*/ "";  //Thymeleaf's JavaScript inlining syntax.
 
         // 프로필 사진변경 modal - 이미지 검증 & 미리보기
         function handleProfileImgChange(input) {
@@ -278,6 +276,8 @@
 
         // (공통) 비밀번호 변경, 회원탈퇴 modal - 현재 비밀번호 일치여부 검증
         function isCurrentPwdValid(keyword) {
+            const loginMemberId = /*[[${session.loginMember.id}]]*/ "";  //Thymeleaf's JavaScript inlining syntax.
+
             let currentPwd;
             let checkResultEl;
 
@@ -285,8 +285,8 @@
                 currentPwd = document.getElementById("currentPwd").value;
                 checkResultEl = document.getElementById("currentPwdResult");
             } else if (keyword == "delete") {
-                currentPwd = document.getElementById("pwdOnDeleteModal").value;
-                checkResultEl = document.getElementById("pwdOnDeleteModalResult");
+                currentPwd = document.getElementById("pwdToDelete").value;
+                checkResultEl = document.getElementById("pwdToDeleteResult");
             }
 
             return new Promise((resolve, reject) => {

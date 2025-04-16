@@ -122,12 +122,22 @@ public class MemberService {
 
     @Transactional
     public void updatePassword(Long memberId, String currentPwd, String newPwd) {
-        Member member = findMemberById(memberId);
+        Member member = validateCurrentPwd(memberId, currentPwd);
+        member.changePassword(newPwd);
+    }
 
+    private Member validateCurrentPwd(Long memberId, String currentPwd) {
+        Member member = findMemberById(memberId);
         if (!currentPwd.equals(member.getPassword())) {
             throw new PasswordNotMatchedException();
         }
-        member.changePassword(newPwd);
+        return member;
+    }
+
+    @Transactional
+    public void delete(Long memberId, String currentPwd) {
+        Member member = validateCurrentPwd(memberId, currentPwd);
+        member.changeStatus(MemberStatus.RESIGNED);
     }
 
     public MemberUpdateForm updateForm(Long memberId) {
@@ -150,12 +160,6 @@ public class MemberService {
         if (byPhone.isPresent() && !byPhone.get().getId().equals(form.getId())) {
             throw new DuplicatedPhoneException();
         }
-    }
-
-    @Transactional
-    public void delete(Long memberId) {
-        Member member = findMemberById(memberId);
-        member.changeStatus(MemberStatus.RESIGNED);
     }
 
     public List<MemberDto> findMembers() {
