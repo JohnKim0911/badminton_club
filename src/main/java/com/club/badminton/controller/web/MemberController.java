@@ -58,8 +58,7 @@ public class MemberController {
             redirectAttributes.addFlashAttribute("popUpMessage", "회원가입에 성공하였습니다.");
             return "redirect:/members/login";
 
-        } catch (DuplicatedEmailException | DuplicatedPhoneException | NullAddressLv3Exception |
-                 InvalidAddressIdException e) {
+        } catch (DuplicatedEmailException | DuplicatedPhoneException | NullAddressLv3Exception | InvalidAddressIdException e) {
             //회원가입 실패
             addAddressAttributes(model);
             handleException(e, bindingResult);
@@ -128,6 +127,25 @@ public class MemberController {
         return "redirect:/members/" + id + "/detail";
     }
 
+    @PostMapping("/{id}/checkPwd")
+    public @ResponseBody boolean checkPwd(@PathVariable Long id, @RequestParam("currentPwd") String pwd) {
+        return memberService.checkPassword(id, pwd);
+    }
+
+    @PostMapping("/{id}/updatePwd")
+    public String updatePwd(@PathVariable Long id, @RequestParam("currentPwd") String currentPwd,
+                            @RequestParam("newPwd") String newPwd, RedirectAttributes redirectAttributes) {
+
+        try {
+            memberService.updatePassword(id, currentPwd, newPwd);
+            redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
+        } catch (PasswordNotMatchedException e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
+        }
+
+        return "redirect:/members/" + id + "/detail";
+    }
+
     @GetMapping("/{id}/update")
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
@@ -156,23 +174,6 @@ public class MemberController {
             handleException(e, bindingResult);
             return "members/memberUpdate";
         }
-    }
-
-    @PostMapping("/{id}/checkPassword")
-    public @ResponseBody String checkPassword(@PathVariable Long id, @RequestParam("currentPassword") String password) {
-        boolean isMatched = memberService.checkPassword(id, password);
-        return isMatched ? "ok" : "wrong";
-    }
-
-    @PostMapping("/{id}/updatePassword")
-    public String updatePassword(@PathVariable Long id, @RequestParam("currentPassword") String currentPassword,
-                                 @RequestParam("newPassword") String newPassword, RedirectAttributes redirectAttributes) {
-
-        //TODO 비밀번호 이중으로 검증?
-        memberService.updatePassword(id, newPassword);
-
-        redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
-        return "redirect:/members/" + id + "/detail";
     }
 
     @PostMapping("/{id}/delete")

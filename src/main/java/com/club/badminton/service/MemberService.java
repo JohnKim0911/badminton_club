@@ -115,6 +115,21 @@ public class MemberService {
         return LoginMember.of(member);
     }
 
+    public boolean checkPassword(Long memberId, String inputPassword) {
+        Member member = findMemberById(memberId);
+        return inputPassword.equals(member.getPassword());
+    }
+
+    @Transactional
+    public void updatePassword(Long memberId, String currentPwd, String newPwd) {
+        Member member = findMemberById(memberId);
+
+        if (!currentPwd.equals(member.getPassword())) {
+            throw new PasswordNotMatchedException();
+        }
+        member.changePassword(newPwd);
+    }
+
     public MemberUpdateForm updateForm(Long memberId) {
         Member member = findMemberById(memberId);
         return MemberUpdateForm.toDto(member);
@@ -135,17 +150,6 @@ public class MemberService {
         if (byPhone.isPresent() && !byPhone.get().getId().equals(form.getId())) {
             throw new DuplicatedPhoneException();
         }
-    }
-
-    public boolean checkPassword(Long memberId, String inputPassword) {
-        Member member = findMemberById(memberId);
-        return inputPassword.equals(member.getPassword());
-    }
-
-    @Transactional
-    public void updatePassword(Long memberId, String newPassword) {
-        Member member = findMemberById(memberId);
-        member.changePassword(newPassword);
     }
 
     @Transactional

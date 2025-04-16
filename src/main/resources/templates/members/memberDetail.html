@@ -84,7 +84,7 @@
                     <div class="d-grid gap-3">
                         <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwModal">비밀번호 변경</button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">회원탈퇴</button>
                     </div>
                 </div>
@@ -120,29 +120,29 @@
         </div>
 
         <!-- 비밀번호 변경 Modal -->
-        <div class="modal fade" id="updatePwModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwModalLabel" aria-hidden="true">
+        <div class="modal fade" id="updatePwdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwdModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="updatePwModalLabel">비밀번호 변경</h1>
+                        <h1 class="modal-title fs-5" id="updatePwdModalLabel">비밀번호 변경</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/updatePassword'}" method="post" id="changePasswordForm" onsubmit="return validateUpdatePwForm(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
+                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/updatePwd'}" method="post" id="changePwdForm" onsubmit="isUpdatePwdFormValid(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="currentPassword" class="col-form-label">기존 비밀번호:</label>
-                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="currentPasswordResult"></p>
+                                <label for="currentPwd" class="col-form-label">기존 비밀번호:</label>
+                                <input type="password" class="form-control" id="currentPwd" name="currentPwd" required onblur="removeError(this);">
+                                <p class="text-danger my-1" id="currentPwdResult"></p>
                             </div>
                             <div class="mb-3">
-                                <label for="newPassword" class="col-form-label">새로운 비밀번호:</label>
-                                <input type="password" class="form-control" id="newPassword" name="newPassword" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="newPasswordResult"></p>
+                                <label for="newPwd" class="col-form-label">새로운 비밀번호:</label>
+                                <input type="password" class="form-control" id="newPwd" name="newPwd" required onblur="removeError(this);">
+                                <p class="text-danger my-1" id="newPwdResult"></p>
                             </div>
                             <div class="mb-3">
-                                <label for="newPasswordCheck" class="col-form-label">새로운 비밀번호 확인:</label>
-                                <input type="password" class="form-control" id="newPasswordCheck" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="newPasswordCheckResult"></p>
+                                <label for="newPwdCheck" class="col-form-label">새로운 비밀번호 확인:</label>
+                                <input type="password" class="form-control" id="newPwdCheck" required onblur="removeError(this);">
+                                <p class="text-danger my-1" id="newPwdCheckResult"></p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -162,7 +162,7 @@
                         <h1 class="modal-title fs-5" id="deleteAccountModalLabel">회원탈퇴</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="return validateDeleteForm(event);">
+                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="isDeleteFormValid(event);">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <p class="my-2">정말로 탈퇴하시겠습니까?<br>탈퇴하시려면, 비밀번호를 입력해주세요.</p>
@@ -239,50 +239,36 @@
         });
 
         // 비밀번호 변경 modal - 새로운/현재 비밀번호 검증 통과시 sumbit
-        async function validateUpdatePwForm(event) {
+        async function isUpdatePwdFormValid(event) {
             event.preventDefault();
 
-            const isValid = await isUpdatePwFormValid();
+            if (!isNewPwdValid()) return;
+
+            const isValid = await isCurrentPwdValid("update");
             if (isValid) {
-                document.getElementById("changePasswordForm").submit();
+                document.getElementById("changePwdForm").submit();
             }
-        }
-
-        // 회원탈퇴 modal - 현재 비밀번호 검증 통과시 sumbit
-        async function validateDeleteForm(event) {
-            event.preventDefault();
-
-            const isValid = await isCurrentPasswordValid("delete");
-            if (isValid) {
-                document.getElementById("deleteForm").submit();
-            }
-        }
-
-        // 비밀번호 변경 modal - 새로운 비밀번호 양식 검증 후, 현재 비밀번호 일치여부 검증
-        async function isUpdatePwFormValid() {
-            if (!isNewPasswordValid()) return false;
-            return await isCurrentPasswordValid("update");
         }
 
         // 비밀번호 변경 modal - 새로운 비밀번호 양식 검증
-        function isNewPasswordValid() {
-            const newPasswordEl = document.getElementById("newPassword");
-            const newPasswordCheckEl = document.getElementById("newPasswordCheck");
+        function isNewPwdValid() {
+            const newPwdEl = document.getElementById("newPwd");
+            const newPwdCheckEl = document.getElementById("newPwdCheck");
 
-            const newPassword = newPasswordEl.value;
-            const newPasswordCheck = newPasswordCheckEl.value;
+            const newPwd = newPwdEl.value;
+            const newPwdCheck = newPwdCheckEl.value;
             
-            if (newPassword.length < 8 || newPassword.length > 20) {
-                newPasswordEl.classList.add("border-danger");
-                const resultEl = document.getElementById("newPasswordResult");
+            if (newPwd.length < 8 || newPwd.length > 20) {
+                newPwdEl.classList.add("border-danger");
+                const resultEl = document.getElementById("newPwdResult");
                 resultEl.innerHTML = "비밀번호는 8 ~ 20자이어야 합니다.";
                 resultEl.style.display = "block";
                 return false;
             }
 
-            if (newPassword !== newPasswordCheck) {
-                newPasswordCheckEl.classList.add("border-danger");
-                const resultEl = document.getElementById("newPasswordCheckResult");
+            if (newPwd !== newPwdCheck) {
+                newPwdCheckEl.classList.add("border-danger");
+                const resultEl = document.getElementById("newPwdCheckResult");
                 resultEl.innerHTML = "입력한 비밀번호가 서로 일치하지 않습니다.";
                 resultEl.style.display = "block";
                 return false;
@@ -291,27 +277,27 @@
         }
 
         // (공통) 비밀번호 변경, 회원탈퇴 modal - 현재 비밀번호 일치여부 검증
-        function isCurrentPasswordValid(keyword) {
-            let currentPassword;
+        function isCurrentPwdValid(keyword) {
+            let currentPwd;
             let checkResultEl;
 
             if (keyword == "update") {
-                currentPassword = document.getElementById("currentPassword").value;
-                checkResultEl = document.getElementById("currentPasswordResult");
+                currentPwd = document.getElementById("currentPwd").value;
+                checkResultEl = document.getElementById("currentPwdResult");
             } else if (keyword == "delete") {
-                currentPassword = document.getElementById("pwdOnDeleteModal").value;
+                currentPwd = document.getElementById("pwdOnDeleteModal").value;
                 checkResultEl = document.getElementById("pwdOnDeleteModalResult");
             }
 
             return new Promise((resolve, reject) => {
                 $.ajax({
                     type: "post",
-                    url: "/members/" + loginMemberId +"/checkPassword",
+                    url: "/members/" + loginMemberId +"/checkPwd",
                     data: {
-                        "currentPassword": currentPassword
+                        "currentPwd": currentPwd
                     },
                     success: function(result) {
-                        if (result == "ok") {
+                        if (result) {
                             resolve(true);
                         } else {
                             checkResultEl.innerHTML = "비밀번호가 일치하지 않습니다.";
@@ -325,6 +311,16 @@
                     }
                 });
             });
+        }
+
+        // 회원탈퇴 modal - 현재 비밀번호 검증 통과시 sumbit
+        async function isDeleteFormValid(event) {
+            event.preventDefault();
+
+            const isValid = await isCurrentPwdValid("delete");
+            if (isValid) {
+                document.getElementById("deleteForm").submit();
+            }
         }
 
         // (공통) 비밀번호 변경, 회원탈퇴 modal - 에러 효과 지우기
