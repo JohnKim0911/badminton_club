@@ -14,12 +14,20 @@ public class LoginMember {
     private String name;
     private String profileImg;
 
-    public LoginMember(Member member) {
-        this.id = member.getId();
-        this.email = member.getEmail();
-        this.name = member.getName();
-        if (member.getProfileImg() != null) {
-            this.profileImg = member.getProfileImg().getStoredName();
+    public static LoginMember of(Member m) {
+        LoginMember dto = new LoginMember();
+
+        dto.setId(m.getId());
+        dto.setEmail(m.getEmail());
+        dto.setName(m.getName());
+
+        if (m.getProfileImg() == null) {
+            dto.setProfileImg(null);
+        } else {
+            dto.setProfileImg(m.getProfileImg().getStoredName());
         }
+
+        return dto;
     }
+
 }

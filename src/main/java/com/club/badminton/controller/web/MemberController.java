@@ -3,7 +3,6 @@ package com.club.badminton.controller.web;
 import com.club.badminton.dto.member.*;
 import com.club.badminton.exception.address.InvalidAddressIdException;
 import com.club.badminton.exception.attachment.FileTooBigException;
-import com.club.badminton.exception.attachment.NoFileException;
 import com.club.badminton.exception.member.login.ResignedMemberException;
 import com.club.badminton.exception.member.signup.DuplicatedEmailException;
 import com.club.badminton.exception.member.signup.DuplicatedPhoneException;
@@ -113,6 +112,22 @@ public class MemberController {
         return "members/memberDetail";
     }
 
+    @PostMapping("/{id}/updateProfileImg")
+    public String updateProfileImg(@PathVariable Long id,
+                                   @RequestParam(value = "attachment", required = false) MultipartFile file,
+                                   HttpSession session, RedirectAttributes redirectAttributes) {
+        try {
+            LoginMember loginMember = memberService.updateProfileImg(id, file);
+            session.setAttribute("loginMember", loginMember);
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 및 삭제 중 오류가 발생했습니다.");
+        } catch (FileTooBigException e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
+        }
+
+        return "redirect:/members/" + id + "/detail";
+    }
+
     @GetMapping("/{id}/update")
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
@@ -158,41 +173,6 @@ public class MemberController {
 
         redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
         return "redirect:/members/" + id + "/detail";
-    }
-
-    @PostMapping("/{id}/updateProfileImg")
-    public String updateProfileImg(@PathVariable Long id,
-                                   @RequestParam(value = "resetToDefault", required = false) boolean resetToDefault,
-                                   @RequestParam(value = "attachment", required = false) MultipartFile file,
-                                   HttpSession session, RedirectAttributes redirectAttributes) {
-
-        if (resetToDefault) {
-            handleProfileImgReset(id, session, redirectAttributes);
-        } else {
-            handleProfileImgUpload(id, file, session, redirectAttributes);
-        }
-
-        return "redirect:/members/" + id + "/detail";
-    }
-
-    private void handleProfileImgReset(Long memberId, HttpSession session, RedirectAttributes redirectAttributes) {
-        try {
-            LoginMember loginMember = memberService.setDefaultProfileImg(memberId);
-            session.setAttribute("loginMember", loginMember);
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("popUpMessage", "파일 삭제 중 오류가 발생했습니다.");
-        }
-    }
-
-    private void handleProfileImgUpload(Long memberId, MultipartFile file, HttpSession session, RedirectAttributes redirectAttributes) {
-        try {
-            LoginMember loginMember = memberService.updateProfileImg(memberId, file);
-            session.setAttribute("loginMember", loginMember);
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 중 오류가 발생했습니다.");
-        } catch (NoFileException | FileTooBigException e) {
-            redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
-        }
     }
 
     @PostMapping("/{id}/delete")

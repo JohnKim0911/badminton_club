@@ -102,15 +102,15 @@
                     <form th:action="@{'/members/' + ${session.loginMember.id} + '/updateProfileImg'}" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div th:object="${memberDto}" style="text-align: center;">
-                                <img th:src="*{profileImg != null} ? @{'/upload/' + ${profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
+                                <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
                             </div>
                             <div class="my-3">
                                 <label for="profileImgInput" class="form-label">새로운 프로필 사진을 선택해주세요.</label>
                                 <input type="file" class="form-control" id="profileImgInput" name="attachment" onchange="handleProfileImgChange(this);">
-                                <button type="button" class="btn btn-outline-secondary btn-sm mt-3" id="useDefaultImgBtn">기본사진 사용</button>
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary ms-0 me-auto" id="useDefaultImgBtn">기본사진 사용</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                             <button type="submit" class="btn btn-primary">프로필 사진변경</button>
                         </div>
@@ -236,17 +236,6 @@
 
             // Change preview image to default
             preview.src = "/images/default_profile.png";
-
-            // Optional: add a hidden input to mark "reset to default"
-            let defaultFlag = document.getElementById("resetToDefault");
-            if (!defaultFlag) {
-                defaultFlag = document.createElement("input");
-                defaultFlag.type = "hidden";
-                defaultFlag.name = "resetToDefault";
-                defaultFlag.value = "true";
-                defaultFlag.id = "resetToDefault";
-                document.getElementById("changeProfileImgForm").appendChild(defaultFlag);
-            }
         });
 
         // 비밀번호 변경 modal - 새로운/현재 비밀번호 검증 통과시 sumbit

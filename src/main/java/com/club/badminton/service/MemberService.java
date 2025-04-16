@@ -61,7 +61,7 @@ public class MemberService {
 
     public LoginMember login(LoginForm loginForm) {
         Member member = validateLogin(loginForm);
-        return new LoginMember(member);
+        return LoginMember.of(member);
     }
 
     private Member validateLogin(LoginForm loginForm) {
@@ -88,22 +88,6 @@ public class MemberService {
         return MemberDto.toDto(member);
     }
 
-    public List<MemberDto> findMembers() {
-        List<Member> members = memberRepository.findAll();
-        return toMemberDtos(members);
-    }
-
-    private List<MemberDto> toMemberDtos(List<Member> members) {
-        return members.stream()
-                .map(m -> MemberDto.toDto(m))
-                .collect(Collectors.toList());
-    }
-
-    public MemberUpdateForm updateForm(Long memberId) {
-        Member member = findMemberById(memberId);
-        return MemberUpdateForm.toDto(member);
-    }
-
     private Member findMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isEmpty()) {
@@ -113,13 +97,37 @@ public class MemberService {
     }
 
     @Transactional
+    public LoginMember updateProfileImg(Long memberId, MultipartFile newFile) throws IOException {
+        Member member = findMemberById(memberId);
+
+        Attachment oldFile = member.getProfileImg();
+        if (oldFile != null) {
+            attachmentService.delete(oldFile);
+        }
+
+        if (newFile.isEmpty()) {
+            member.changeProfileImg(null);
+        } else {
+            Attachment newFIle = attachmentService.save(newFile);
+            member.changeProfileImg(newFIle);
+        }
+
+        return LoginMember.of(member);
+    }
+
+    public MemberUpdateForm updateForm(Long memberId) {
+        Member member = findMemberById(memberId);
+        return MemberUpdateForm.toDto(member);
+    }
+
+    @Transactional
     public LoginMember update(MemberUpdateForm form) {
         validateUpdate(form);
 
         Member member = findMemberById(form.getId());
 //        Address address = addressService.findById(form.getAddressId());
 //        member.update(form, address);
-        return new LoginMember(member);
+        return LoginMember.of(member);
     }
 
     private void validateUpdate(MemberUpdateForm form) {
@@ -146,35 +154,14 @@ public class MemberService {
         member.changeStatus(MemberStatus.RESIGNED);
     }
 
-    @Transactional
-    public LoginMember setDefaultProfileImg(Long memberId) throws IOException {
-        Member member = findMemberById(memberId);
-
-        Attachment previousFile = member.getProfileImg();
-
-        deleteOldProfileImg(previousFile);
-        member.changeProfileImg(null);
-
-        return new LoginMember(member);
+    public List<MemberDto> findMembers() {
+        List<Member> members = memberRepository.findAll();
+        return toMemberDtos(members);
     }
 
-    @Transactional
-    public LoginMember updateProfileImg(Long memberId, MultipartFile file) throws IOException {
-        Member member = findMemberById(memberId);
-
-        Attachment oldFile = member.getProfileImg();
-        Attachment newFIle = attachmentService.save(memberId, file);
-
-        deleteOldProfileImg(oldFile);
-        member.changeProfileImg(newFIle);
-
-        return new LoginMember(member);
-    }
-
-    @Transactional
-    private void deleteOldProfileImg(Attachment oldFile) throws IOException {
-        if (oldFile != null) {
-            attachmentService.delete(oldFile.getId());
-        }
+    private List<MemberDto> toMemberDtos(List<Member> members) {
+        return members.stream()
+                .map(m -> MemberDto.toDto(m))
+                .collect(Collectors.toList());
     }
 }
