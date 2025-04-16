@@ -1,5 +1,6 @@
 package com.club.badminton.dto.member;
 
+import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.member.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,9 +15,7 @@ import java.time.LocalDate;
 public class MemberUpdateForm {
 
     private Long id;
-
     private String profileImg;
-
     private String email;
 
     @NotBlank
@@ -29,21 +28,35 @@ public class MemberUpdateForm {
     private LocalDate birthday;
 
     @NotNull
-    private Long addressId;
+    private Long addressLv1;
 
-    public static MemberUpdateForm toUpdateForm(Member m) {
-        MemberUpdateForm form = new MemberUpdateForm();
+    @NotNull
+    private Long addressLv2;
+
+    private Long addressLv3;
+    private String detailAddress;
+
+    //TODO Builder Pattern 적용?
+    public static MemberUpdateForm toDto(Member m) {
+        MemberUpdateForm dto = new MemberUpdateForm();
 
         if (m.getProfileImg() != null) {
-            form.setProfileImg(m.getProfileImg().getStoredName());
+            dto.setProfileImg(m.getProfileImg().getStoredName());
         }
-        form.setId(m.getId());
-        form.setEmail(m.getEmail());
-        form.setName(m.getName());
-        form.setPhone(m.getPhone());
-        form.setBirthday(m.getBirthday());
-        form.setAddressId(m.getAddress().getId());
 
-        return form;
+        dto.setId(m.getId());
+        dto.setEmail(m.getEmail());
+        dto.setName(m.getName());
+        dto.setPhone(m.getPhone());
+        dto.setBirthday(m.getBirthday());
+
+        Address address = m.getAddress();
+        dto.setAddressLv1(address.getLv1().getId());
+        dto.setAddressLv2(address.getLv2().getId());
+        if (address.getLv3() != null) {
+            dto.setAddressLv3(address.getLv3().getId());
+        }
+
+        return dto;
     }
 }

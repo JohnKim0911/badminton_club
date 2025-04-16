@@ -83,6 +83,11 @@ public class MemberService {
         return member;
     }
 
+    public MemberDto findMember(Long memberId) {
+        Member member = findMemberById(memberId);
+        return MemberDto.toDto(member);
+    }
+
     public List<MemberDto> findMembers() {
         List<Member> members = memberRepository.findAll();
         return toMemberDtos(members);
@@ -90,13 +95,13 @@ public class MemberService {
 
     private List<MemberDto> toMemberDtos(List<Member> members) {
         return members.stream()
-                .map(m -> new MemberDto(m))
+                .map(m -> MemberDto.toDto(m))
                 .collect(Collectors.toList());
     }
 
     public MemberUpdateForm updateForm(Long memberId) {
         Member member = findMemberById(memberId);
-        return MemberUpdateForm.toUpdateForm(member);
+        return MemberUpdateForm.toDto(member);
     }
 
     private Member findMemberById(Long memberId) {
@@ -112,8 +117,8 @@ public class MemberService {
         validateUpdate(form);
 
         Member member = findMemberById(form.getId());
-        Address address = addressService.findById(form.getAddressId());
-        member.update(form, address);
+//        Address address = addressService.findById(form.getAddressId());
+//        member.update(form, address);
         return new LoginMember(member);
     }
 

@@ -88,7 +88,6 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginForm loginForm, HttpSession session, Model model) {
-
         try {
             LoginMember loginMember = memberService.login(loginForm);
             session.setAttribute("loginMember", loginMember);
@@ -109,10 +108,8 @@ public class MemberController {
 
     @GetMapping("/{id}/detail")
     public String detail(@PathVariable Long id, Model model) {
-        MemberUpdateForm form = memberService.updateForm(id);
-//        Map<Integer, AddressDto> addressDtoMapByDepth = addressService.getRelatedDtoMapByDepth(form.getAddressId());
-        model.addAttribute("memberUpdateForm", form);
-//        model.addAttribute("addressDtoMapByDepth", addressDtoMapByDepth);
+        MemberDto memberDto = memberService.findMember(id);
+        model.addAttribute("memberDto", memberDto);
         return "members/memberDetail";
     }
 
