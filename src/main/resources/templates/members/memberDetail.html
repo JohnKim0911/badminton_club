@@ -19,46 +19,59 @@
                 <input type="hidden" th:field="*{id}">
 
                 <div class="row g-3">
+
+                    <!-- 프로필 사진 -->
                     <div class="col-12" style="text-align: center;">
                         <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}"
                             alt="profile-img" class="profile-img"/>
                         <button type="button" class="btn btn-outline-secondary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#profileImgModal">프로필 사진변경</button>
                     </div>
 
+                    <!-- 이메일 -->
                     <div class="col-12">
                         <label th:for="email" class="form-label">이메일</label>
                         <input type="email" th:field="*{email}" class="form-control" disabled readonly>
                     </div>
 
+                    <!-- 이름 -->
                     <div class="col-12">
                         <label th:for="name" class="form-label">이름</label>
                         <input type="text" th:field="*{name}" class="form-control" disabled readonly>
                     </div>
 
+                    <!-- 연락처 -->
                     <div class="col-12">
                         <label th:for="phone" class="form-label">연락처</label>
                         <input type="text" th:field="*{phone}" class="form-control" disabled readonly>
                     </div>
 
+                    <!-- 생일 -->
                     <div class="col-12">
                         <label th:for="birthday" class="form-label">생일</label>
                         <input type="date" th:field="*{birthday}" class="form-control" disabled readonly>
                     </div>
 
+                    <!-- 지역 -->
                     <div class="col-12">
                         <label th:for="addressLv1" class="form-label">지역</label><br>
+
                         <div class="row">
+                            <!-- 지역 Lv1 -->
                             <div class="col">
                                 <select th:field="*{addressLv1}" id="addressLv1" class="form-select" disabled>
                                     <option th:text="*{addressLv1}" th:value="*{addressLv1}"></option>
                                 </select>
                             </div>
+
+                            <!-- 지역 Lv2 -->
                             <div class="col">
                                 <select th:field="*{addressLv2}" id="addressLv2" class="form-select" disabled>
                                     <option th:text="*{addressLv2}" th:value="*{addressLv2}"></option>
                                 </select>
                             </div>
                         </div>
+
+                        <!-- 지역 Lv3 -->
                         <div th:if="*{addressLv3 != null}" class="row mt-2">
                             <div class="col-6">
                             </div>
@@ -68,13 +81,22 @@
                                 </select>
                             </div>
                         </div>
-                    </div> <!-- col -->
+
+                    </div> <!-- 지역.col -->
+
+                    <!-- 상세주소 -->
+                    <div class="col-12">
+                        <label th:for="detailAddress" class="form-label">상세주소</label>
+                        <input type="text" th:field="*{detailAddress}" class="form-control" disabled readonly>
+                    </div>
+
                 </div> <!-- row -->
 
                 <hr class="my-4">
 
                 <div class="d-grid gap-3">
                     <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
+
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
                     <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">회원탈퇴</button>

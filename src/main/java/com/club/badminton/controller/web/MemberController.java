@@ -167,9 +167,7 @@ public class MemberController {
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
         model.addAttribute("memberUpdateForm", form);
-//        model.addAttribute("addressDtoMapByDepth", addressService.getRelatedDtoMapByDepth(form.getAddressId()));
-//        model.addAttribute("addressByDepth1List", addressService.getDtoListByDepth(1));
-//        model.addAttribute("childrenAddressMap", addressService.getChildrenDtoMap());
+        addAddressAttributes(model);
         return "members/memberUpdate";
     }
 

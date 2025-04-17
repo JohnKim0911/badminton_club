@@ -37,7 +37,7 @@ public class MemberUpdateForm {
     private String detailAddress;
 
     //TODO Builder Pattern 적용?
-    public static MemberUpdateForm toDto(Member m) {
+    public static MemberUpdateForm of(Member m) {
         MemberUpdateForm dto = new MemberUpdateForm();
 
         if (m.getProfileImg() != null) {
@@ -56,6 +56,8 @@ public class MemberUpdateForm {
         if (address.getLv3() != null) {
             dto.setAddressLv3(address.getLv3().getId());
         }
+
+        dto.setDetailAddress(m.getDetailAddress());
 
         return dto;
     }

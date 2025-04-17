@@ -15,6 +15,7 @@
             </div>
 
             <div class="d-grid gap-3">
+                
                 <!-- TODO 로그인 ID/PW 클라이언트단 검증 구현 -->
                 <div class="form-floating mb-1">
                     <input type="email" class="form-control" th:field="*{email}" placeholder="email@example.com" required>
@@ -24,6 +25,12 @@
                 <div class="form-floating">
                     <input type="password" class="form-control" th:field="*{password}" placeholder="Password" required>
                     <label th:for="password">비밀번호</label>
+                </div>
+
+                <!-- TODO Rembmer me 구현 -->
+                <div class="form-check text-start">
+                    <input class="form-check-input" type="checkbox" value="remember-me" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
 
                 <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
@@ -39,17 +46,11 @@
                         <a class="" href="#">비밀번호 찾기</a>
                     </li>
                 </ul>
-            </div>
-<!-- TODO Rembmer me 구현 -->
-<!-- 
-            <div class="form-check text-start my-3">
-                <input class="form-check-input" type="checkbox" value="remember-me" id="rememberMe"> 
-                <label class="form-check-label" for="rememberMe">Remember me</label>
-            </div>
--->      
+
+            </div> <!-- d-grid -->
         </form>
 
-    </div>
+    </div> <!-- form-signin -->
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>

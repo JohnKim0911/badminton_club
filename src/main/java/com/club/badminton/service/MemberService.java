@@ -39,7 +39,7 @@ public class MemberService {
         log.info("MemberSignUpForm: {}", form);
         validateSignUp(form);
         Address address = addressService.findByLevelIds(form.getAddressLv1(), form.getAddressLv2(), form.getAddressLv3());
-        Member member = Member.toEntity(form, address);
+        Member member = Member.of(form, address);
         memberRepository.save(member);
     }
 
@@ -85,7 +85,7 @@ public class MemberService {
 
     public MemberDto findMember(Long memberId) {
         Member member = findMemberById(memberId);
-        return MemberDto.toDto(member);
+        return MemberDto.of(member);
     }
 
     private Member findMemberById(Long memberId) {
@@ -142,7 +142,7 @@ public class MemberService {
 
     public MemberUpdateForm updateForm(Long memberId) {
         Member member = findMemberById(memberId);
-        return MemberUpdateForm.toDto(member);
+        return MemberUpdateForm.of(member);
     }
 
     @Transactional
@@ -169,7 +169,7 @@ public class MemberService {
 
     private List<MemberDto> toMemberDtos(List<Member> members) {
         return members.stream()
-                .map(m -> MemberDto.toDto(m))
+                .map(m -> MemberDto.of(m))
                 .collect(Collectors.toList());
     }
 }

@@ -135,7 +135,7 @@
                         </div>
                     </div>
 
-                </div> <!-- form/row -->
+                </div> <!-- row -->
 
                 <hr class="my-4">
 
@@ -149,7 +149,7 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
 <script th:inline="javascript">
-    window.MyApp.signUpForm = {
+    window.MyApp.memberForm = {
         addressChildrenMap: /*[[${addressChildrenMap}]]*/ null,
         addressLv1: /*[[${memberSignUpForm.addressLv1}]]*/ null,
         addressLv2: /*[[${memberSignUpForm.addressLv2}]]*/ null,
@@ -157,7 +157,8 @@
     };
 </script>
 
-<script src="/js/members/signUpForm.js" defer></script>
+<!-- memberUpdate.html과 동일한 JS 사용-->
+<script src="/js/members/memberForm.js" defer></script>
 
 </body>
 </html>

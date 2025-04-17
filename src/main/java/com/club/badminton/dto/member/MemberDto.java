@@ -27,7 +27,7 @@ public class MemberDto {
     private String addressLv3;
     private String detailAddress;
 
-    public static MemberDto toDto(Member m) {
+    public static MemberDto of(Member m) {
         MemberDto dto = new MemberDto();
 
         if (m.getProfileImg() != null) {
@@ -46,6 +46,8 @@ public class MemberDto {
         if (address.getLv3() != null) {
             dto.setAddressLv3(address.getLv3().getName());
         }
+
+        dto.setDetailAddress(m.getDetailAddress());
 
         return dto;
     }

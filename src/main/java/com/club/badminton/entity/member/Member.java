@@ -85,7 +85,7 @@ public class Member extends BaseTimeEntity {
         this.profileImg = attachment;
     }
 
-    public static Member toEntity(MemberSignUpForm form, Address address) {
+    public static Member of(MemberSignUpForm form, Address address) {
         return new Member(
             form.getEmail(),
             form.getPassword(),
