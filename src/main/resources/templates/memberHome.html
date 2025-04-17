@@ -2,60 +2,65 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     
 <head th:replace="~{fragments/header::header(~{})}"></head>
+
 <body>
-    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
+<header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container">
+<main class="container">
 
-        <section class="border-bottom pb-5 mb-3">
-            <div class="row mb-3">
-                <div class="col">
-                    <h2>내 클럽</h2>
-                </div>
-                <div class="col text-end">
-                    <a href="/clubs/new" class="btn btn-warning">클럽 만들기</a>
-                </div>
-            </div>
+<!-- 내 클럽 -->
+<section class="border-bottom pb-5 mb-3">
+    <div class="row mb-3">
+        <div class="col">
+            <h2>내 클럽</h2>
+        </div>
+        <div class="col text-end">
+            <a href="/clubs/new" class="btn btn-warning">클럽 만들기</a>
+        </div>
+    </div>
 
-            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">클럽 이름</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <a href="/clubs/1/detail" class="btn btn-primary">자세히</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">클럽 이름</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <a href="/clubs/1/detail" class="btn btn-primary">자세히</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">클럽 이름</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <a href="/clubs/1/detail" class="btn btn-primary">자세히</a>
-                        </div>
-                    </div>
+    <!-- 내 클럽 목록 -->
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">클럽 이름</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <a href="/clubs/1/detail" class="btn btn-primary">자세히</a>
                 </div>
             </div>
-        </section>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">클럽 이름</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <a href="/clubs/1/detail" class="btn btn-primary">자세히</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1983&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top w-100" style="height: 200px; object-fit: cover;" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">클럽 이름</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <a href="/clubs/1/detail" class="btn btn-primary">자세히</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <section th:replace="~{clubs/clubListFragment:: clubListFragment}"></section>
+<!-- 클럽 리스트 & 찾기 -->
+<section th:replace="~{clubs/clubListFragment:: clubListFragment}"></section>
 
-    </main>
+</main>
 
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
 </body>
 </html>
 

@@ -2,12 +2,11 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <section th:fragment="clubListFragment">
-
+    <!-- 클럽 찾기 -->
     <form class="row row-cols-lg-auto g-3 align-items-center mb-3">
         <div class="col">
             <h2>클럽 찾기</h2>
         </div>
-
         <div class="col d-flex ms-auto me-0 gap-2">
             <div>
                 <label class="visually-hidden" for="siDo"></label>
@@ -18,7 +17,6 @@
                     <option value="3">제주도</option>
                 </select>
             </div>
-
             <div>
                 <label class="visually-hidden" for="guGun"></label>
                 <select class="form-select" id="guGun">
@@ -28,18 +26,17 @@
                     <option value="3">해운대구</option>
                 </select>
             </div>
-
             <div>
                 <label class="visually-hidden" for="search"></label>
                 <input type="text" class="form-control" id="search" placeholder="클럽 이름">
             </div>
-
             <div>
                 <button type="submit" class="btn btn-primary">검색</button>
             </div>
         </div>
     </form>
 
+    <!-- 클럽 리스트 -->
     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
         <div class="col">
             <div class="card h-100">
@@ -131,8 +128,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> <!-- 클럽 리스트.row -->
 
+    <!-- 클럽 리스트 페이지번호 -->
     <nav class="row mt-5" aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item disabled">
@@ -150,5 +148,4 @@
             </li>
         </ul>
     </nav>
-
 </section>
