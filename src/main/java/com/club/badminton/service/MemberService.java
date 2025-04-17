@@ -83,7 +83,7 @@ public class MemberService {
         return member;
     }
 
-    public MemberDto findMember(Long memberId) {
+    public MemberDto getMemberDto(Long memberId) {
         Member member = findMemberById(memberId);
         return MemberDto.of(member);
     }
@@ -150,16 +150,18 @@ public class MemberService {
         validateUpdate(form);
 
         Member member = findMemberById(form.getId());
-//        Address address = addressService.findById(form.getAddressId());
-//        member.update(form, address);
+        // TODO 이렇게 address를 조회하고 넣어줘야하는게 번거롭다. 주소 구조를 다시 바꿔야 하나?..
+        Address address = addressService.findByLevelIds(form.getAddressLv1(), form.getAddressLv2(), form.getAddressLv3());
+        member.update(form, address);
         return LoginMember.of(member);
     }
 
     private void validateUpdate(MemberUpdateForm form) {
-        Optional<Member> byPhone = memberRepository.findByPhone(form.getPhone());
-        if (byPhone.isPresent() && !byPhone.get().getId().equals(form.getId())) {
+        Optional<Member> optionalMember = memberRepository.findByPhone(form.getPhone());
+        if (optionalMember.isPresent() && !optionalMember.get().getId().equals(form.getId())) {
             throw new DuplicatedPhoneException();
         }
+        // TODO 다른 검증도 해야하나? ex) readonly였던 이메일 등..
     }
 
     public List<MemberDto> findMembers() {

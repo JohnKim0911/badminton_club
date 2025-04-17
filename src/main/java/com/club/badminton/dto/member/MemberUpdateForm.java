@@ -2,6 +2,7 @@ package com.club.badminton.dto.member;
 
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.member.Member;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,8 +16,7 @@ import java.time.LocalDate;
 public class MemberUpdateForm {
 
     private Long id;
-    private String profileImg;
-    private String email;
+    private String email; //readOnly
 
     @NotBlank
     private String name;
@@ -39,10 +39,6 @@ public class MemberUpdateForm {
     //TODO Builder Pattern 적용?
     public static MemberUpdateForm of(Member m) {
         MemberUpdateForm dto = new MemberUpdateForm();
-
-        if (m.getProfileImg() != null) {
-            dto.setProfileImg(m.getProfileImg().getStoredName());
-        }
 
         dto.setId(m.getId());
         dto.setEmail(m.getEmail());

@@ -106,7 +106,7 @@ public class MemberController {
 
     @GetMapping("/{id}/detail")
     public String detail(@PathVariable Long id, Model model) {
-        MemberDto memberDto = memberService.findMember(id);
+        MemberDto memberDto = memberService.getMemberDto(id);
         model.addAttribute("memberDto", memberDto);
         return "members/memberDetail";
     }
@@ -172,9 +172,11 @@ public class MemberController {
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @Valid MemberUpdateForm form, BindingResult bindingResult,
+    public String update(@PathVariable Long id, @Valid MemberUpdateForm form, BindingResult bindingResult, Model model,
                          HttpSession session, RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
+            addAddressAttributes(model);
             return "members/memberUpdate";
         }
 
@@ -187,6 +189,7 @@ public class MemberController {
         } catch (DuplicatedPhoneException e) {
             //수정 실패
             handleException(e, bindingResult);
+            addAddressAttributes(model);
             return "members/memberUpdate";
         }
     }

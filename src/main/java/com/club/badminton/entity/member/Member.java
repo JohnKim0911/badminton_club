@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "email", "password", "name", "phone", "birthday", "address", "status"})
+@ToString(of = {"id", "email", "password", "name", "phone", "birthday", "address", "detailAddress", "status", "profileImg"})
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -66,11 +66,20 @@ public class Member extends BaseTimeEntity {
         this.status = MemberStatus.ACTIVE;
     }
 
-    public void update(MemberUpdateForm form, Address address) {
-        this.name = form.getName();
-        this.phone = form.getPhone();
-        this.birthday = form.getBirthday();
-        this.address = address;
+    public static Member of(MemberSignUpForm form, Address address) {
+        return new Member(
+                form.getEmail(),
+                form.getPassword(),
+                form.getName(),
+                form.getPhone(),
+                form.getBirthday(),
+                address,
+                form.getDetailAddress()
+        );
+    }
+
+    public void changeProfileImg(Attachment attachment) {
+        this.profileImg = attachment;
     }
 
     public void changePassword(String newPassword) {
@@ -81,19 +90,11 @@ public class Member extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void changeProfileImg(Attachment attachment) {
-        this.profileImg = attachment;
-    }
-
-    public static Member of(MemberSignUpForm form, Address address) {
-        return new Member(
-            form.getEmail(),
-            form.getPassword(),
-            form.getName(),
-            form.getPhone(),
-            form.getBirthday(),
-            address,
-            form.getDetailAddress()
-        );
+    public void update(MemberUpdateForm form, Address address) {
+        this.name = form.getName();
+        this.phone = form.getPhone();
+        this.birthday = form.getBirthday();
+        this.address = address;
+        this.detailAddress = form.getDetailAddress();
     }
 }

@@ -21,9 +21,7 @@ public class LoginMember {
         dto.setEmail(m.getEmail());
         dto.setName(m.getName());
 
-        if (m.getProfileImg() == null) {
-            dto.setProfileImg(null);
-        } else {
+        if (m.getProfileImg() != null) {
             dto.setProfileImg(m.getProfileImg().getStoredName());
         }
 
