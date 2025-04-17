@@ -1,338 +1,190 @@
 <!DOCTYPE HTML>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header:: header}"></head>
-<style>
-    .profile-img {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        object-fit: cover;
-        display: block;
-        margin: auto;
-    }
-</style>
+
+<head th:replace="~{fragments/header::header(~{::link})}">
+    <link rel="stylesheet" href="/css/memberDetail.css" />
+</head>
+
 <body>
-    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
+<header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container" style="max-width: 400px;">
-        <div class="py-4 text-center">
-            <h2>회원정보</h2>
-        </div>
+<main class="container" style="max-width: 400px;">
+    <div class="py-4 text-center">
+        <h2>회원정보</h2>
+    </div>
 
-        <div class="row g-5">
-            <div class="col">
-                <div th:object="${memberDto}">
-                    <input type="hidden" th:field="*{id}">
+    <div class="row g-5">
+        <div class="col">
+            <div th:object="${memberDto}">
+                <input type="hidden" th:field="*{id}">
 
-                    <div class="row g-3">
-
-                        <div class="col-12" style="text-align: center;">
-                            <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}"
-                                alt="profile-img" class="profile-img"/>
-                            <button type="button" class="btn btn-outline-secondary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#profileImgModal">프로필 사진변경</button>
-                        </div>
-
-                        <div class="col-12">
-                            <label th:for="email" class="form-label">이메일</label>
-                            <input type="email" th:field="*{email}" class="form-control" disabled readonly>
-                        </div>
-
-                        <div class="col-12">
-                            <label th:for="name" class="form-label">이름</label>
-                            <input type="text" th:field="*{name}" class="form-control" disabled readonly>
-                        </div>
-
-                        <div class="col-12">
-                            <label th:for="phone" class="form-label">연락처</label>
-                            <input type="text" th:field="*{phone}" class="form-control" disabled readonly>
-                        </div>
-
-                        <div class="col-12">
-                            <label th:for="birthday" class="form-label">생일</label>
-                            <input type="date" th:field="*{birthday}" class="form-control" disabled readonly>
-                        </div>
-
-                        <div class="col-12">
-                            <label th:for="addressLv1" class="form-label">지역</label><br>
-                            <div class="row">
-                                <div class="col">
-                                    <select th:field="*{addressLv1}" id="addressLv1" class="form-select" disabled>
-                                        <option th:text="*{addressLv1}" th:value="*{addressLv1}"></option>
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <select th:field="*{addressLv2}" id="addressLv2" class="form-select" disabled>
-                                        <option th:text="*{addressLv2}" th:value="*{addressLv2}"></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div th:if="*{addressLv3 != null}" class="row mt-2">
-                                <div class="col-6">
-                                </div>
-                                <div class="col-6">
-                                    <select th:field="*{addressLv3}" id="addressLv3" class="form-select" disabled>
-                                        <option th:text="*{addressLv3}" th:value="*{addressLv3}"></option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
+                <div class="row g-3">
+                    <div class="col-12" style="text-align: center;">
+                        <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}"
+                            alt="profile-img" class="profile-img"/>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#profileImgModal">프로필 사진변경</button>
                     </div>
 
-                    <hr class="my-4">
-
-                    <div class="d-grid gap-3">
-                        <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">회원탈퇴</button>
+                    <div class="col-12">
+                        <label th:for="email" class="form-label">이메일</label>
+                        <input type="email" th:field="*{email}" class="form-control" disabled readonly>
                     </div>
+
+                    <div class="col-12">
+                        <label th:for="name" class="form-label">이름</label>
+                        <input type="text" th:field="*{name}" class="form-control" disabled readonly>
+                    </div>
+
+                    <div class="col-12">
+                        <label th:for="phone" class="form-label">연락처</label>
+                        <input type="text" th:field="*{phone}" class="form-control" disabled readonly>
+                    </div>
+
+                    <div class="col-12">
+                        <label th:for="birthday" class="form-label">생일</label>
+                        <input type="date" th:field="*{birthday}" class="form-control" disabled readonly>
+                    </div>
+
+                    <div class="col-12">
+                        <label th:for="addressLv1" class="form-label">지역</label><br>
+                        <div class="row">
+                            <div class="col">
+                                <select th:field="*{addressLv1}" id="addressLv1" class="form-select" disabled>
+                                    <option th:text="*{addressLv1}" th:value="*{addressLv1}"></option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select th:field="*{addressLv2}" id="addressLv2" class="form-select" disabled>
+                                    <option th:text="*{addressLv2}" th:value="*{addressLv2}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div th:if="*{addressLv3 != null}" class="row mt-2">
+                            <div class="col-6">
+                            </div>
+                            <div class="col-6">
+                                <select th:field="*{addressLv3}" id="addressLv3" class="form-select" disabled>
+                                    <option th:text="*{addressLv3}" th:value="*{addressLv3}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> <!-- col -->
+                </div> <!-- row -->
+
+                <hr class="my-4">
+
+                <div class="d-grid gap-3">
+                    <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">회원탈퇴</button>
                 </div>
+
+            </div>
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+    <!-- 프로필 사진변경 Modal -->
+    <div class="modal fade" id="profileImgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileImgModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="profileImgModalLabel">프로필 사진변경</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{'/members/' + ${session.loginMember.id} + '/updateProfileImg'}" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div th:object="${memberDto}" style="text-align: center;">
+                            <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
+                        </div>
+                        <div class="my-3">
+                            <label for="profileImgInput" class="form-label">새로운 프로필 사진을 선택해주세요.</label>
+                            <input type="file" class="form-control" id="profileImgInput" name="attachment">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary ms-0 me-auto" id="useDefaultImgBtn">기본사진 사용</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">프로필 사진변경</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- 프로필 사진변경 Modal -->
-        <div class="modal fade" id="profileImgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileImgModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="profileImgModalLabel">프로필 사진변경</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/updateProfileImg'}" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            <div th:object="${memberDto}" style="text-align: center;">
-                                <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
-                            </div>
-                            <div class="my-3">
-                                <label for="profileImgInput" class="form-label">새로운 프로필 사진을 선택해주세요.</label>
-                                <input type="file" class="form-control" id="profileImgInput" name="attachment" onchange="handleProfileImgChange(this);">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary ms-0 me-auto" id="useDefaultImgBtn">기본사진 사용</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                            <button type="submit" class="btn btn-primary">프로필 사진변경</button>
-                        </div>
-                    </form>
+    <!-- 비밀번호 변경 Modal -->
+    <div class="modal fade" id="updatePwdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwdModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="updatePwdModalLabel">비밀번호 변경</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form th:action="@{'/members/' + ${session.loginMember.id} + '/updatePwd'}" method="post" id="changePwdForm" onsubmit="isUpdatePwdFormValid(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="currentPwd" class="col-form-label">기존 비밀번호:</label>
+                            <input type="password" class="form-control" id="currentPwd" name="currentPwd" required onblur="removeError(this);">
+                            <p class="text-danger my-1" id="currentPwdResult"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPwd" class="col-form-label">새로운 비밀번호:</label>
+                            <input type="password" class="form-control" id="newPwd" name="newPwd" required onblur="removeError(this);">
+                            <p class="text-danger my-1" id="newPwdResult"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPwdCheck" class="col-form-label">새로운 비밀번호 확인:</label>
+                            <input type="password" class="form-control" id="newPwdCheck" required onblur="removeError(this);">
+                            <p class="text-danger my-1" id="newPwdCheckResult"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">비밀번호 변경</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- 비밀번호 변경 Modal -->
-        <div class="modal fade" id="updatePwdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwdModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="updatePwdModalLabel">비밀번호 변경</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/updatePwd'}" method="post" id="changePwdForm" onsubmit="isUpdatePwdFormValid(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="currentPwd" class="col-form-label">기존 비밀번호:</label>
-                                <input type="password" class="form-control" id="currentPwd" name="currentPwd" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="currentPwdResult"></p>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newPwd" class="col-form-label">새로운 비밀번호:</label>
-                                <input type="password" class="form-control" id="newPwd" name="newPwd" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="newPwdResult"></p>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newPwdCheck" class="col-form-label">새로운 비밀번호 확인:</label>
-                                <input type="password" class="form-control" id="newPwdCheck" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="newPwdCheckResult"></p>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                            <button type="submit" class="btn btn-primary">비밀번호 변경</button>
-                        </div>
-                    </form>
+    <!-- 회원탈퇴 Modal -->
+    <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">회원탈퇴</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="isDeleteFormValid(event);">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <p class="my-2">정말로 탈퇴하시겠습니까?<br>탈퇴하시려면, 비밀번호를 입력해주세요.</p>
+                            <label for="pwdToDelete" class="col-form-label">비밀번호:</label>
+                            <input type="password" class="form-control" id="pwdToDelete" name="pwdToDelete" required onblur="removeError(this);">
+                            <p class="text-danger my-1" id="pwdToDeleteResult"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-danger">회원탈퇴</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- 회원탈퇴 Modal -->
-        <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="deleteModalLabel">회원탈퇴</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="isDeleteFormValid(event);">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <p class="my-2">정말로 탈퇴하시겠습니까?<br>탈퇴하시려면, 비밀번호를 입력해주세요.</p>
-                                <label for="pwdToDelete" class="col-form-label">비밀번호:</label>
-                                <input type="password" class="form-control" id="pwdToDelete" name="pwdToDelete" required onblur="removeError(this);">
-                                <p class="text-danger my-1" id="pwdToDeleteResult"></p>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                            <button type="submit" class="btn btn-danger">회원탈퇴</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+</main>
 
-    </main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+<script th:inline="javascript">
+    window.MyApp.memberDetail = {
+        profileImg: /*[[${memberDto.profileImg}]]*/ null, //Thymeleaf's JavaScript inlining syntax.
+        loginMemberId: /*[[${session.loginMember.id}]]*/ ""
+    };
+</script>
 
-    <script th:if="${popUpMessage}"> // 팝업 메시지
-        alert("[[${popUpMessage}]]");
-    </script>
+<script src="/js/memberDetail.js" defer></script>
 
-    <script th:inline="javascript">
-
-        // 프로필 사진변경 modal - 이미지 검증 & 미리보기
-        function handleProfileImgChange(input) {
-            const file = input.files[0];
-            const preview = document.getElementById("previewImg");
-            const maxSize = 10 * 1024 * 1024; // 10MB
-
-            if (!file) return;
-
-            // 1. Validate file type
-            if (!file.type.startsWith("image/")) {
-                alert("이미지 파일만 업로드 가능합니다.");
-                input.value = "";
-                return;
-            }
-
-            // 2. Validate file size
-            if (file.size > maxSize) {
-                alert("파일이 너무 큽니다. 최대 업로드 크기 1MB를 초과했습니다.");
-                input.value = "";
-                
-                // Restore preview image to current valid profile image
-                const currentImg = /*[[${memberDto.profileImg}]]*/ null;
-                preview.src = currentImg ? `/upload/${currentImg}` : '/images/default_profile.png';
-                return;
-            }
-
-            // 3. Show preview if valid
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 프로필 사진변경 modal - "기본 이미지 사용" 버튼
-        document.getElementById("useDefaultImgBtn").addEventListener("click", function() {
-            const preview = document.getElementById("previewImg");
-            const fileInput = document.getElementById("profileImgInput");
-
-            // Clear selected file
-            fileInput.value = "";
-
-            // Change preview image to default
-            preview.src = "/images/default_profile.png";
-        });
-
-        // 비밀번호 변경 modal - 새로운/현재 비밀번호 검증 통과시 sumbit
-        async function isUpdatePwdFormValid(event) {
-            event.preventDefault();
-
-            if (!isNewPwdValid()) return;
-
-            const isValid = await isCurrentPwdValid("update");
-            if (isValid) {
-                document.getElementById("changePwdForm").submit();
-            }
-        }
-
-        // 비밀번호 변경 modal - 새로운 비밀번호 양식 검증
-        function isNewPwdValid() {
-            const newPwdEl = document.getElementById("newPwd");
-            const newPwdCheckEl = document.getElementById("newPwdCheck");
-
-            const newPwd = newPwdEl.value;
-            const newPwdCheck = newPwdCheckEl.value;
-            
-            if (newPwd.length < 8 || newPwd.length > 20) {
-                newPwdEl.classList.add("border-danger");
-                const resultEl = document.getElementById("newPwdResult");
-                resultEl.innerHTML = "비밀번호는 8 ~ 20자이어야 합니다.";
-                resultEl.style.display = "block";
-                return false;
-            }
-
-            if (newPwd !== newPwdCheck) {
-                newPwdCheckEl.classList.add("border-danger");
-                const resultEl = document.getElementById("newPwdCheckResult");
-                resultEl.innerHTML = "입력한 비밀번호가 서로 일치하지 않습니다.";
-                resultEl.style.display = "block";
-                return false;
-            }
-            return true;
-        }
-
-        // (공통) 비밀번호 변경, 회원탈퇴 modal - 현재 비밀번호 일치여부 검증
-        function isCurrentPwdValid(keyword) {
-            const loginMemberId = /*[[${session.loginMember.id}]]*/ "";  //Thymeleaf's JavaScript inlining syntax.
-
-            let currentPwd;
-            let checkResultEl;
-
-            if (keyword == "update") {
-                currentPwd = document.getElementById("currentPwd").value;
-                checkResultEl = document.getElementById("currentPwdResult");
-            } else if (keyword == "delete") {
-                currentPwd = document.getElementById("pwdToDelete").value;
-                checkResultEl = document.getElementById("pwdToDeleteResult");
-            }
-
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    type: "post",
-                    url: "/members/" + loginMemberId +"/checkPwd",
-                    data: {
-                        "currentPwd": currentPwd
-                    },
-                    success: function(result) {
-                        if (result) {
-                            resolve(true);
-                        } else {
-                            checkResultEl.innerHTML = "비밀번호가 일치하지 않습니다.";
-                            checkResultEl.style.display = "block";
-                            resolve(false);
-                        }
-                    },
-                    error: function(error) {
-                        console.log("에러발생", error);
-                        reject(false);
-                    }
-                });
-            });
-        }
-
-        // 회원탈퇴 modal - 현재 비밀번호 검증 통과시 sumbit
-        async function isDeleteFormValid(event) {
-            event.preventDefault();
-
-            const isValid = await isCurrentPwdValid("delete");
-            if (isValid) {
-                document.getElementById("deleteForm").submit();
-            }
-        }
-
-        // (공통) 비밀번호 변경, 회원탈퇴 modal - 에러 효과 지우기
-        function removeError(input) {
-            input.classList.remove("border-danger");
-            let errorMessage = input.parentElement.querySelector("p.text-danger");
-            if (errorMessage) {
-                errorMessage.style.display = "none";
-            }
-        }
-
-    </script>
-    
 </body>
 </html>

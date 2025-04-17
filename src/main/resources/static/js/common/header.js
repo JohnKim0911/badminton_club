@@ -1,0 +1,1 @@
+window.MyApp = window.MyApp || {}; // Create a root namespace

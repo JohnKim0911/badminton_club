@@ -5,4 +5,13 @@
     <hr class="mt-5 mb-3 py-3">
     <p class="float-end"><a href="#">Back to top</a></p>
     <p>© 2025 BadmintonClubs, Inc. All rights reserved.</p>
+
+    <!-- 팝업 메시지 -->
+    <script th:inline="javascript">
+        window.MyApp.footer = {
+            popUpMessage: /*[[${popUpMessage}]]*/ null
+        };
+    </script>
+
+    <script src="/js/common/footer.js"></script>
 </footer>

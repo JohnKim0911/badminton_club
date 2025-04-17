@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header:: header}"></head>
+    
+<head th:replace="~{fragments/header::header(~{})}"></head> <!-- This makes the fragment take a parameter (headContent) that the child page can pass in. -->
 <body>
     <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 

@@ -5,10 +5,12 @@
     <div class="container">
         <div class="row flex-nowrap justify-content-between align-items-center">
 
+            <!-- 헤더바 좌측: 홈페이지 메인 타이틀-->
             <div class="col-2">
                 <a class="fs-5 text-white text-decoration-none" href="/">BadmintonClubs</a>
             </div>
 
+            <!-- 헤더바 중앙: 클럽명 + 클럽메뉴 -->
             <div class="col-8 text-center">
                 <div th:if="${club != null}" th:object="${club}">
                     <a th:href="@{/clubs/{id}/detail(id=*{id})}" th:text="*{name}" class="fs-4 text-white text-decoration-none"></a>
@@ -33,6 +35,7 @@
                 </div>
             </div>
 
+            <!-- 헤더바 우측: 회원가입, 로그인, 회원정보 등 -->
             <div class="col-2 d-flex justify-content-end align-items-center">
                 <!-- 로그인 전 -->
                 <div th:if="${session.loginMember == null}">
@@ -53,23 +56,15 @@
                         <li><a class="dropdown-item" href="#">내 활동</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a href="#" class="dropdown-item" onclick="confirmLogout(event);">로그아웃</a>
+                            <a id="logoutMenu" href="#" class="dropdown-item">로그아웃</a>
                             <form id="bodyHeaderLogoutForm" action="/members/logout" method="post" style="display: none;"></form>
                         </li>
                     </ul>
                 </div>
             </div>
 
-        </div>
-    </div>
-
-    <script>
-        // 로그아웃 재확인 팝업
-        function confirmLogout(event) {
-            event.preventDefault();
-            if (confirm("로그아웃 하시겠습니까?")) {
-                document.getElementById('bodyHeaderLogoutForm').submit();
-            }
-        }
-    </script>
+        </div> <!-- row -->
+    </div> <!-- container -->
+    
+    <script src="/js/common/bodyHeader.js" defer></script> <!-- defer: ensures the DOM and Thymeleaf inlining happen before the script runs:-->
 </header>
