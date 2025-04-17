@@ -2,239 +2,162 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     
 <head th:replace="~{fragments/header::header(~{})}"></head>
+
 <body>
-    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
+<header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container" style="max-width: 400px;">
-        <div class="py-4 text-center">
-            <h2>회원가입</h2>
-        </div>
-        
-        <!-- TODO 각종 REGEX 검증 -->
-        <div class="row g-5">
-            <div class="col">
-                <form th:action="@{/members/new}" method="post" th:object="${memberSignUpForm}" class="needs-validation" novalidate>
-                    <div class="row g-3">
+<main class="container" style="max-width: 400px;">
+    <div class="py-4 text-center">
+        <h2>회원가입</h2>
+    </div>
+    
+    <!-- TODO 각종 REGEX 검증 -->
+    <div class="row g-5">
+        <div class="col">
 
-                        <div class="col-12">
-                            <span class="text-danger"><b>*</b></span>
-                            <label th:for="email" class="form-label">이메일</label>
-                            <input type="email" th:field="*{email}" class="form-control" placeholder="email@example.com" required
-                                   th:classappend="${#fields.hasErrors('email')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">이메일을 입력해주세요.</div>
-                        </div>
+            <form th:action="@{/members/new}" method="post" th:object="${memberSignUpForm}" class="needs-validation" novalidate>
+                <div class="row g-3">
 
-                        <div class="col-12">
-                            <span class="text-danger"><b>*</b></span>
-                            <label th:for="password" class="form-label">비밀번호</label>
-                            <input type="password" th:field="*{password}" class="form-control" required
-                                   th:classappend="${#fields.hasErrors('password')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
-                            <div class="form-text">비밀번호는 8 ~ 20자 사이여야 하며, 글자와 숫자를 포함해야 합니다. (공백, 특수문자, 이모티콘은 사용할 수 없습니다.)</div>
-                        </div>
-                        <!-- TODO 비밀번호 제약 조건 update-->
+                    <!-- 이메일 -->
+                    <div class="col-12">
+                        <span class="text-danger"><b>*</b></span>
+                        <label th:for="email" class="form-label">이메일</label>
+                        <input type="email" th:field="*{email}" class="form-control validate-input" placeholder="email@example.com" required
+                                th:classappend="${#fields.hasErrors('email')} ? 'border-danger' : ''" />
+                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger my-1"></p>
+                        <div class="invalid-feedback">이메일을 입력해주세요.</div>
+                    </div>
 
-                        <div class="col-12">
-                            <span class="text-danger"><b>*</b></span>
-                            <label th:for="name" class="form-label">이름</label>
-                            <input type="text" th:field="*{name}" class="form-control" required
-                                   th:classappend="${#fields.hasErrors('name')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">이름을 입력해주세요.</div>
-                        </div>
+                    <!-- 비밀번호 -->
+                    <div class="col-12">
+                        <span class="text-danger"><b>*</b></span>
+                        <label th:for="password" class="form-label">비밀번호</label>
+                        <input type="password" th:field="*{password}" class="form-control validate-input" required
+                                th:classappend="${#fields.hasErrors('password')} ? 'border-danger' : ''" />
+                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger my-1"></p>
+                        <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+                        <div class="form-text">비밀번호는 8 ~ 20자 사이여야 하며, 글자와 숫자를 포함해야 합니다. (공백, 특수문자, 이모티콘은 사용할 수 없습니다.)</div>
+                    </div>
+                    <!-- TODO 비밀번호 제약 조건 update-->
 
-                        <div class="col-12">
-                            <span class="text-danger"><b>*</b></span>
-                            <label th:for="phone" class="form-label">연락처</label>
-                            <input type="text" th:field="*{phone}" class="form-control" placeholder="010-XXXX-XXXX" required
-                                   th:classappend="${#fields.hasErrors('phone')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">연락처를 입력해주세요.</div>
-                        </div>
+                    <!-- 이름 -->
+                    <div class="col-12">
+                        <span class="text-danger"><b>*</b></span>
+                        <label th:for="name" class="form-label">이름</label>
+                        <input type="text" th:field="*{name}" class="form-control validate-input" required
+                                th:classappend="${#fields.hasErrors('name')} ? 'border-danger' : ''" />
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger my-1"></p>
+                        <div class="invalid-feedback">이름을 입력해주세요.</div>
+                    </div>
 
-                        <div class="col-12">
-                            <label th:for="birthday" class="form-label">생일</label>
-                            <span class=".text-secondary"><small>(선택사항)</small></span>
-                            <input type="date" th:field="*{birthday}" class="form-control"
-                                   th:classappend="${#fields.hasErrors('birthday')} ? 'border-danger' : ''" onblur="removeError(this)">
-                            <p th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger my-1"></p>
-                            <div class="invalid-feedback">생일을 입력해주세요.</div>
-                        </div>
+                    <!-- 연락처 -->
+                    <div class="col-12">
+                        <span class="text-danger"><b>*</b></span>
+                        <label th:for="phone" class="form-label">연락처</label>
+                        <input type="text" th:field="*{phone}" class="form-control validate-input" placeholder="010-XXXX-XXXX" required
+                                th:classappend="${#fields.hasErrors('phone')} ? 'border-danger' : ''" />
+                        <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger my-1"></p>
+                        <div class="invalid-feedback">연락처를 입력해주세요.</div>
+                    </div>
 
-                        <div class="col-12">
-                            <span class="text-danger"><b>*</b></span>
-                            <label th:for="lv1Select" class="form-label">지역</label><br>
-                            <div class="row">
-                                <div class="col">
-                                    <select th:field="*{addressLv1}" id="lv1Select" class="form-select" required
-                                            th:classappend="${#fields.hasErrors('addressLv1')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                        <option value="" selected disabled>==선택==</option>
-                                        <th:block th:each="lv1 : ${addressLv1List}">
-                                            <option th:value="${lv1.id}" th:text="${lv1.name}"></option>
-                                        </th:block>
-                                    </select>
-                                    <p th:if="${#fields.hasErrors('addressLv1')}" th:errors="*{addressLv1}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">지역을 선택해주세요.</div>
-                                </div>
-                                <div class="col">
-                                    <select th:field="*{addressLv2}" id="lv2Select" class="form-select" required
-                                            th:classappend="${#fields.hasErrors('addressLv2')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                        <option value="" selected disabled>==선택==</option>
-                                    </select>
-                                    <p th:if="${#fields.hasErrors('addressLv2')}" th:errors="*{addressLv2}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">지역을 선택해주세요.</div>
-                                </div>
+                    <!-- 생일 -->
+                    <div class="col-12">
+                        <label th:for="birthday" class="form-label">생일</label>
+                        <span class=".text-secondary"><small>(선택사항)</small></span>
+                        <input type="date" th:field="*{birthday}" class="form-control validate-input"
+                                th:classappend="${#fields.hasErrors('birthday')} ? 'border-danger' : ''" />
+                        <p th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger my-1"></p>
+                        <div class="invalid-feedback">생일을 입력해주세요.</div>
+                    </div>
+
+                    <!-- 주소 -->
+                    <div class="col-12">
+                        <span class="text-danger"><b>*</b></span>
+                        <label th:for="lv1Select" class="form-label">지역</label><br>
+
+                        <div class="row">
+                            <!-- 지역 Lv1 -->
+                            <div class="col">
+                                <select th:field="*{addressLv1}" id="lv1Select" class="form-select validate-input" required
+                                        th:classappend="${#fields.hasErrors('addressLv1')} ? 'border-danger' : ''" >
+                                    <option value="" selected disabled>==선택==</option>
+                                    <th:block th:each="lv1 : ${addressLv1List}">
+                                        <option th:value="${lv1.id}" th:text="${lv1.name}"></option>
+                                    </th:block>
+                                </select>
+                                <p th:if="${#fields.hasErrors('addressLv1')}" th:errors="*{addressLv1}" class="text-danger my-1"></p>
+                                <div class="invalid-feedback">지역을 선택해주세요.</div>
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-6"></div>
-                                <div class="col-6">
-                                    <select th:field="*{addressLv3}" id="lv3Select" class="form-select" style="display: none;"
-                                            th:classappend="${#fields.hasErrors('addressLv3')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                        <option value="" selected disabled>==선택==</option>
-                                    </select>
-                                    <p th:if="${#fields.hasErrors('addressLv3')}" th:errors="*{addressLv3}" class="text-danger my-1"></p>
-                                    <div class="invalid-feedback">지역을 선택해주세요.</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <label th:for="detailAddress" class="form-label">상세주소</label>
-                                    <span class=".text-secondary"><small>(선택사항)</small></span>
-                                    <input type="text" th:field="*{detailAddress}" class="form-control">
-                                </div>
+
+                            <!-- 지역 Lv2 -->
+                            <div class="col">
+                                <select th:field="*{addressLv2}" id="lv2Select" class="form-select validate-input" required
+                                        th:classappend="${#fields.hasErrors('addressLv2')} ? 'border-danger' : ''" >
+                                    <option value="" selected disabled>==선택==</option>
+                                </select>
+                                <p th:if="${#fields.hasErrors('addressLv2')}" th:errors="*{addressLv2}" class="text-danger my-1"></p>
+                                <div class="invalid-feedback">지역을 선택해주세요.</div>
                             </div>
                         </div>
 
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input type="checkbox" th:field="*{hasAcceptedTerms}" class="form-check-input" required
-                                        th:classappend="${#fields.hasErrors('hasAcceptedTerms')} ? 'border-danger' : ''" onblur="removeError(this)">
-                                <label class="form-check-label" th:for="hasAcceptedTerms">회원가입 약관에 동의합니다.</label>
-                                <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1"></p>
-                                <div class="invalid-feedback">약관에 동의해야만 회원가입 할 수 있습니다.</div>
+                        <!-- 지역 Lv3 -->
+                        <div class="row mt-2">
+                            <div class="col-6"></div>
+                            <div class="col-6">
+                                <select th:field="*{addressLv3}" id="lv3Select" class="form-select validate-input" style="display: none;"
+                                        th:classappend="${#fields.hasErrors('addressLv3')} ? 'border-danger' : ''" >
+                                    <option value="" selected disabled>==선택==</option>
+                                </select>
+                                <p th:if="${#fields.hasErrors('addressLv3')}" th:errors="*{addressLv3}" class="text-danger my-1"></p>
+                                <div class="invalid-feedback">지역을 선택해주세요.</div>
                             </div>
+                        </div>
+
+                        <!-- 상세주소 -->
+                        <div class="row">
+                            <div class="col">
+                                <label th:for="detailAddress" class="form-label">상세주소</label>
+                                <span class=".text-secondary"><small>(선택사항)</small></span>
+                                <input type="text" th:field="*{detailAddress}" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>  <!-- 주소 col -->
+
+                    <!-- 약관 -->
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input type="checkbox" th:field="*{hasAcceptedTerms}" class="form-check-input validate-input" required
+                                    th:classappend="${#fields.hasErrors('hasAcceptedTerms')} ? 'border-danger' : ''" />
+                            <label class="form-check-label" th:for="hasAcceptedTerms">회원가입 약관에 동의합니다.</label>
+                            <p th:if="${#fields.hasErrors('hasAcceptedTerms')}" th:errors="*{hasAcceptedTerms}" class="text-danger my-1"></p>
+                            <div class="invalid-feedback">약관에 동의해야만 회원가입 할 수 있습니다.</div>
                         </div>
                     </div>
 
-                    <hr class="my-4">
+                </div> <!-- form/row -->
 
-                    <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
-                </form>
-            </div>
-        </div>
-    </main>
+                <hr class="my-4">
 
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+                <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
+            </form>
 
-    <script th:inline="javascript">
+        </div> <!-- col -->
+    </div> <!-- row -->
+</main>
 
-        // 부트스트랩 폼 검증
-        (() => {
-          'use strict'
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
-          const forms = document.querySelectorAll('.needs-validation')
+<script th:inline="javascript">
+    window.MyApp.signUpForm = {
+        addressChildrenMap: /*[[${addressChildrenMap}]]*/ null,
+        addressLv1: /*[[${memberSignUpForm.addressLv1}]]*/ null,
+        addressLv2: /*[[${memberSignUpForm.addressLv2}]]*/ null,
+        addressLv3: /*[[${memberSignUpForm.addressLv3}]]*/ null,
+    };
+</script>
 
-          Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-              if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-              }
-
-              form.classList.add('was-validated')
-            }, false)
-          })
-        })()
-
-        // 서버에서 전달해준 검증에러 지우기 (해당 input에서 다른 곳으로 focus 이동시 작동)
-        function removeError(input) {
-            input.classList.remove("border-danger");
-            let errorMessage = input.parentElement.querySelector("p.text-danger");
-            if (errorMessage) {
-                errorMessage.style.display = "none";
-            }
-        }
-
-        // 주소 관련
-        const addressChildrenMap = /*[[${addressChildrenMap}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
-
-        const lv1Select = document.getElementById("lv1Select");
-        const lv2Select = document.getElementById("lv2Select");
-        const lv3Select = document.getElementById("lv3Select");
-
-        // 주소 lv2 조작
-        function populateLv2Options(selectedLv2Id) {
-            const lv1Id = lv1Select.value;
-            const lv2List = (addressChildrenMap.lv1 && addressChildrenMap.lv1[lv1Id]) || [];
-
-            lv2Select.innerHTML = '<option value="" selected disabled>==선택==</option>';
-            lv2List.forEach(lv2 => {
-                const option = document.createElement("option");
-                option.value = lv2.id;
-                option.text = lv2.name;
-                if (lv2.id == selectedLv2Id) option.selected = true;
-                lv2Select.appendChild(option);
-            });
-        }
-
-        // 주소 lv3 조작
-        function populateLv3Options(selectedLv3Id) {
-            const lv2Id = lv2Select.value;
-            const lv3List = (addressChildrenMap.lv2 && addressChildrenMap.lv2[lv2Id]) || [];
-
-            lv3Select.innerHTML = '<option value="" selected disabled>==선택==</option>';
-            if (lv3List.length > 0) {
-                lv3Select.style.display = "block";
-                lv3Select.setAttribute("required", "required");
-                lv3List.forEach(lv3 => {
-                    const option = document.createElement("option");
-                    option.value = lv3.id;
-                    option.text = lv3.name;
-                    if (lv3.id == selectedLv3Id) option.selected = true;
-                    lv3Select.appendChild(option);
-                });
-            } else {
-                lv3Select.style.display = "none";
-                lv3Select.removeAttribute("required");
-            }
-        }
-
-        // 주소 lv1 선택시
-        lv1Select.addEventListener("change", function () {
-            populateLv2Options(null);
-            lv3Select.innerHTML = '<option value="" selected disabled>==선택==</option>';
-            lv3Select.style.display = "none";
-        });
-
-        // 주소 lv2 선택시
-        lv2Select.addEventListener("change", function () {
-            populateLv3Options(null);
-        });
-
-        // 페이지 로딩시, 이전 주소값 넣기
-        document.addEventListener("DOMContentLoaded", function () {
-            const selectedLv1Id = /*[[${memberSignUpForm.addressLv1}]]*/ null;
-            const selectedLv2Id = /*[[${memberSignUpForm.addressLv2}]]*/ null;
-            const selectedLv3Id = /*[[${memberSignUpForm.addressLv3}]]*/ null;
-
-            // Reset lv1, lv2 to "==선택==" if not selected
-            if (!selectedLv1Id) {
-                lv1Select.selectedIndex = 0; // This selects the first <option>
-                lv2Select.selectedIndex = 0;
-            }
-
-            if (lv1Select.value) {
-                populateLv2Options(selectedLv2Id);
-            }
-
-            if (selectedLv2Id) {
-                populateLv3Options(selectedLv3Id);
-            }
-        });
-
-    </script>
+<script src="/js/members/signUpForm.js" defer></script>
 
 </body>
 </html>

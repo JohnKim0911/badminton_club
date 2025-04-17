@@ -2,34 +2,36 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     
 <head th:replace="~{fragments/header::header(~{})}"></head> <!-- This makes the fragment take a parameter (headContent) that the child page can pass in. -->
+
 <body>
-    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
+<header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container mt-5 py-3">
+<main class="container mt-5 py-3">
 
-        <section class="text-center border-bottom mb-5">
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-bold text-body-emphasis">배드민턴 클럽 플랫폼</h1>
-                    <p class="lead text-body-secondary">
-                        지역별 배드민턴 클럽을 찾아보세요!<br>
-                        가입한 클럽에서 회원들과 다양한 방식으로 소통할 수 있어요.<br>
-                        게시판, 앨범, 일정, 회비 관리, 물품 거래, 레슨 신청, 채팅까지<br>
-                        ㅡ 모든 것을 한 곳에서! 지금 바로 시작하세요! 🏸
-                    </p>
-                    <div>
-                        <a href="/members/new" class="btn btn-primary my-2 btn-lg me-2">회원가입</a>
-                        <a href="/members/login" class="btn btn-outline-secondary my-2 btn-lg">로그인</a>
-                    </div>
+    <section class="text-center border-bottom mb-5">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-bold text-body-emphasis">배드민턴 클럽 플랫폼</h1>
+                <p class="lead text-body-secondary">
+                    지역별 배드민턴 클럽을 찾아보세요!<br>
+                    가입한 클럽에서 회원들과 다양한 방식으로 소통할 수 있어요.<br>
+                    게시판, 앨범, 일정, 회비 관리, 물품 거래, 레슨 신청, 채팅까지<br>
+                    ㅡ 모든 것을 한 곳에서! 지금 바로 시작하세요! 🏸
+                </p>
+                <div>
+                    <a href="/members/new" class="btn btn-primary my-2 btn-lg me-2">회원가입</a>
+                    <a href="/members/login" class="btn btn-outline-secondary my-2 btn-lg">로그인</a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section th:replace="~{clubs/clubListFragment:: clubListFragment}"></section>
+    <section th:replace="~{clubs/clubListFragment:: clubListFragment}"></section>
+    
+</main>
 
-    </main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
 

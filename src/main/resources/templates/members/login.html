@@ -2,56 +2,57 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     
 <head th:replace="~{fragments/header::header(~{})}"></head>
+
 <body>
-    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
+<header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container mt-5 py-3">
-        <div class="form-signin w-100 mx-auto my-5" style="max-width: 330px;">
-            <form th:action="@{/members/login}" method="post" th:object="${loginForm}">
-                <div class="pb-4 text-center">
-                    <h2>로그인</h2>
-                </div>
-                <div class="d-grid gap-3">
-                    <!-- TODO 로그인 ID/PW 클라이언트단 검증 구현 -->
-                    <div class="form-floating mb-1">
-                        <input type="email" class="form-control" th:field="*{email}" placeholder="email@example.com" required>
-                        <label th:for="email">이메일 주소</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control" th:field="*{password}" placeholder="Password" required>
-                        <label th:for="password">비밀번호</label>
-                    </div>
-                    <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
-                    <a class="btn btn-warning w-100 py-2" href="/members/new" role="button">회원가입</a>
-                    <!-- TODO ID/PW 찾기 구현 -->
-                    <ul class="list-inline text-end">
-                        <li class="list-inline-item">
-                            <a class="" href="#">ID 찾기</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="" href="#">비밀번호 찾기</a>
-                        </li>
-                    </ul>
+<main class="container mt-5 py-3">
+    <div class="form-signin w-100 mx-auto my-5" style="max-width: 330px;">
+
+        <form th:action="@{/members/login}" method="post" th:object="${loginForm}">
+            <div class="pb-4 text-center">
+                <h2>로그인</h2>
+            </div>
+
+            <div class="d-grid gap-3">
+                <!-- TODO 로그인 ID/PW 클라이언트단 검증 구현 -->
+                <div class="form-floating mb-1">
+                    <input type="email" class="form-control" th:field="*{email}" placeholder="email@example.com" required>
+                    <label th:for="email">이메일 주소</label>
                 </div>
 
-    <!--
-                <div class="form-check text-start my-3">
-                    <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Remember me
-                    </label>
+                <div class="form-floating">
+                    <input type="password" class="form-control" th:field="*{password}" placeholder="Password" required>
+                    <label th:for="password">비밀번호</label>
                 </div>
-    -->
 
-            </form>
-        </div>
-    </main>
+                <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
 
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+                <a class="btn btn-warning w-100 py-2" href="/members/new" role="button">회원가입</a>
 
-    <!-- TODO 팝업 메시지 공통 처리 -->
-    <script th:if="${popUpMessage}"> // 팝업 메시지
-        alert("[[${popUpMessage}]]");
-    </script>
+                <!-- TODO ID/PW 찾기 구현 -->
+                <ul class="list-inline text-end">
+                    <li class="list-inline-item">
+                        <a class="" href="#">ID 찾기</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="" href="#">비밀번호 찾기</a>
+                    </li>
+                </ul>
+            </div>
+<!-- TODO Rembmer me 구현 -->
+<!-- 
+            <div class="form-check text-start my-3">
+                <input class="form-check-input" type="checkbox" value="remember-me" id="rememberMe"> 
+                <label class="form-check-label" for="rememberMe">Remember me</label>
+            </div>
+-->      
+        </form>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
 </body>
 </html>

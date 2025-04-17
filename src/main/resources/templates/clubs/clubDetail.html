@@ -2,69 +2,71 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">'
 
 <head th:replace="~{fragments/header::header(~{})}"></head>
+
 <body>
-    <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
+<header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
-    <main class="container">
-        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2" th:object="${club}">
-            <div class="col">
-                <h1 class="fw-bold text-body-emphasis mb-3" th:text="*{name}">XXXX클럽</h1>
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th scope="row">지역</th>
-                            <td colspan="3" th:text="*{addressId}">XXXXX시 XX구</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">상세위치</th>
-                            <td th:text="*{detailAddress}">xxx체육관</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">회원수</th>
-                            <td th:text="*{memberCount}">xxx</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">창립일</th>
-                            <td th:text="*{createdDate}">XXXX-XX-XX</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="mb-3">
-                    <a href="#" class="btn btn-primary my-2 btn-lg me-2">클럽가입</a>
-                    <a href="#" class="btn btn-outline-secondary my-2 btn-lg">공유하기</a>
-                </div>
-                <p th:text="*{description}">
-                    운동합시다!<br>
-                    xxxx은 실력에 관계없이 모든 회원이 같이 운동하는걸 권장합니다.<br>
-                    <br>
-                    ☆ 필수 가입 조건 ☆<br>
-                    • 개인장비(라켓/배드민턴화/셔틀콕)보유<br>
-                    • 배드민턴 경기 룰 숙지자<br>
-                    (점수 카운팅 기본)<br>
-                    • 로테이션에 대한 숙지자<br>
-                    • 예의범절을 아는 분<br>
-                    <br>
-                    ☆ 회비 ☆<br>
-                    • 분기별 15,000원<br>
-                    • 가입시 별도 안내<br>
-                    <br>
-                    ☆ 가입문의 ☆<br>
-                    • 카톡 id : xxxxxxxxx<br>
-                    • 오픈톡 : aaaaa<br>
-                    • 인스타 : bbbbbb<br>
-                    * 초심자 꼭 문의 후 가입<br>
-                    <br>
-                    * 무응답 회원 무관심 회원 강퇴 됩니다.<br>
-                </p>
+<main class="container">
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2" th:object="${club}">
+        <div class="col">
+            <h1 class="fw-bold text-body-emphasis mb-3" th:text="*{name}">XXXX클럽</h1>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="row">지역</th>
+                        <td colspan="3" th:text="*{addressId}">XXXXX시 XX구</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">상세위치</th>
+                        <td th:text="*{detailAddress}">xxx체육관</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">회원수</th>
+                        <td th:text="*{memberCount}">xxx</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">창립일</th>
+                        <td th:text="*{createdDate}">XXXX-XX-XX</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="mb-3">
+                <a href="#" class="btn btn-primary my-2 btn-lg me-2">클럽가입</a>
+                <a href="#" class="btn btn-outline-secondary my-2 btn-lg">공유하기</a>
             </div>
-            <div class="col">
-                <img th:src="*{clubImg != null} ? @{'/upload/' + *{clubImg}} : @{/images/default_club.jpg}"
-                    class="img-fluid rounded object-fit-cover w-100" alt="club-main-img">
-            </div>
+            <p th:text="*{description}">
+                운동합시다!<br>
+                xxxx은 실력에 관계없이 모든 회원이 같이 운동하는걸 권장합니다.<br>
+                <br>
+                ☆ 필수 가입 조건 ☆<br>
+                • 개인장비(라켓/배드민턴화/셔틀콕)보유<br>
+                • 배드민턴 경기 룰 숙지자<br>
+                (점수 카운팅 기본)<br>
+                • 로테이션에 대한 숙지자<br>
+                • 예의범절을 아는 분<br>
+                <br>
+                ☆ 회비 ☆<br>
+                • 분기별 15,000원<br>
+                • 가입시 별도 안내<br>
+                <br>
+                ☆ 가입문의 ☆<br>
+                • 카톡 id : xxxxxxxxx<br>
+                • 오픈톡 : aaaaa<br>
+                • 인스타 : bbbbbb<br>
+                * 초심자 꼭 문의 후 가입<br>
+                <br>
+                * 무응답 회원 무관심 회원 강퇴 됩니다.<br>
+            </p>
         </div>
-    </main>
+        <div class="col">
+            <img th:src="*{clubImg != null} ? @{'/upload/' + *{clubImg}} : @{/images/default_club.jpg}"
+                class="img-fluid rounded object-fit-cover w-100" alt="club-main-img">
+        </div>
+    </div>
+</main>
 
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
 </body>
 </html>
 

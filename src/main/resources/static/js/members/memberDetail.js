@@ -1,6 +1,6 @@
 const { profileImg, loginMemberId } = window.MyApp.memberDetail;
 
-// DOMContentLoaded
+// DOM이 로드된 후
 document.addEventListener("DOMContentLoaded", () => {
 
     // 프로필 사진변경 modal - 이미지 업로드시
