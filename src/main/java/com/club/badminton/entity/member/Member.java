@@ -45,17 +45,24 @@ public class Member extends BaseTimeEntity {
 
     private String detailAddress;
 
-    @Enumerated(EnumType.STRING)
-    private MemberStatus status;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attachment_id")
     private Attachment profileImg;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
 
     public Member(String email, String password, String name, String phone, LocalDate birthday, Address address, String detailAddress) {
+        this(email, password, name, phone, birthday, address, detailAddress, MemberRole.USER);
+    }
+
+    public Member(String email, String password, String name, String phone, LocalDate birthday, Address address, String detailAddress, MemberRole role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -63,6 +70,7 @@ public class Member extends BaseTimeEntity {
         this.birthday = birthday;
         this.address = address;
         this.detailAddress = detailAddress;
+        this.role = role;
         this.status = MemberStatus.ACTIVE;
     }
 

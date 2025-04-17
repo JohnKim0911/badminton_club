@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
-import static com.club.badminton.InitApp.ADDRESSES;
+import static com.club.badminton.init.InitApp.ADDRESSES;
 
 @Controller
 @RequiredArgsConstructor
