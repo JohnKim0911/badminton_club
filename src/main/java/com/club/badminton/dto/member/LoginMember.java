@@ -13,6 +13,7 @@ public class LoginMember {
     private String email;
     private String name;
     private String profileImg;
+    private String role;
 
     public static LoginMember of(Member m) {
         LoginMember dto = new LoginMember();
@@ -24,6 +25,8 @@ public class LoginMember {
         if (m.getProfileImg() != null) {
             dto.setProfileImg(m.getProfileImg().getStoredName());
         }
+
+        dto.setRole(m.getRole().name());
 
         return dto;
     }

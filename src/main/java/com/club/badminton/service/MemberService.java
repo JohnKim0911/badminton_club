@@ -4,14 +4,9 @@ import com.club.badminton.dto.member.*;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.attachment.Attachment;
 import com.club.badminton.entity.member.Member;
+import com.club.badminton.entity.member.MemberRole;
 import com.club.badminton.entity.member.MemberStatus;
-import com.club.badminton.exception.member.InvalidMemberIdException;
-import com.club.badminton.exception.member.login.ResignedMemberException;
-import com.club.badminton.exception.member.signup.DuplicatedEmailException;
-import com.club.badminton.exception.member.signup.DuplicatedPhoneException;
-import com.club.badminton.exception.member.login.NotRegisteredEmailException;
-import com.club.badminton.exception.member.login.PasswordNotMatchedException;
-import com.club.badminton.exception.member.signup.NullAddressLv3Exception;
+import com.club.badminton.exception.member.*;
 import com.club.badminton.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,7 +132,15 @@ public class MemberService {
     @Transactional
     public void delete(Long memberId, String currentPwd) {
         Member member = validateCurrentPwd(memberId, currentPwd);
+        validateRole(member);
+
         member.changeStatus(MemberStatus.RESIGNED);
+    }
+
+    private void validateRole(Member member) {
+        if (member.getRole() == MemberRole.ADMIN) {
+            throw new AdminCannotBeDeletedException();
+        }
     }
 
     public MemberUpdateForm updateForm(Long memberId) {
@@ -164,14 +167,12 @@ public class MemberService {
         // TODO 다른 검증도 해야하나? ex) readonly였던 이메일 등..
     }
 
-    public List<MemberDto> findMembers() {
+    public List<MemberDto> getMemberDtoList() {
         List<Member> members = memberRepository.findAll();
-        return toMemberDtos(members);
-    }
-
-    private List<MemberDto> toMemberDtos(List<Member> members) {
         return members.stream()
                 .map(m -> MemberDto.of(m))
                 .collect(Collectors.toList());
     }
+
+
 }

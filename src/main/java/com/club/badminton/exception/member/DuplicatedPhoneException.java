@@ -1,4 +1,4 @@
-package com.club.badminton.exception.member.signup;
+package com.club.badminton.exception.member;
 
 public class DuplicatedPhoneException extends RuntimeException {
 

@@ -22,9 +22,12 @@
 
                     <!-- 프로필 사진 -->
                     <div class="col-12" style="text-align: center;">
-                        <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}"
-                            alt="profile-img" class="profile-img"/>
-                        <button type="button" class="btn btn-outline-secondary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#profileImgModal">프로필 사진변경</button>
+                        <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}" alt="profile-img" class="profile-img"/>
+                        
+                        <!-- 로그인한 본인이거나, Admin인 경우 -->
+                        <button th:if="${memberDto.id == session.loginMember.id or session.loginMember.role == 'ADMIN'}" type="button" class="btn btn-outline-secondary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#profileImgModal">
+                            프로필 사진변경
+                        </button>
                     </div>
 
                     <!-- 이메일 -->
@@ -92,22 +95,37 @@
 
                 </div> <!-- row -->
 
-                <hr class="my-4">
-
-                <div class="d-grid gap-3">
-                    <a class="btn btn-primary" th:href="@{'/members/' + ${session.loginMember.id} + '/update'}" role="button">회원정보 수정</a>
-
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">회원탈퇴</button>
+                <!-- 로그인한 본인이거나, Admin인 경우 -->
+                <div th:if="${memberDto.id == session.loginMember.id or session.loginMember.role == 'ADMIN'}">
+                    <hr class="my-4">
+                
+                    <div class="d-grid gap-3">
+                        <a class="btn btn-primary" th:href="@{'/members/' + *{id} + '/update'}" role="button">회원정보 수정</a>
+                        
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updatePwdModal">비밀번호 변경</button>
+                        <button th:if="${session.loginMember.role == 'USER'}" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">회원탈퇴</button>
+    
+                        <!-- Admin이 다른 유저를 조회하는 경우 -->
+                        <a th:if="${session.loginMember.role == 'ADMIN' and session.loginMember.id != memberDto.id}" th:href="@{'/members/' + *{id} + '/ban'}" class="btn btn-outline-secondary" role="button">회원탈퇴 시키기</a>
+                    </div>
                 </div>
 
-            </div>
+                <!-- Admin인 경우 -->
+                <div th:if="${session.loginMember.role == 'ADMIN'}" >
+                    <hr class="my-4">
+                    
+                    <a th:href="@{'/admin/members'}">
+                        <p class="text-end">회원목록</p>
+                    </a>
+                </div>
+
+            </div> <!-- th:object="${memberDto}" -->
         </div> <!-- col -->
     </div> <!-- row -->
 
     <!-- 프로필 사진변경 Modal -->
-    <div class="modal fade" id="profileImgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileImgModalLabel" aria-hidden="true">
+    <div th:if="${memberDto.id == session.loginMember.id or session.loginMember.role == 'ADMIN'}" class="modal fade" id="profileImgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileImgModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -135,7 +153,7 @@
     </div>
 
     <!-- 비밀번호 변경 Modal -->
-    <div class="modal fade" id="updatePwdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwdModalLabel" aria-hidden="true">
+    <div th:if="${memberDto.id == session.loginMember.id or session.loginMember.role == 'ADMIN'}" class="modal fade" id="updatePwdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwdModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -170,7 +188,7 @@
     </div>
 
     <!-- 회원탈퇴 Modal -->
-    <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div th:if="${memberDto.id == session.loginMember.id and session.loginMember.role == 'USER'}" class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

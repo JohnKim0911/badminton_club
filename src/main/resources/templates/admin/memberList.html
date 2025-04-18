@@ -15,19 +15,23 @@
                 <th scope="col">이름</th>
                 <th scope="col">연락처</th>
                 <th scope="col">생일</th>
-                <th scope="col">지역</th>
+                <th scope="col" colspan="3">지역</th>
+                <th scope="col">상세주소</th>
                 <th scope="col">자세히</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="member : ${members}" class="align-middle">
-                <td th:text="${member.id}"></td>
-                <td th:text="${member.email}"></td>
-                <td th:text="${member.name}"></td>
-                <td th:text="${member.phone}"></td>
-                <td th:text="${member.birthday}"></td>
-                <td th:text="${member.addressId}"></td>
-                <td><a th:href="@{/members/{id}/detail(id=${member.id})}" class="btn btn-primary">자세히</a></td> <!-- example: /members/1 -->
+            <tr th:each="dto : ${memberDtos}" class="align-middle">
+                <td th:text="${dto.id}"></td>
+                <td th:text="${dto.email}"></td>
+                <td th:text="${dto.name}"></td>
+                <td th:text="${dto.phone}"></td>
+                <td th:text="${dto.birthday}"></td>
+                <td th:text="${dto.addressLv1}"></td>
+                <td th:text="${dto.addressLv2}"></td>
+                <td th:text="${dto.addressLv3}"></td>
+                <td th:text="${dto.detailAddress}"></td>
+                <td><a th:href="@{/members/{id}/detail (id=${dto.id})}" class="btn btn-outline-secondary">자세히</a></td> <!-- example: /members/1 -->
             </tr>
         </tbody>
     </table>

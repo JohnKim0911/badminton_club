@@ -14,7 +14,7 @@
     <div class="row g-5">
         <div class="col">
 
-            <form th:action="@{'/members/' + ${session.loginMember.id} + '/update'}" method="post" th:object="${memberUpdateForm}" class="needs-validation" novalidate>
+            <form th:object="${memberUpdateForm}" th:action="@{'/members/' + *{id} + '/update'}" method="post" class="needs-validation" novalidate>
                 <input type="hidden" th:field="*{id}">
 
                 <div class="row g-3">
@@ -117,7 +117,7 @@
 
                 <div class="d-grid gap-3">
                     <button class="w-100 btn btn-primary" type="submit">수정완료</button>
-                    <a class="w-100 btn btn-outline-secondary" th:href="@{'/members/' + ${session.loginMember.id} + '/detail'}" role="button">취소</a>
+                    <a class="w-100 btn btn-outline-secondary" th:href="@{'/members/' + *{id} + '/detail'}" role="button">취소</a>
                 </div>
 
             </form>

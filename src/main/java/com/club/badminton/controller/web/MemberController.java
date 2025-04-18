@@ -3,12 +3,7 @@ package com.club.badminton.controller.web;
 import com.club.badminton.dto.member.*;
 import com.club.badminton.exception.address.InvalidAddressIdException;
 import com.club.badminton.exception.attachment.FileTooBigException;
-import com.club.badminton.exception.member.login.ResignedMemberException;
-import com.club.badminton.exception.member.signup.DuplicatedEmailException;
-import com.club.badminton.exception.member.signup.DuplicatedPhoneException;
-import com.club.badminton.exception.member.login.NotRegisteredEmailException;
-import com.club.badminton.exception.member.login.PasswordNotMatchedException;
-import com.club.badminton.exception.member.signup.NullAddressLv3Exception;
+import com.club.badminton.exception.member.*;
 import com.club.badminton.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -118,10 +113,10 @@ public class MemberController {
         try {
             LoginMember loginMember = memberService.updateProfileImg(id, file);
             session.setAttribute("loginMember", loginMember);
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 및 삭제 중 오류가 발생했습니다.");
         } catch (FileTooBigException e) {
             redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("popUpMessage", "파일 업로드 및 삭제 중 오류가 발생했습니다.");
         }
 
         return "redirect:/members/" + id + "/detail";
@@ -140,6 +135,7 @@ public class MemberController {
             memberService.updatePassword(id, currentPwd, newPwd);
             redirectAttributes.addFlashAttribute("popUpMessage", "성공적으로 비밀번호를 변경하였습니다.");
         } catch (PasswordNotMatchedException e) {
+            // 비밀번호 변경 실패
             redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
         }
 
@@ -157,7 +153,8 @@ public class MemberController {
             return "redirect:/members/login";
             //TODO 탈퇴회원 복구 기능 추가?
 
-        } catch (Exception e) {
+        } catch (PasswordNotMatchedException | AdminCannotBeDeletedException e) {
+            // 회원탈퇴 실패
             redirectAttributes.addFlashAttribute("popUpMessage", e.getMessage());
             return "redirect:/members/" + id + "/detail";
         }

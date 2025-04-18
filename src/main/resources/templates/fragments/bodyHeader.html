@@ -13,55 +13,71 @@
             <!-- 헤더바 중앙: 클럽명 + 클럽메뉴 -->
             <div class="col-8 text-center">
                 <div th:if="${club != null}" th:object="${club}">
-                    <a th:href="@{/clubs/{id}/detail(id=*{id})}" th:text="*{name}" class="fs-4 text-white text-decoration-none"></a>
+                    <a th:href="@{/clubs/{id}/detail (id=*{id})}" th:text="*{name}" class="fs-4 text-white text-decoration-none"></a>
                     <div class="mt-2">
-                        <a th:href="@{/clubs/{id}/home(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/home (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/home') ? 'text-white' : 'text-secondary'}">Home</a>
-                        <a th:href="@{/clubs/{id}/detail(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/detail (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/detail') ? 'text-white' : 'text-secondary'}">소개</a>
-                        <a th:href="@{/clubs/{id}/posts(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/posts (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/posts') ? 'text-white' : 'text-secondary'}">게시판</a>
-                        <a th:href="@{/clubs/{id}/budget(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/budget (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/budget') ? 'text-white' : 'text-secondary'}">회비</a>
-                        <a th:href="@{/clubs/{id}/schedule(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/schedule (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/schedule') ? 'text-white' : 'text-secondary'}">일정</a>
-                        <a th:href="@{/clubs/{id}/lesson(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/lesson (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/lesson') ? 'text-white' : 'text-secondary'}">레슨</a>
-                        <a th:href="@{/clubs/{id}/trade(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/trade (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/trade') ? 'text-white' : 'text-secondary'}">거래</a>
-                        <a th:href="@{/clubs/{id}/members(id=*{id})}" class="text-decoration-none m-2"
+                        <a th:href="@{/clubs/{id}/members (id=*{id})}" class="text-decoration-none m-2"
                            th:classappend="${#strings.contains(currentPath, '/members') ? 'text-white' : 'text-secondary'}">회원</a>
                     </div>
                 </div>
             </div>
 
             <!-- 헤더바 우측: 회원가입, 로그인, 회원정보 등 -->
-            <div class="col-2 d-flex justify-content-end align-items-center">
+            <div th:object="${session}" class="col-2 d-flex justify-content-end align-items-center">
+
                 <!-- 로그인 전 -->
-                <div th:if="${session.loginMember == null}">
+                <div th:if="*{loginMember == null}">
                     <a class="btn btn-warning me-2" href="/members/new">회원가입</a>
                     <a class="btn btn-outline-light" href="/members/login">로그인</a>
                 </div>
 
                 <!-- 로그인 후 -->
-                <div th:if="${session.loginMember != null}" class="dropdown">
+                <div th:if="*{loginMember != null}" th:object="${session.loginMember}" class="dropdown">
+
+                    <!-- 바깥 메뉴 -->
                     <a href="#" class="d-block text-white link-body-emphasis text-decoration-none dropdown-toggle"
                        data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
-                        <span class="me-2" style="line-height: 40px;"><b th:text="${session.loginMember.name}">홍길동</b>님</span>
-                        <img th:src="${session.loginMember.profileImg != null} ? @{'/upload/' + ${session.loginMember.profileImg}} : @{/images/default_profile.png}" 
+                        <span class="me-2" style="line-height: 40px;"><b th:text="*{name}">홍길동</b>님</span>
+                        <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}" 
                             alt="header-profile-img" width="40" height="40" class="rounded-circle" style="object-fit: cover;">
                     </a>
+
+                    <!-- dropdown 메뉴 -->
                     <ul class="dropdown-menu text-small">
-                        <li><a class="dropdown-item" th:href="@{'/members/' + ${session.loginMember.id} + '/detail'}">마이페이지</a></li>
+                        <!-- 회원 -->
+                        <li><a class="dropdown-item" th:href="@{'/members/' + *{id} + '/detail'}">마이페이지</a></li>
                         <li><a class="dropdown-item" href="#">내 활동</a></li>
+
+                        <!-- 어드민 전용 -->
+                        <div th:if="*{role == 'ADMIN'}">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/members}">회원 목록</a></li>
+                        </div>
+
+                        <!-- 로그아웃 -->
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a id="logoutMenu" href="#" class="dropdown-item">로그아웃</a>
                             <form id="bodyHeaderLogoutForm" action="/members/logout" method="post" style="display: none;"></form>
                         </li>
                     </ul>
+
                 </div>
-            </div>
+
+            </div> <!-- 헤더바 우측 div -->
 
         </div> <!-- row -->
     </div> <!-- container -->
