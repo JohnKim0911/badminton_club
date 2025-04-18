@@ -19,4 +19,6 @@ public class HomeController {
 
         return "memberHome";
     }
+
+    // TODO ERROR 페이지 구현
 }

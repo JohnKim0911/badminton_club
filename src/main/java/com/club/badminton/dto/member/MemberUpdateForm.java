@@ -2,7 +2,6 @@ package com.club.badminton.dto.member;
 
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.member.Member;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

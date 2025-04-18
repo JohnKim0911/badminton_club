@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/header::header(~{::link})}">
-    <link rel="stylesheet" href="/css/memberDetail.css" />
+    <link rel="stylesheet" href="/css/members/memberDetail.css" />
 </head>
 
 <body>
@@ -124,17 +124,17 @@
         </div> <!-- col -->
     </div> <!-- row -->
 
-    <!-- 프로필 사진변경 Modal -->
+    <!-- 프로필 사진변경 Modal: 로그인한 본인이거나, Admin인 경우 -->
     <div th:if="${memberDto.id == session.loginMember.id or session.loginMember.role == 'ADMIN'}" class="modal fade" id="profileImgModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileImgModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div th:object="${memberDto}" class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="profileImgModalLabel">프로필 사진변경</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form th:action="@{'/members/' + ${session.loginMember.id} + '/updateProfileImg'}" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
+                <form th:action="@{'/members/' + *{id} + '/updateProfileImg'}" method="post" id="changeProfileImgForm" enctype="multipart/form-data">
                     <div class="modal-body">
-                        <div th:object="${memberDto}" style="text-align: center;">
+                        <div style="text-align: center;">
                             <img th:src="*{profileImg != null} ? @{'/upload/' + *{profileImg}} : @{/images/default_profile.png}" id="previewImg" alt="preview-image" class="profile-img"/>
                         </div>
                         <div class="my-3">
@@ -149,18 +149,18 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> <!-- th:object="${memberDto}" -->
     </div>
 
-    <!-- 비밀번호 변경 Modal -->
+    <!-- 비밀번호 변경 Modal: 로그인한 본인이거나, Admin인 경우 -->
     <div th:if="${memberDto.id == session.loginMember.id or session.loginMember.role == 'ADMIN'}" class="modal fade" id="updatePwdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePwdModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div th:object="${memberDto}" class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="updatePwdModalLabel">비밀번호 변경</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form th:action="@{'/members/' + ${session.loginMember.id} + '/updatePwd'}" method="post" id="changePwdForm" onsubmit="isUpdatePwdFormValid(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
+                <form th:action="@{'/members/' + *{id} + '/updatePwd'}" method="post" id="changePwdForm" onsubmit="isUpdatePwdFormValid(event);"> <!-- 비동기 통신에는 onsubmit 사용해야한다. -->
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="currentPwd" class="col-form-label">기존 비밀번호:</label>
@@ -184,18 +184,18 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> <!-- th:object="${memberDto}" -->
     </div>
 
-    <!-- 회원탈퇴 Modal -->
+    <!-- 회원탈퇴 Modal: 로그인한 본인이고, USER인 경우 -->
     <div th:if="${memberDto.id == session.loginMember.id and session.loginMember.role == 'USER'}" class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div th:object="${memberDto}" class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="deleteModalLabel">회원탈퇴</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form th:action="@{'/members/' + ${session.loginMember.id} + '/delete'}" method="post" id="deleteForm" onsubmit="isDeleteFormValid(event);">
+                <form th:action="@{'/members/' + *{id} + '/delete'}" method="post" id="deleteForm" onsubmit="isDeleteFormValid(event);">
                     <div class="modal-body">
                         <div class="mb-3">
                             <p class="my-2">정말로 탈퇴하시겠습니까?<br>탈퇴하시려면, 비밀번호를 입력해주세요.</p>
@@ -210,7 +210,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> <!-- th:object="${memberDto}" -->
     </div>
 
 </main>

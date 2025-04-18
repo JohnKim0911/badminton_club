@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "email", "password", "name", "phone", "birthday", "address", "detailAddress", "status", "profileImg"})
-public class Member extends BaseTimeEntity {
+public class Member extends BaseTimeEntity { // TODO BaseEntity로 변경
 
     @Id
     @GeneratedValue
@@ -51,6 +51,8 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
+
+    // TODO Last-Login-Time 추가? LoginHistory Table 별도 생성?
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;

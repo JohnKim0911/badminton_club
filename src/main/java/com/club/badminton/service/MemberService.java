@@ -167,12 +167,11 @@ public class MemberService {
         // TODO 다른 검증도 해야하나? ex) readonly였던 이메일 등..
     }
 
-    public List<MemberDto> getMemberDtoList() {
+    public List<MemberListDto> getMemberListDtos() {
         List<Member> members = memberRepository.findAll();
         return members.stream()
-                .map(m -> MemberDto.of(m))
+                .map(m -> MemberListDto.of(m))
                 .collect(Collectors.toList());
     }
-
 
 }

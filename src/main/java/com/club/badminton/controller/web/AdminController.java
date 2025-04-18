@@ -1,6 +1,6 @@
 package com.club.badminton.controller.web;
 
-import com.club.badminton.dto.member.MemberDto;
+import com.club.badminton.dto.member.MemberListDto;
 import com.club.badminton.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,8 +23,8 @@ public class AdminController {
     //TODO paging 처리
     @GetMapping("/members")
     public String memberList(Model model) {
-        List<MemberDto> memberDtos = memberService.getMemberDtoList();
-        model.addAttribute("memberDtos", memberDtos);
+        List<MemberListDto> memberListDtos = memberService.getMemberListDtos();
+        model.addAttribute("memberListDtos", memberListDtos);
         return "admin/memberList";
     }
 }

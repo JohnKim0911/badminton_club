@@ -1,27 +1,32 @@
 <!DOCTYPE HTML>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/header::header(~{})}"></head>
+<head th:replace="~{fragments/header::header(~{::link})}">
+    <link rel="stylesheet" href="/css/members/memberList.css" />
+</head>
 
 <body>
 <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
 <main class="container">
-    <table class="table table-striped table-hover">
-        <thead>
+    <div class="mb-3">
+        <h2>회원목록</h2>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">이메일</th>
                 <th scope="col">이름</th>
                 <th scope="col">연락처</th>
-                <th scope="col">생일</th>
+                <th scope="col">생년월일</th>
                 <th scope="col" colspan="3">지역</th>
-                <th scope="col">상세주소</th>
                 <th scope="col">자세히</th>
+                <!-- TODO 생성일, 마지막 로그인 시간 추가? -->
             </tr>
         </thead>
         <tbody>
-            <tr th:each="dto : ${memberDtos}" class="align-middle">
+            <tr th:each="dto : ${memberListDtos}" class="align-middle">
                 <td th:text="${dto.id}"></td>
                 <td th:text="${dto.email}"></td>
                 <td th:text="${dto.name}"></td>
@@ -30,44 +35,15 @@
                 <td th:text="${dto.addressLv1}"></td>
                 <td th:text="${dto.addressLv2}"></td>
                 <td th:text="${dto.addressLv3}"></td>
-                <td th:text="${dto.detailAddress}"></td>
-                <td><a th:href="@{/members/{id}/detail (id=${dto.id})}" class="btn btn-outline-secondary">자세히</a></td> <!-- example: /members/1 -->
+                <td class="text-center">
+                    <a th:href="@{/members/{id}/detail (id=${dto.id})}" class="btn btn-outline-secondary">자세히</a>
+                </td>
             </tr>
         </tbody>
     </table>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
-
-<script th:inline="javascript">
-
-    // 주소 합친후 화면에 보여주기. (예: 서울시 + 서초구)
-    const allAddressDtoMap = /*[[${allAddressDtoMap}]]*/ {}; //Thymeleaf's JavaScript inlining syntax.
-
-    function displayFullAddress() {
-        // Loop through each row in the table
-        document.querySelectorAll("tbody tr").forEach(row => {
-            const td = row.querySelector("td:nth-child(6)"); // 6th column is 주소
-            const addressId = td.textContent.trim();
-
-            // Convert to full address using allAddressDtoMap
-            let fullAddress = '';
-            let currentId = addressId;
-
-            while (currentId && allAddressDtoMap[currentId]) {
-                const addressObj = allAddressDtoMap[currentId];
-                fullAddress = addressObj.name + (fullAddress ? ' ' + fullAddress : '');
-                currentId = addressObj.parentId;
-            }
-
-            td.textContent = fullAddress || '주소 정보 없음';
-        });
-    }
-
-    // Run after page loads
-    window.addEventListener("DOMContentLoaded", displayFullAddress);
-
-</script>
 
 </body>
 </html>

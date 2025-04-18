@@ -62,7 +62,7 @@
 
                     <!-- 생일 -->
                     <div class="col-12">
-                        <label th:for="birthday" class="form-label">생일</label>
+                        <label th:for="birthday" class="form-label">생년월일</label>
                         <span class=".text-secondary"><small>(선택사항)</small></span>
                         <input type="date" th:field="*{birthday}" class="form-control validate-input"
                                 th:classappend="${#fields.hasErrors('birthday')} ? 'border-danger' : ''" />

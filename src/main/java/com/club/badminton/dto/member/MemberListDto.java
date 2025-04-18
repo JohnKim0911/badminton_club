@@ -1,6 +1,5 @@
 package com.club.badminton.dto.member;
 
-
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.member.Member;
 import lombok.Getter;
@@ -11,10 +10,9 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class MemberDto {
+public class MemberListDto {
 
     private Long id;
-    private String profileImg;
     private String email;
     private String name;
     private String phone;
@@ -25,15 +23,13 @@ public class MemberDto {
     private String addressLv1;
     private String addressLv2;
     private String addressLv3;
-    private String detailAddress;
 
-    public static MemberDto of(Member m) {
-        MemberDto dto = new MemberDto();
+    // TODO 생성일, 마지막 로그인 시간 추가?
+
+    public static MemberListDto of(Member m) {
+        MemberListDto dto = new MemberListDto();
 
         dto.setId(m.getId());
-        if (m.getProfileImg() != null) {
-            dto.setProfileImg(m.getProfileImg().getStoredName());
-        }
         dto.setEmail(m.getEmail());
         dto.setName(m.getName());
         dto.setPhone(m.getPhone());
@@ -46,7 +42,6 @@ public class MemberDto {
         if (a.getLv3() != null) {
             dto.setAddressLv3(a.getLv3().getName());
         }
-        dto.setDetailAddress(m.getDetailAddress());
 
         return dto;
     }
