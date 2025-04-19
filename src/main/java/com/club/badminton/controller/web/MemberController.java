@@ -31,19 +31,14 @@ public class MemberController {
     @GetMapping("/new")
     public String signUpForm(Model model) {
         model.addAttribute("memberSignUpForm", new MemberSignUpForm());
-        addAddressAttributes(model);
+        AddressUtil.addAddressAttributes(model);
         return "members/signUpForm";
-    }
-
-    private void addAddressAttributes(Model model) {
-        model.addAttribute("addressLv1List", ADDRESSES.getLv1List());
-        model.addAttribute("addressChildrenMap", ADDRESSES.getChildrenMap());
     }
 
     @PostMapping("/new")
     public String signUp(@Valid MemberSignUpForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            addAddressAttributes(model);
+            AddressUtil.addAddressAttributes(model);
             return "members/signUpForm";
         }
 
@@ -55,7 +50,7 @@ public class MemberController {
 
         } catch (DuplicatedEmailException | DuplicatedPhoneException | NullAddressLv3Exception | InvalidAddressIdException e) {
             //회원가입 실패
-            addAddressAttributes(model);
+            AddressUtil.addAddressAttributes(model);
             handleException(e, bindingResult);
             return "members/signUpForm";
         }
@@ -164,7 +159,7 @@ public class MemberController {
     public String updateForm(@PathVariable Long id, Model model) {
         MemberUpdateForm form = memberService.updateForm(id);
         model.addAttribute("memberUpdateForm", form);
-        addAddressAttributes(model);
+        AddressUtil.addAddressAttributes(model);
         return "members/memberUpdate";
     }
 
@@ -173,7 +168,7 @@ public class MemberController {
                          HttpSession session, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            addAddressAttributes(model);
+            AddressUtil.addAddressAttributes(model);
             return "members/memberUpdate";
         }
 
@@ -186,7 +181,7 @@ public class MemberController {
         } catch (DuplicatedPhoneException e) {
             //수정 실패
             handleException(e, bindingResult);
-            addAddressAttributes(model);
+            AddressUtil.addAddressAttributes(model);
             return "members/memberUpdate";
         }
     }
