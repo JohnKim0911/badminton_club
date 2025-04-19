@@ -2,14 +2,12 @@ package com.club.badminton.dto.member;
 
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.member.Member;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data // (@Getter @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor)
 public class MemberListDto {
 
     private Long id;

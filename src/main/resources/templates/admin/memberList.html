@@ -1,18 +1,19 @@
 <!DOCTYPE HTML>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/header::header(~{::link})}">
-    <link rel="stylesheet" href="/css/members/memberList.css" />
-</head>
+<head th:replace="~{fragments/header::header(~{})}"></head>
 
 <body>
 <header th:replace="~{fragments/bodyHeader:: bodyHeader}"></header>
 
 <main class="container">
+
     <div class="mb-3">
         <h2>회원목록</h2>
     </div>
-    <table class="table table-bordered table-hover">
+
+    <!-- 실제 목록 -->
+    <table class="table table-bordered table-hover text-start">
         <thead class="table-light">
             <tr>
                 <th scope="col">#</th>
@@ -35,12 +36,54 @@
                 <td th:text="${dto.addressLv1}"></td>
                 <td th:text="${dto.addressLv2}"></td>
                 <td th:text="${dto.addressLv3}"></td>
-                <td class="text-center">
-                    <a th:href="@{/members/{id}/detail (id=${dto.id})}" class="btn btn-outline-secondary">자세히</a>
+                <td>
+                    <a th:href="@{/members/{id}/detail(id=${dto.id})}">자세히</a>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <!-- 페이징 -->
+    <nav class="row mt-5" aria-label="Page navigation" th:object="${memberListDtos}">
+        <ul class="pagination justify-content-center">
+    
+            <!-- First -->
+            <li class="page-item" th:classappend="*{first} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/members(page=1)}">
+                    <i class="bi bi-chevron-double-left"></i>
+                </a>
+            </li>
+
+            <!-- Previous -->
+            <li class="page-item" th:classappend="*{hasPrevious()} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/admin/members(page=${currentPage - 1})}">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            <li class="page-item" th:each="pageNum : ${pageNumbers}" th:classappend="${pageNum} == ${currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/admin/members(page=${pageNum})}" th:text="${pageNum}">1</a>
+            </li>
+
+            <!-- Next -->
+            <li class="page-item" th:classappend="*{hasNext()} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/admin/members(page=${currentPage + 1})}">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+
+            <!-- Last -->
+            <li class="page-item" th:classappend="*{last} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/members(page=*{totalPages})}">
+                    <i class="bi bi-chevron-double-right"></i>
+                </a>
+            </li>
+    
+        </ul>
+    </nav>
+    
+
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
