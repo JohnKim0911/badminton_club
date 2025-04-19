@@ -4,6 +4,7 @@ import com.club.badminton.dto.member.MemberSignUpForm;
 import com.club.badminton.dto.member.MemberUpdateForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.attachment.Attachment;
+import com.club.badminton.entity.base.BaseEntity;
 import com.club.badminton.entity.base.BaseTimeEntity;
 import com.club.badminton.entity.club.ClubMember;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "email", "password", "name", "phone", "birthday", "address", "detailAddress", "status", "profileImg"})
-public class Member extends BaseTimeEntity { // TODO BaseEntity로 변경
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue

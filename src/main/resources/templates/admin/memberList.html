@@ -13,15 +13,17 @@
     </div>
 
     <!-- 실제 목록 -->
-    <table class="table table-bordered table-hover text-start">
+    <table class="table table-bordered table-hover text-center">
         <thead class="table-light">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">이메일</th>
                 <th scope="col">이름</th>
-                <th scope="col">연락처</th>
                 <th scope="col">생년월일</th>
                 <th scope="col" colspan="3">지역</th>
+                <th scope="col">회원구분</th>
+                <th scope="col">가입일</th>
+                <th scope="col">최근 로그인 일시</th>
                 <th scope="col">자세히</th>
                 <!-- TODO 생성일, 마지막 로그인 시간 추가? -->
             </tr>
@@ -31,11 +33,13 @@
                 <td th:text="${dto.id}"></td>
                 <td th:text="${dto.email}"></td>
                 <td th:text="${dto.name}"></td>
-                <td th:text="${dto.phone}"></td>
                 <td th:text="${dto.birthday}"></td>
                 <td th:text="${dto.addressLv1}"></td>
                 <td th:text="${dto.addressLv2}"></td>
-                <td th:text="${dto.addressLv3}"></td>
+                <td th:text="${dto.addressLv3 ?: '-'}"></td>
+                <td th:text="${dto.role}"></td>
+                <td th:text="${dto.createdDate}"></td>
+                <td th:text="${dto.lastLoginTime ?: '로그인 기록없음'}"></td>
                 <td>
                     <a th:href="@{/members/{id}/detail(id=${dto.id})}">자세히</a>
                 </td>

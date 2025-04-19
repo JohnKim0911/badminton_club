@@ -6,14 +6,15 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data // (@Getter @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor)
 public class MemberListDto {
 
     private Long id;
+
     private String email;
     private String name;
-    private String phone;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
@@ -22,7 +23,10 @@ public class MemberListDto {
     private String addressLv2;
     private String addressLv3;
 
-    // TODO 생성일, 마지막 로그인 시간 추가?
+    private String role;
+
+    private LocalDate createdDate;
+    private LocalDateTime lastLoginTime; //TODO 관련 엔티티 생성
 
     public static MemberListDto of(Member m) {
         MemberListDto dto = new MemberListDto();
@@ -30,7 +34,6 @@ public class MemberListDto {
         dto.setId(m.getId());
         dto.setEmail(m.getEmail());
         dto.setName(m.getName());
-        dto.setPhone(m.getPhone());
 
         dto.setBirthday(m.getBirthday());
 
@@ -40,6 +43,11 @@ public class MemberListDto {
         if (a.getLv3() != null) {
             dto.setAddressLv3(a.getLv3().getName());
         }
+
+        dto.setRole(m.getRole().toString());
+
+        dto.setCreatedDate(m.getCreatedDate().toLocalDate());
+        // TODO lastLoginTime
 
         return dto;
     }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ public class AdminController {
 
     @GetMapping("/members")
     public String memberList(@RequestParam(value = "page", defaultValue = "1") int page,
-                             @PageableDefault(size = 20) Pageable defaultPageable,
+                             @PageableDefault(size = 10) Pageable defaultPageable,
                              Model model) {
 
         Pageable pageable = convertToZeroBasedIndexPageable(page, defaultPageable); // convert to 0 based index
@@ -46,14 +47,17 @@ public class AdminController {
      * Convert to 0-based page index for Spring Data
      */
     private PageRequest convertToZeroBasedIndexPageable(int page, Pageable defaultPageable) {
-        return PageRequest.of(page - 1, defaultPageable.getPageSize(), defaultPageable.getSort());
+        return PageRequest.of(
+                page - 1, // Convert to 0-based page index
+                defaultPageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "id") // sort newest first
+        );
     }
 
     private List<Integer> getPageNumbers(Page<MemberListDto> memberListDtos) {
-        // Page grouping: 1~10, 11~20, etc.
         int totalPages = memberListDtos.getTotalPages();
         int currentPage = memberListDtos.getNumber(); // 0-based index
-        int groupSize = 10;
+        int groupSize = 10; // Page grouping: 1~10, 11~20, etc.
 
         int startPage = (currentPage / groupSize) * groupSize + 1;
         int endPage = Math.min(startPage + groupSize - 1, totalPages);
