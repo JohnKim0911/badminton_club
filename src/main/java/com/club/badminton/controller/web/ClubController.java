@@ -28,13 +28,13 @@ public class ClubController {
     public String createForm (Model model) {
         model.addAttribute("createClubForm", new CreateClubForm());
         AddressUtil.addAddressAttributes(model);
-
         return "clubs/createClubForm";
     }
 
     @PostMapping("/new")
-    public String create(@Valid CreateClubForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String create(@Valid CreateClubForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            AddressUtil.addAddressAttributes(model);
             return "clubs/createClubForm";
         }
 
@@ -45,6 +45,7 @@ public class ClubController {
 
         } catch (DuplicatedClubNameException e) {
             bindingResult.rejectValue("name", "duplicated.clubName", e.getMessage());
+            AddressUtil.addAddressAttributes(model);
             return "clubs/createClubForm";
         }
     }

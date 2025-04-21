@@ -1,16 +1,16 @@
 package com.club.badminton.dto.club;
 
-import com.club.badminton.entity.address.Address;
-import com.club.badminton.entity.club.Club;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class CreateClubForm {
 
     @NotBlank
@@ -18,14 +18,16 @@ public class CreateClubForm {
     private String name;
 
     @NotNull
-    private Long addressId;
+    private Long addressLv1;
+
+    @NotNull
+    private Long addressLv2;
+
+    private Long addressLv3;
 
     private String detailAddress;
 
     @AssertTrue
     private Boolean hasAcceptedTerms;
 
-    public Club toClub(Address address) {
-        return new Club(name, address, detailAddress);
-    }
 }

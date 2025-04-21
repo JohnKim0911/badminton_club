@@ -1,6 +1,10 @@
-// signUpForm.html, memberUpdate.html 에서 공통으로 사용됨.
+/*
+signUpForm.html, memberUpdate.html, createClubForm.html에서 공통으로 사용됨.
 
-const { addressChildrenMap, addressLv1, addressLv2, addressLv3 } = window.MyApp.memberForm;
+주요내용: 주소 select, 부트스트랩 폼 검증, 서버 검증에러(bindingResult) 처리
+*/
+
+const { addressChildrenMap, addressLv1, addressLv2, addressLv3 } = window.MyApp.createForm;
 
 // 주소 관련
 const lv1Select = document.getElementById("lv1Select");

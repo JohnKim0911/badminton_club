@@ -8,6 +8,7 @@ import com.club.badminton.exception.club.DuplicatedClubNameException;
 import com.club.badminton.repository.ClubRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class ClubService {
 
     private final ClubRepository clubRepository;
@@ -23,12 +25,10 @@ public class ClubService {
 
     @Transactional
     public Long create(@Valid CreateClubForm form) {
+        log.info("CreateClubForm: {}", form);
         validateCreate(form);
-
-        Address address = addressService.findById(form.getAddressId());
-        Club club = form.toClub(address);
-
-        clubRepository.save(club);
+        Address address = addressService.findByLevelIds(form.getAddressLv1(), form.getAddressLv2(), form.getAddressLv3());
+        Club club = clubRepository.save(Club.of(form, address));
         return club.getId();
     }
 

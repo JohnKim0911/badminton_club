@@ -129,7 +129,7 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
 <script th:inline="javascript">
-    window.MyApp.memberForm = {
+    window.MyApp.createForm = {
         addressChildrenMap: /*[[${addressChildrenMap}]]*/ null,
         addressLv1: /*[[${memberUpdateForm.addressLv1}]]*/ null,
         addressLv2: /*[[${memberUpdateForm.addressLv2}]]*/ null,
@@ -137,8 +137,8 @@
     };
 </script>
 
-<!-- signUpForm과 동일한 JS 사용-->
-<script src="/js/members/memberForm.js" defer></script>
+<!-- 공유 JS 사용 -->
+<script src="/js/common/createForm.js" defer></script>
 
 </body>
 </html>

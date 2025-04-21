@@ -1,5 +1,6 @@
 package com.club.badminton.entity.club;
 
+import com.club.badminton.dto.club.CreateClubForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.attachment.Attachment;
 import com.club.badminton.entity.schedule.Schedule;
@@ -10,7 +11,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "name", "address", "description"})
 public class Club extends BaseEntity {
 
     @Id
@@ -27,11 +26,11 @@ public class Club extends BaseEntity {
     private Long id;
 
     @Column(unique = true)
-    private String name; //클럽명
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
-    private Address address; //가장 구체적인 주소만 저장. - 예)서울특별시 서초구에서 서초구만 저장.
+    private Address address;
 
     private String detailAddress;
 
@@ -55,9 +54,13 @@ public class Club extends BaseEntity {
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Schedule> schedules = new ArrayList<>();
 
-    public Club(String name, Address address, String detailAddress) {
+    private Club(String name, Address address, String detailAddress) {
         this.name = name;
         this.address = address;
         this.detailAddress = detailAddress;
+    }
+
+    public static Club of(CreateClubForm form, Address address) {
+        return new Club(form.getName(), address, form.getDetailAddress());
     }
 }
