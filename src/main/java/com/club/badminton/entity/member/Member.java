@@ -52,8 +52,6 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    // TODO Last-Login-Time 추가? LoginHistory Table 별도 생성?
-
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 

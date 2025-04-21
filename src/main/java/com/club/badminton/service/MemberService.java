@@ -176,7 +176,7 @@ public class MemberService {
     }
 
     public Page<MemberListDto> getMemberListDtos(Pageable pageable) {
-        return memberRepository.findAll(pageable).map(m -> MemberListDto.of(m));
+        return memberRepository.findAllWithLatestLogin(pageable).map(p -> MemberListDto.of(p));
     }
 
 }

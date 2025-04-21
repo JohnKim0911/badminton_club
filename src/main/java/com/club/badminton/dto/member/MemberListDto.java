@@ -1,12 +1,12 @@
 package com.club.badminton.dto.member;
 
-import com.club.badminton.entity.address.Address;
-import com.club.badminton.entity.member.Member;
+import com.club.badminton.dto.member.projection.MemberListProjection;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data // (@Getter @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor)
 public class MemberListDto {
@@ -26,28 +26,27 @@ public class MemberListDto {
     private String role;
 
     private LocalDate createdDate;
-    private LocalDateTime lastLoginTime; //TODO 관련 엔티티 생성
+    private LocalDateTime latestLoginTime;
 
-    public static MemberListDto of(Member m) {
+    public String getFormattedLoginTime() {
+        return latestLoginTime != null
+                ? latestLoginTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                : null;
+    }
+
+    public static MemberListDto of(MemberListProjection p) {
         MemberListDto dto = new MemberListDto();
 
-        dto.setId(m.getId());
-        dto.setEmail(m.getEmail());
-        dto.setName(m.getName());
-
-        dto.setBirthday(m.getBirthday());
-
-        Address a = m.getAddress();
-        dto.setAddressLv1(a.getLv1().getName());
-        dto.setAddressLv2(a.getLv2().getName());
-        if (a.getLv3() != null) {
-            dto.setAddressLv3(a.getLv3().getName());
-        }
-
-        dto.setRole(m.getRole().toString());
-
-        dto.setCreatedDate(m.getCreatedDate().toLocalDate());
-        // TODO lastLoginTime
+        dto.setId(p.getId());
+        dto.setEmail(p.getEmail());
+        dto.setName(p.getName());
+        dto.setBirthday(p.getBirthday());
+        dto.setAddressLv1(p.getAddressLv1());
+        dto.setAddressLv2(p.getAddressLv2());
+        dto.setAddressLv3(p.getAddressLv3());
+        dto.setRole(p.getRole());
+        dto.setCreatedDate(p.getCreatedDate());
+        dto.setLatestLoginTime(p.getLatestLoginTime());
 
         return dto;
     }
