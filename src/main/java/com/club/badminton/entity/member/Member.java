@@ -5,7 +5,6 @@ import com.club.badminton.dto.member.MemberUpdateForm;
 import com.club.badminton.entity.address.Address;
 import com.club.badminton.entity.attachment.Attachment;
 import com.club.badminton.entity.base.BaseEntity;
-import com.club.badminton.entity.base.BaseTimeEntity;
 import com.club.badminton.entity.club.ClubMember;
 import jakarta.persistence.*;
 import lombok.*;
@@ -60,6 +59,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ClubMember> clubMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<LoginHistory> loginHistories = new ArrayList<>();
 
     public Member(String email, String password, String name, String phone, LocalDate birthday, Address address, String detailAddress) {
         this(email, password, name, phone, birthday, address, detailAddress, MemberRole.USER);

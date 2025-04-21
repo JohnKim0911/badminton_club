@@ -18,8 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
-import static com.club.badminton.init.InitApp.ADDRESSES;
-
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -90,6 +88,8 @@ public class MemberController {
 
     @PostMapping("/logout")
     public String logout(HttpSession session) {
+        LoginMember loginMember = (LoginMember) session.getAttribute("loginMember");
+        memberService.logout(loginMember);
         session.invalidate();
         return "redirect:/";
     }

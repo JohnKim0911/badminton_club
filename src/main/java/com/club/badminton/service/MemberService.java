@@ -28,6 +28,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AddressService addressService;
     private final AttachmentService attachmentService;
+    private final LoginHistoryService loginHistoryService;
 
     @Transactional
     public void signUp(MemberSignUpForm form) {
@@ -54,9 +55,16 @@ public class MemberService {
         }
     }
 
+    @Transactional
     public LoginMember login(LoginForm loginForm) {
         Member member = validateLogin(loginForm);
+        loginHistoryService.login(member);
         return LoginMember.of(member);
+    }
+
+    @Transactional
+    public void logout(LoginMember loginMember) {
+        loginHistoryService.logout(loginMember);
     }
 
     private Member validateLogin(LoginForm loginForm) {
